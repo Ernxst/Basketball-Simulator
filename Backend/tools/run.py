@@ -1,7 +1,7 @@
 with open("src/main/resources/application.properties", "r") as file:
-    lines = [line for line in file if line.startswith("com.example.app.port=")]
+    lines = [line for line in file if line.startswith("backend.app.port=")]
     DEFAULT_PORT = lines[0].split("=")[1]
-    lines = [line for line in file if line.startswith("com.example.app.title=")]
+    lines = [line for line in file if line.startswith("backend.app.title=")]
     APP_TITLE = lines[0].split("=")[1]
 
 if __name__ == "__main__":

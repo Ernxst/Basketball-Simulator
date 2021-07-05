@@ -1,6 +1,6 @@
 # Backend API
 
-Source code for the backend of the **Basketball Simulator** web com.example.app accessed via a restful API running on `localhost`.
+Source code for the backend of the **Basketball Simulator** web app accessed via a restful API running on `localhost`.
 
 The backend can be run on a separate server-like device in a fully-federated manner. To accommodate this, the com
 sends out UDP broadcast messages to all devices in the local network allowing devices to discover the IP address of the
@@ -20,7 +20,7 @@ To start the application in a Docker container, you must first build the image w
 
 And then to start the application on port `8100`:
 
-    docker run --rm -it -p 8100:8100 backend com
+    docker run --rm -it -p 8100:8100 backend backend
 
 ### Without Docker
 
@@ -66,7 +66,7 @@ The following arguments are all optional.
 - If you would like to run the backend on a separate device, you will need to enable **broadcast mode** with the `-b` (
   or `--b`) flag.
     - This will broadcast the IP address of the device the backend is running on to make it automatically discoverable
-      by the web com.example.api.
+      by the web app.
     - It is **unsafe to use broadcast mode on public or insecure networks**.
 - The application can be built into a single jar and executed using the `-jar` (or `--jar`) flag.
     - This option is only available using the Python `run` script.

@@ -84,9 +84,8 @@ export default {
                 this.loading = true;
                 this.$store.dispatch("auth/register", this.user).then(
                     (data) => {
-                        console.log(data)
-                        this.loading = false;
-                        this.$nextTick(() => {
+                        this.$store.dispatch("auth/login", this.user).then(data => {
+                            this.loading = false;
                             this.$router.push(
                                 {
                                     name: "team-select",

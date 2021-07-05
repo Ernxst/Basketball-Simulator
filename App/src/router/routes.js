@@ -3,7 +3,7 @@ export const routes = [
         path: "/",
         redirect: (route) => {
             const user = JSON.parse(localStorage.getItem('user'));
-            return user
+            return user && user.accessToken
                 ? `/${user.username}/select`
                 : "/welcome";
         },
@@ -25,7 +25,7 @@ export const routes = [
     },
     {
         path: "/:username/select",
-        component: () => import(/* webpackChunkName: "play", webpackPrefetch: true */ "../app/views/save-selection/SelectSave.vue"),
+        component: () => import(/* webpackChunkName: "team-select", webpackPrefetch: true */ "../app/views/save-selection/SelectSave.vue"),
         name: "team-select",
         meta: {
             title: (route) => {

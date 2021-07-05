@@ -2,6 +2,7 @@ package com.example.api.responses;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
@@ -14,6 +15,7 @@ public class GenericResponse {
     public GenericResponse(String message) {
         super();
         this.message = message;
+        this.error = HttpStatus.OK.toString();
     }
 
     public GenericResponse(String message, String error) {

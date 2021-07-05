@@ -7,7 +7,6 @@ import com.example.entities.player.util.Position;
 import com.example.entities.player.util.attributes.PlayerAttributes;
 import com.example.entities.player.util.contract.Contract;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -17,13 +16,13 @@ import java.util.Objects;
 //@Entity
 //@Table(name = "PLAYER")
 public class Player {
-    protected String firstName;
-    protected String lastName;
-    protected double height;
-    protected double wingspan;
-    protected Archetype archetype;
-    protected String college;
-    protected LocalDate birthDate;
+    protected final String firstName;
+    protected final String lastName;
+    protected final double height;
+    protected final double wingspan;
+    protected final Archetype archetype;
+    protected final String college;
+    protected final LocalDate birthDate;
     protected Position position;
     protected Position secondaryPosition;
     protected double weight;

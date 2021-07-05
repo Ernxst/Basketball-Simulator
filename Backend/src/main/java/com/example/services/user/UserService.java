@@ -31,7 +31,7 @@ public class UserService implements UserServiceInterface {
             user.setPassword(encryptedPassword);
             return userRepository.save(user);
         }
-        throw new UsernameTakenException(MessageFormat.format("The username {0} is already taken.", username));
+        throw new UsernameTakenException(MessageFormat.format("The username {0} is already taken, please try another.", username));
     }
 
     @Override

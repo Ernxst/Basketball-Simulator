@@ -1,5 +1,7 @@
 package com.example.api.controllers.account;
 
+import com.example.api.responses.GenericResponse;
+import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.api.responses.UserLoginResponse;
 import com.example.config.JwtTokenUtil;
 import com.example.entities.requests.AuthRequest;
@@ -26,18 +28,20 @@ public class AccountController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
-
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public ResponseEntity<GenericResponse> register(@RequestBody User user) {
         try {
-            return userService.register(user).getUsername();
+            String username = userService.register(user).getUsername();
+            return ResponseEntity.ok()
+                    .body(new RegistrationSuccessResponse(username));
         } catch (UsernameTakenException e) {
-            return null;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT.toString()));
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid AuthRequest authRequest) {
+    public ResponseEntity<GenericResponse> login(@RequestBody @Valid AuthRequest authRequest) {
         try {
             Authentication authenticate = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
@@ -49,7 +53,8 @@ public class AccountController {
                     .header(HttpHeaders.AUTHORIZATION, accessToken)
                     .body(new UserLoginResponse(user.getUsername(), accessToken));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new GenericResponse("Login failed, either your username or password was incorrect, please try again.", HttpStatus.UNAUTHORIZED.toString()));
         }
     }
 

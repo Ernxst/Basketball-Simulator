@@ -1,0 +1,138 @@
+package com.example.app.generators.team;
+
+import com.example.app.generators.player.PlayerGenerator;
+import com.example.app.util.Util;
+import com.example.db.interfaces.NameGenerator;
+import com.example.db.interfaces.player.NewPlayerInterface;
+import com.example.db.interfaces.team.TeamInterface;
+import com.example.entities.player.Player;
+import com.example.entities.player.util.Position;
+import com.example.entities.team.Team;
+import com.example.entities.team.TeamConstants;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingInt;
+
+/**
+ * A class to randomly generate a team.
+ */
+public class TeamGenerator {
+    /**
+     * Generate a CPU team.
+     *
+     * @param leagueID        the ID of the league the team plays in.
+     * @param leagueStartDate the date the league started.
+     * @return a CPU team.
+     */
+    public static Team generateTeam(int leagueID, LocalDate leagueStartDate) {
+        String state = NameGenerator.randomTeamState();
+        String name = NameGenerator.randomTeamName();
+        return generateTeam(leagueID, state, name, false, leagueStartDate);
+    }
+
+    /**
+     * Generate the user's team, with the given state and name.
+     *
+     * @param leagueID        the ID of the league the team plays in.
+     * @param state           the state the team is located in.
+     * @param name            the name of the team.
+     * @param leagueStartDate the date the league started.
+     * @return a team for the user.
+     */
+    public static Team generateTeam(int leagueID, String state, String name, LocalDate leagueStartDate) {
+        return generateTeam(leagueID, state, name, true, leagueStartDate);
+    }
+
+    /**
+     * Private method to generate a team.
+     *
+     * @param leagueID        the ID of the league the team plays in.
+     * @param state           the state the team is located in.
+     * @param name            the name of the team.
+     * @param isUserTeam      whether the team being generated is the user or CPU team.
+     * @param leagueStartDate the date the league started.
+     * @return a team.
+     */
+    private static Team generateTeam(int leagueID, String state, String name, boolean isUserTeam, LocalDate leagueStartDate) {
+        Player[] players = generatePlayers(leagueStartDate);
+        LocalDate dateFounded = isUserTeam ? leagueStartDate : Util.randomDate(leagueStartDate, LocalDate.now());
+        int iconID = TeamInterface.randomTeamIconID();
+        Team team = new Team(state, name, 0, 0, isUserTeam, dateFounded, iconID);
+        team.setLeagueID(leagueID);
+        int teamID = TeamInterface.insertTeam(team, leagueID);
+        Map<Integer, Player> mappedPlayers = getPlayerIDs(players, teamID, leagueID);
+        team.setPlayers(mappedPlayers);
+        team.setTeamID(teamID);
+        return team;
+    }
+
+    /**
+     * Insert players into the database and retrieve their IDs into a map.
+     *
+     * @param players  the players to insert.
+     * @param teamID   the team the players play for.
+     * @param leagueID the ID of the league the player belongs to.
+     * @return a map of IDs to players.
+     */
+    private static Map<Integer, Player> getPlayerIDs(Player[] players, int teamID, int leagueID) {
+        Map<Integer, Player> mappedPlayers = new HashMap<>();
+        for (Player player : players) {
+            int playerID = NewPlayerInterface.addNewPlayer(player, teamID, leagueID, 1);
+            player.setPlayerID(playerID);
+            mappedPlayers.put(playerID, player);
+        }
+        return mappedPlayers;
+    }
+
+    /**
+     * Generate the players in the team.
+     *
+     * @param leagueStartDate the date the league started.
+     * @return the players in the team.
+     */
+    private static Player[] generatePlayers(LocalDate leagueStartDate) {
+        int yearsSinceStart = Util.yearsBetweenDateAndToday(leagueStartDate);
+        int numOfPlayers = Util.randomInt(TeamConstants.MIN_PLAYERS, TeamConstants.MAX_PLAYERS + 1);
+        Map<Position, Integer> playersInEachPosition = generatePositionNumbers(numOfPlayers);
+        Map<Position, Integer> positionFrequency = new HashMap<>();
+        Player[] players = new Player[numOfPlayers];
+
+        int i = 0;
+        for (Position position : Position.positions) {
+            int maxPlayersInPosition = playersInEachPosition.get(position);
+            positionFrequency.put(position, 1);
+            while (positionFrequency.get(position) <= maxPlayersInPosition) {
+                Player player = PlayerGenerator.generatePlayer(yearsSinceStart);
+                Position playerPosition = player.getPosition();
+                if (playerPosition.equals(position)) {
+                    players[i] = player;
+                    positionFrequency.merge(position, 1, Integer::sum);
+                    i++;
+                }
+            }
+        }
+        return players;
+    }
+
+    /**
+     * Given the number of players to be generated, calculate how many players should be in each position.
+     *
+     * @param numOfPlayers the number of players to be generated.
+     * @return the number of players in each position.
+     */
+    private static Map<Position, Integer> generatePositionNumbers(int numOfPlayers) {
+        // Ensures there is always at least one player in each position
+        Position[] sample = Position.randomPositions(numOfPlayers - Position.numOfPositions);
+        Map<Position, Integer> distribution = Arrays.stream(sample).collect(groupingBy(Function.identity(), summingInt(e -> 1)));
+        for (Position position : Position.positions) {
+            distribution.merge(position, TeamConstants.MIN_PLAYERS_IN_EACH_POSITION, Integer::sum);
+        }
+        return distribution;
+    }
+}

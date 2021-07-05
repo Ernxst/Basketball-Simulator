@@ -1,0 +1,66 @@
+{
+  "Post Scoring": {
+    "Post Hook": "The effectiveness of a player's post hook move.",
+    "Post Fadeaway": "The effectiveness of a player's post fadeaway move.",
+    "Post Moves": "The effectiveness of a player's post moves. Players with a higher 'post moves' rating will be more successful at scoring down low in the post."
+  },
+  "Inside Scoring": {
+    "Standing Layup": "The ability of a player to make a layup under the basket when contested by one or more defenders. Note that a professional basketball player should be able to make an uncontested standing layup.",
+    "Driving Layup": "The ability of a player to make a layup in traffic after driving to the basket. Players with a higher driving layup rating are more likely to finish through contact.",
+    "Standing Dunk": "The ability of a player to finish a dunk from standing still.",
+    "Driving Dunk": "The likelihood of a player finishing a dunk in traffic. When attempting a dunk in traffic, players with a higher driving dunk rating are more likely to complete the dunk.",
+    "Contact Dunk": "The ability of a player to complete a dunk through contact. Players with a higher contact dunk rating are more likely to posterise defenders.",
+    "Shot Close": "Shots taken around the basket which are not close enough to be counted as layups but are not far enough out to be counted as mid-range shots.",
+    "Free Throw": "Players with a higher free throw rating are more likely to make free throws."
+  },
+  "Outside Scoring": {
+    "Mid-Range Open Standing": "The ability of a player to make open mid-range shots when their feet are properly set.",
+    "Mid-Range Off Dribble": "The effectiveness of a player's mid-range shot when pulling up after one or more dribble moves. This stat does not affect open or contested mid-range shots.",
+    "Mid-Range Contested": "The effectiveness of a player's mid-range shot when contested by a defender. This stat does not affect open or off-dribble (and uncontested) mid-range shots.",
+    "3PT Open Standing": "The ability of a player to make open three-point shots when their feet are properly set.",
+    "3PT Off Dribble": "The effectiveness of a player's three-point shot when pulling up after one or more dribble moves. This stat does not affect open or contested three-point shots.",
+    "3PT Contested": "The effectiveness of a player's three-point shot when contested by a defender. This stat does not affect open or off-dribble (and uncontested) three-point shots."
+  },
+  "Playmaking": {
+    "Passing Accuracy": "Players with higher passing accuracy are more likely to put passes on the money for teammates.",
+    "Passing Vision": "Players with higher passing vision are more likely to see open teammates, and passes lesser-skilled players will not. They are effective at cutting open defences with their passes.",
+    "Ball-Handling": "Players with a higher ball-handling rating are less likely to be ripped by defenders.",
+    "Speed with Ball": "Players with a 'high speed with ball' rating can move faster with the ball in their hands.",
+    "Passing IQ": "Players with a higher passing IQ are effective at leading their teammates into good shooting spots with their passes. They are also less likely to have their passes stolen by defenders as they know where exactly to throw the ball."
+  },
+  "Rebounding": {
+    "Offensive Rebound": "A measure of how well a player can grab offensive rebounds.",
+    "Defensive Rebound": "A measure of how well a player can grab defensive rebounds.",
+    "Box-Out": "The ability of a player to box out other players to secure the rebound. Players with a higher box-out rating are effective at positioning themselves for rebounds and are more likely to pull down the board."
+  },
+  "Defending": {
+    "Lateral Quickness": "A measure of how quickly a player can move side-to-side. Players with a higher lateral quickness are more likely to stay in front of their matchup when they change direction.",
+    "Defensive Awareness": "Players with a higher defensive awareness rating are better at reading the offence from the defensive end and are less likely to make defensive lapses in judgement.",
+    "Play Recognition": "Players with a higher play recognition stat are meticulous in watching the opponent's game film; they are more likely to remember and recognise the opposing team's play and hence how to defend against it.",
+    "Steal": "The ability of a player to steal the ball from the ball-handler. Players with a higher steal rating are more likely to steal the ball and are less likely to be cautioned with reach-in fouls.",
+    "Block": "The ability of a player to block a shot. Players with a higher block rating can time their blocks better, avoiding shooting fouls more often. They are also more likely to block the ball to a teammate, as opposed to the opposition or out of bounds.",
+    "Pass-Perception": "Players with a higher pass perception stat are more effective at predicting where a pass is headed and hence, more likely to steal it.",
+    "Shot Contest": "A measure of how well a player can contest a shot. Players with a higher shot contest rating are more effective at interrupting an offensive player's shooting or layup motion, making them more likely to miss the shot without conceding a shooting foul in the process.",
+    "Interior Defense": "A measure of a player's ability to defend inside the paint and around the basket.",
+    "Perimeter Defense": "A measure of a player's ability to defend around the perimeter."
+  },
+  "Physical": {
+    "Speed": "The top sprint speed of a player.",
+    "Stamina": "Players with higher stamina are less likely to get fatigued in a game and require less bench-time. They also cope better in back-to-back and four-games-in-five-days schedules.",
+    "Strength": "Stronger players are more effective at interrupting layups, setting hard screens, backing-down defenders in the post and finishing through contact around the basket.",
+    "Vertical": "A measure of a player's ability to get off the ground from a standstill or after a run-up. Player's with a higher vertical are more likely to snag rebounds, finish over taller defenders and catch wayward alley-oop passes.",
+    "Durability": "A measure of how likely a player is to get injured. Players with higher durability are less likely to get injured and are less likely to suffer long-term injuries.",
+    "Agility": "The ability for a player to change direction quickly.",
+    "Acceleration": "A measure of how quickly a player can reach (near) their top speed. In most cases, high acceleration may be preferred over high speed as a player is unlikely to reach their top speed in a basketball game."
+  },
+  "Mental": {
+    "Shot IQ": "Players with a higher shot IQ know the best type of shot to take and when to take it at any given moment. As a result, they are more likely to make the shot and are less likely to get blocked.",
+    "Basketball IQ": "A measure of a player's overall basketball knowledge. Player's with a higher basketball IQ tend to make better reads on both ends of the floor and last longer in the league.",
+    "Offensive Consistency": "A measure of how likely a player is to maintain their level of performance on the offensive end. Players with higher offensive consistency are less likely to go on cold streaks.",
+    "Defensive Consistency": "A measure of how likely a player is to maintain their level of performance on the defensive end. Players with higher defensive consistency are less likely to suffer from defensive lapses.",
+    "Confidence": "A measure of how a player's form dictates their performance and play style. Players with higher confidence are less likely to be affected by consecutive misses and take more risks in a game.",
+    "Reaction Time": "Players with a higher reaction time are better at reacting to defender's swipes (when the player is dribbling), adjusting their body to finish through contact, contest shots, react to passes, loose balls and shot misses.",
+    "Hands": "A measure of how likely a player is to catch a ball from a pass.",
+    "Draw Foul": "Players with a higher draw foul rating are more effective at initiating contact and are more likely to get calls from the referees."
+  }
+}

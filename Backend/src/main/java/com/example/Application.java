@@ -32,7 +32,9 @@ import java.util.Properties;
 @EntityScan("com.example.entities")
 @EnableJpaRepositories("com.example.repositories")
 public class Application implements ApplicationRunner {
+    // The port this backend runs on.
     public static String PORT;
+    // The port the frontend runs on.
     public static String APP_PORT = "8080";
     /**
      * Whether to broadcast device IP address.
@@ -40,13 +42,14 @@ public class Application implements ApplicationRunner {
     public static boolean broadcast;
 
     public static void main(String[] args) {
+        // Load properties file
         Properties properties = new Properties();
         try (InputStream is = Application.class.getResourceAsStream("../../application.properties")) {
             properties.load(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String defaultPort = properties.getProperty("app.port");
+        String defaultPort = properties.getProperty("backend.app.port");
 
         Options options = new Options();
         Option portOption = new Option("p", "port", true,
@@ -99,7 +102,9 @@ public class Application implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        Database.getInstance();
+        // Connect to cloud database.
+        Database database = Database.getInstance();
+        // Output startup logging information
         AppLogger.start();
     }
 }

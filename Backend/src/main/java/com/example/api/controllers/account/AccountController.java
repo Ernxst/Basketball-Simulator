@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * Controller managing anything pertaining to the user's account.
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/user")
@@ -28,6 +31,12 @@ public class AccountController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * Register a new account and return a JSON response.
+     *
+     * @param user the request body, containing a username and password.
+     * @return a HTTP response including the username if registration succeeds and an error message otherwise.
+     */
     @PostMapping("/register")
     public ResponseEntity<GenericResponse> register(@RequestBody User user) {
         try {
@@ -40,6 +49,12 @@ public class AccountController {
         }
     }
 
+    /**
+     * Login into an existing account and return a JSON response with a JWT authenticated token in the header.
+     *
+     * @param authRequest the request body, containing a username and password.
+     * @return a HTTP response including a JWT token if login succeeds and an error message otherwise.
+     */
     @PostMapping("/login")
     public ResponseEntity<GenericResponse> login(@RequestBody @Valid AuthRequest authRequest) {
         try {
@@ -57,8 +72,13 @@ public class AccountController {
         }
     }
 
+    /**
+     * Delete a user from the database.
+     *
+     * @param user the user to delete.
+     */
     @DeleteMapping("/delete")
-    public void deleteUser(User user) {
+    public void deleteUser(@RequestBody User user) {
         userService.deleteUser(user);
     }
 }

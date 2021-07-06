@@ -1,23 +1,32 @@
-import Reference from "firebase-storage-lite";
+import MediaService from '../../services/media.service';
 
-const base = "gs://fise-concierge.appspot.com/";
-const baseBucket = new Reference(base);
-const imgFormat = ".webp";
 
-async function getImage(src, bucket) {
-    try {
-        const imageRef = bucket.child(src + imgFormat);
-        return await imageRef.getDownloadURL();
-    } catch {
-        return null;
+const state = () => ({
+    "backgrounds": {},
+    "team-icons": {},
+    "icons": {}
+});
+
+const getters = {
+    backgrounds: (state) => {
+        return state.backgrounds;
+    },
+};
+
+export const media = {
+    namespaced: true,
+    state,
+    getters,
+    actions: {
+        fetchBackgrounds({ commit }) {
+            MediaService.fetchBackgrounds().then((backgrounds) => {
+                commit("setBackgrounds", backgrounds);
+            });
+        }
+    },
+    mutations: {
+        setBackgrounds(state, backgrounds) {
+            state.backgrounds = backgrounds;
+        }
     }
-}
-
-const fetchImages = async (folder, names) => {
-    const map = {};
-    const bucket = await baseBucket.child(folder + "/");
-    for (const name of names) {
-        map[name] = await getImage(name, bucket);
-    }
-    return map;
 };

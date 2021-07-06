@@ -78,7 +78,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .welcome {
     flex-direction: column;
     padding: 24px;
@@ -99,7 +99,7 @@ h1 {
 }
 
 .form-card p {
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .container {
@@ -114,6 +114,10 @@ h1 {
 .form-card > a {
     margin-top: 16px;
     text-align: center;
+}
+
+.text-input label, .text-input input {
+    color: #FFF;
 }
 
 @media (min-width: 768px) {
@@ -131,6 +135,16 @@ h1 {
 @media (min-width: 900px) {
     .form-card {
         padding: 64px;
+        backdrop-filter: blur(10px);
+        background-clip: padding-box;
+        background: rgba(255, 255, 255, .2);
+        border: 1px solid rgba(255, 255, 255, .3);
+        border-radius: 8px;
+    }
+
+    .text-input .input-container {
+        background: rgba(254, 254, 254, 0.075);
+        border: 2px solid rgba(254, 254, 254, 0.3);
     }
 }
 

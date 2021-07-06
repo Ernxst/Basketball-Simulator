@@ -75,3 +75,27 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 ## Acknowledgements
 
+### Background Images
+
+All images are from [Unsplash](https://unsplash.com), allowing for free usage of images.
+
+* Welcome page background image:
+
+    * Photo
+      by <a href="https://unsplash.com/@jcgellidon?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+      JC Gellidon</a>
+      on <a href="https://unsplash.com/s/photos/basketball?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+      Unsplash</a>
+
+* League selection page:
+    * Photo
+      by <a href="https://unsplash.com/@rrajputphotography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+      Rajesh Rajput</a>
+      on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+
+* League creation page:
+    * Photo
+      by <a href="https://unsplash.com/@_ryan_?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+      Ryan</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+      Unsplash</a>
+  

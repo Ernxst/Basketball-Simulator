@@ -1,6 +1,7 @@
 import {createStore} from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import {auth} from "./modules/auth.module.js";
+import {media} from "./modules/media.module.js";
 
 export const store = createStore({
     strict: process.env.NODE_ENV !== 'production',
@@ -8,6 +9,7 @@ export const store = createStore({
         storage: window.localStorage,
     })],
     modules: {
-        auth
+        auth,
+        media,
     },
 });

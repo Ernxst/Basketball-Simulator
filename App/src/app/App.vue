@@ -19,7 +19,9 @@ export default {
         };
     },
     beforeCreate() {
-        this.$store.dispatch("media/fetchBackgrounds");
+        this.$store.dispatch("media/fetchBackgrounds").then(_ => {
+            this.setBackground();
+        });
     },
     watch: {
         $route(to, from) {
@@ -33,7 +35,8 @@ export default {
     },
     methods: {
         setBackground() {
-            const src = this.$route.name
+            const src = this.$route.name;
+            console.log(this.$store.getters["media/backgrounds"]);
             this.background = this.$store.getters["media/backgrounds"][src] || "";
         },
         scrollToId(id) {

@@ -31,11 +31,11 @@ class MediaService {
     async fetchBackgrounds() {
         const names = [];
         for (const route of routes) {
-            if (route.name && !route.meta.requiresAuth) {
+            if (route.name) {
                 names.push(route.name);
             }
         }
-        if (store.getters["media/backgrounds"].length < names.length)
+        if (Object.values(store.getters["media/backgrounds"]).length < names.length)
             return fetchImages("backgrounds", names);
         return store.getters["media/backgrounds"]
     }

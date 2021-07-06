@@ -10,17 +10,24 @@ import java.util.List;
 
 public class GenericResponse {
     private String message;
+    private HttpStatus code;
     private String error;
 
     public GenericResponse(String message) {
         super();
         this.message = message;
-        this.error = HttpStatus.OK.toString();
+        this.code = HttpStatus.OK;
     }
 
-    public GenericResponse(String message, String error) {
+    public GenericResponse(String message, HttpStatus code) {
         super();
         this.message = message;
+        this.code = code;
+    }
+
+    public GenericResponse(String message, HttpStatus code, String error) {
+        this.message = message;
+        this.code = code;
         this.error = error;
     }
 
@@ -32,8 +39,9 @@ public class GenericResponse {
             this.error = mapper.writeValueAsString(globalErrors);
         } catch (JsonProcessingException e) {
             this.message = "";
-            this.error = "";
+            this.error += e.getMessage();
         }
+        this.code = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     public String getMessage() {
@@ -42,6 +50,14 @@ public class GenericResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public HttpStatus getCode() {
+        return code;
+    }
+
+    public void setCode(HttpStatus code) {
+        this.code = code;
     }
 
     public String getError() {

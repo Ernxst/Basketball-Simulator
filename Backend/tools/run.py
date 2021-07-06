@@ -1,14 +1,15 @@
 with open("src/main/resources/application.properties", "r") as file:
-    lines = [line for line in file if line.startswith("backend.app.port=")]
+    all_lines = [line for line in file]
+    lines = [line for line in all_lines if line.startswith("backend.app.port")]
     DEFAULT_PORT = lines[0].split("=")[1]
-    lines = [line for line in file if line.startswith("backend.app.title=")]
+    lines = [line for line in all_lines if line.startswith("backend.app.title")]
     APP_TITLE = lines[0].split("=")[1]
 
 if __name__ == "__main__":
     import argparse
     from os import system
 
-    parser = argparse.ArgumentParser(prog=APP_TITLE + " Backend", description='Run the {TITLE} backend as an API on localhost.'.format(TITLE=APP_TITLE)
+    parser = argparse.ArgumentParser(prog=APP_TITLE + " Backend", description='Run the {TITLE} backend as an API on localhost.'.format(TITLE=APP_TITLE))
     parser.add_argument("-port", "--port", "-p", "--p", type=str, default=DEFAULT_PORT, nargs="?", 
                     help='(optional) choose to run on a desired port - default is ' + DEFAULT_PORT)
     parser.add_argument('-l', '--l', action="store_true", help='include logging information during execution')

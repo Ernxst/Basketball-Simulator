@@ -36,7 +36,7 @@ public class AccountController {
                     .body(new RegistrationSuccessResponse(username));
         } catch (UsernameTakenException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT.toString()));
+                    .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT));
         }
     }
 
@@ -53,7 +53,7 @@ public class AccountController {
                     .body(new UserLoginResponse(user.getUsername(), accessToken));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new GenericResponse("Login failed, either your username or password was incorrect, please try again.", HttpStatus.UNAUTHORIZED.toString()));
+                    .body(new GenericResponse("Login failed, either your username or password was incorrect, please try again.", HttpStatus.UNAUTHORIZED));
         }
     }
 

@@ -49,7 +49,6 @@ export default {
                 this.$store.dispatch("auth/login", this.user).then(
                     // On success
                     () => {
-                        console.log("Login success");
                         this.$nextTick(() => {
                             this.$router.push(
                                 {

@@ -36,7 +36,6 @@ export default {
     methods: {
         setBackground() {
             const src = this.$route.name;
-            console.log(this.$store.getters["media/backgrounds"]);
             this.background = this.$store.getters["media/backgrounds"][src] || "";
         },
         scrollToId(id) {

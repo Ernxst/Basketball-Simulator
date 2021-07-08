@@ -1,5 +1,6 @@
-import api from "../../src/backend/api.js";
-import {app} from "./constants.js";
+import api from "../../src/api/api";
+import { app } from "./constants";
+
 
 const windowScroll = window.scrollTo;
 const windowAlert = window.alert;

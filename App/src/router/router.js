@@ -1,6 +1,6 @@
-import {nextTick} from "@vue/runtime-core";
-import {createRouter, createWebHistory} from "vue-router";
-import {routes} from "./routes";
+import { nextTick } from "@vue/runtime-core";
+import { createRouter, createWebHistory } from "vue-router";
+import { routes } from "./routes.js";
 
 
 const router = createRouter({

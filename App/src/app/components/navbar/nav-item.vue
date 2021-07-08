@@ -11,6 +11,7 @@
 <script>
 import Tooltip from "../widgets/tooltip.vue";
 
+
 export default {
     name: "nav-item",
     components: { Tooltip },

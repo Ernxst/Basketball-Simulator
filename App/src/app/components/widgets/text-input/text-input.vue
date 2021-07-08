@@ -3,9 +3,9 @@
         <label v-if="label !== ''" :for="id">{{ label }} <b v-if="required">*</b></label>
         <div class="input-container centred">
             <span class="icon material-icons noselect">{{ icon }}</span>
-            <input :id="id" ref="input" v-model="object[keyName]" @focus="toggleDelete"
-                   :autocomplete="autocomplete" :maxlength="maxlength" :name="name"
-                   :placeholder="placeholder" :type="type" v-on:input="toggleDelete"
+            <input :id="id" ref="input" v-model="object[keyName]" :autocomplete="autocomplete"
+                   :maxlength="maxlength" :name="name" :placeholder="placeholder"
+                   :type="type" @focus="toggleDelete" v-on:input="toggleDelete"
                    v-on:keydown="onKeyPress" v-on:keyup.enter.prevent="onEnter">
             <span ref="delete" class="delete-icon material-icons noselect"
                   v-on:click="clearInput">close</span>
@@ -52,7 +52,7 @@ export default {
     data() {
         return {
             ignoreKeys: [],
-        }
+        };
     },
     methods: {
         focus() {

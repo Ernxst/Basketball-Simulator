@@ -19,6 +19,7 @@ import FlatButton from "../../components/widgets/buttons/flat-button.vue";
 import LoginForm from "./login-form.vue";
 import SignupForm from "./signup-form.vue";
 
+
 export default {
     name: "Welcome",
     components: { FlatButton, SignupForm, LoginForm },

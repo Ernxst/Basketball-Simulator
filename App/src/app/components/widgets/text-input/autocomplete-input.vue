@@ -1,12 +1,14 @@
 <template>
     <div class="autocomplete-text-input">
-        <text-input ref="input" :id="id" :type="type" :icon="icon" :maxlength="maxlength" :placeholder="placeholder"
-                    :label="label" :no-spaces="noSpaces" :on-enter="onSubmit" :disallowed-keys="disallowedKeys"
-                    autocomplete="off" :required="required" :object="object" :key-name="keyName" :name="`${id}-search`"
+        <text-input :id="id" ref="input" :disallowed-keys="disallowedKeys" :icon="icon" :key-name="keyName"
+                    :label="label"
+                    :maxlength="maxlength" :name="`${id}-search`" :no-spaces="noSpaces" :object="object"
+                    :on-enter="onSubmit" :placeholder="placeholder" :required="required" :type="type" autocomplete="off"
                     @keyup.down='down' @keyup.up='up'></text-input>
-        <ul class="listbox centred" ref="listbox" v-show="matches.length > 0">
-            <li v-for="(suggestion, index) in matches" class="listbox-item" @keyup.down='down' @keyup.up='up'
-                v-bind:class="{'active-suggestion': isActive(index)}" @click="suggestionClick(index)">
+        <ul v-show="matches.length > 0" ref="listbox" class="listbox centred">
+            <li v-for="(suggestion, index) in matches" class="listbox-item"
+                v-bind:class="{'active-suggestion': isActive(index)}" @click="suggestionClick(index)"
+                @keyup.down='down' @keyup.up='up'>
                 {{ suggestion }}
             </li>
 
@@ -16,6 +18,7 @@
 
 <script>
 import TextInput from "./text-input.vue";
+
 
 export default {
     name: "autocomplete-input",

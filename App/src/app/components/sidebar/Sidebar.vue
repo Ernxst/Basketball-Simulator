@@ -20,6 +20,7 @@ import Navbar from "../navbar/Navbar.vue";
 import Tooltip from "../widgets/tooltip.vue";
 import TeamInfo from "./team-info.vue";
 
+
 export default {
     name: "Sidebar",
     components: { Tooltip, TeamInfo, Navbar },

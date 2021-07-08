@@ -11,6 +11,7 @@
 import Page from "../../components/layout/Page.vue";
 import SettingsSidebar from "./sidebar/settings-sidebar.vue";
 
+
 export default {
     name: "Settings",
     components: { SettingsSidebar, Page },

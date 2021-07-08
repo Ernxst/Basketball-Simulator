@@ -1,9 +1,10 @@
 <template>
-    <nav-item :icon="icon" :tooltip="tooltip" :page="page"></nav-item>
+    <nav-item :icon="icon" :page="page" :tooltip="tooltip"></nav-item>
 </template>
 
 <script>
 import NavItem from "./nav-item.vue";
+
 
 export default {
     name: "help-item",

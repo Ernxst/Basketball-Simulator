@@ -8,6 +8,7 @@
 
 import NextGameCard from "./sidebar-cards/next-game-card.vue";
 
+
 export default {
     name: "home-sidebar",
     components: { NextGameCard },

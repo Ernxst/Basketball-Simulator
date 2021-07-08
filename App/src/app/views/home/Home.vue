@@ -15,6 +15,7 @@ import Page from "../../components/layout/Page.vue";
 import SimCalendar from "./calendar/sim-calendar.vue";
 import HomeSidebar from "./sidebar/home-sidebar.vue";
 
+
 export default {
     name: "Home",
     components: { SimCalendar, HomeSidebar, Page },

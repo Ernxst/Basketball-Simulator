@@ -2,8 +2,8 @@
     <router-view v-slot="{ Component }">
         <transition>
             <div>
-                <img :src="background" class="background-img centred" alt="Background"
-                     v-if="background !== ''">
+                <img v-if="background !== ''" :src="background" alt="Background"
+                     class="background-img centred">
                 <component :is="Component"/>
             </div>
         </transition>

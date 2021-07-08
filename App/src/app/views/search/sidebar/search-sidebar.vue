@@ -12,6 +12,7 @@ import FlatButton from "../../../components/widgets/buttons/flat-button.vue";
 import PlayerInfoCard from "./sidebar-cards/player-info-card.vue";
 import StatsCard from "./sidebar-cards/stats-card.vue";
 
+
 export default {
     name: "search-sidebar",
     components: { StatsCard, PlayerInfoCard, FlatButton },

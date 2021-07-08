@@ -15,6 +15,7 @@
 import Page from "../../components/layout/Page.vue";
 import SearchSidebar from "./sidebar/search-sidebar.vue";
 
+
 export default {
     name: "Search",
     components: { SearchSidebar, Page },

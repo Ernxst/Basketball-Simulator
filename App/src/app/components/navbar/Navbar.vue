@@ -17,6 +17,7 @@
 import HelpItem from "./help-item.vue";
 import NavItem from "./nav-item.vue";
 
+
 export default {
     name: "navbar",
     components: { HelpItem, NavItem },

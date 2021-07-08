@@ -11,6 +11,7 @@
 import Page from "../../components/layout/Page.vue";
 import InsightsSidebar from "./sidebar/insights-sidebar.vue";
 
+
 export default {
     name: "Insights",
     components: { InsightsSidebar, Page },

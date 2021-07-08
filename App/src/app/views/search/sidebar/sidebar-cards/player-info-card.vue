@@ -1,16 +1,17 @@
 <template>
     <div class="player-info-card centred sidebar-card">
-        <autocomplete-input id="first-name-input" icon="person" label="First Name" placeholder="Kyrie"
-                            :suggestions="allFirstNames" :object="searchInfo" type="text"
-                            key-name="first-name"></autocomplete-input>
-        <autocomplete-input id="last-name-input" icon="person" label="Last Name" placeholder="Irving"
-                            :suggestions="allLastNames" :object="searchInfo" type="text"
-                            key-name="last-name"></autocomplete-input>
+        <autocomplete-input id="first-name-input" :object="searchInfo" :suggestions="allFirstNames" icon="person"
+                            key-name="first-name" label="First Name" placeholder="Kyrie"
+                            type="text"></autocomplete-input>
+        <autocomplete-input id="last-name-input" :object="searchInfo" :suggestions="allLastNames" icon="person"
+                            key-name="last-name" label="Last Name" placeholder="Irving"
+                            type="text"></autocomplete-input>
     </div>
 </template>
 
 <script>
 import AutocompleteInput from "../../../../components/widgets/text-input/autocomplete-input.vue";
+
 
 export default {
     name: "player-info-card",
@@ -25,7 +26,7 @@ export default {
         },
         allLastNames() {
             return ["Irving", "James", "Durant", "George", "Leonard", "Paul", "Booker", "Tatum", "Brown",
-            "Jokic", "Doncic", "Murray", "Davis", "Simmons", "Embiid", "Curry", "Lillard"];
+                "Jokic", "Doncic", "Murray", "Davis", "Simmons", "Embiid", "Curry", "Lillard"];
         }
     }
 };

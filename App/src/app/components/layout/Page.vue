@@ -14,6 +14,7 @@
 import Sidebar from "../sidebar/Sidebar.vue";
 import PageFooter from "./PageFooter.vue";
 
+
 export default {
     name: 'Page',
     components: { Sidebar, PageFooter },

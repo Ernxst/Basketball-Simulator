@@ -5,10 +5,11 @@
 </template>
 
 <script>
-import {Calendar} from "@fullcalendar/core";
+import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import CalendarContainer from "./calendar-container.vue";
+
 
 export default {
     name: "sim-calendar",

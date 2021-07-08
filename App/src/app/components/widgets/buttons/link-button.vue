@@ -9,6 +9,7 @@
 import FlatButton from "./flat-button.vue";
 import VLink from "./v-link.vue";
 
+
 export default {
     name: "link-button",
     components: { VLink, FlatButton },

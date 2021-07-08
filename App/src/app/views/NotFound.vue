@@ -15,6 +15,7 @@
 import FlatButton from "../components/widgets/buttons/flat-button.vue";
 import VlinkButton from "../components/widgets/buttons/vlink-button.vue";
 
+
 export default {
     name: "NotFound",
     components: { VlinkButton, FlatButton },

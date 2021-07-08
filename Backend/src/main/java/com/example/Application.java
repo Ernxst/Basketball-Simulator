@@ -6,6 +6,7 @@ TODO - Pass "b" flag from docker/python run script to here
 
 import com.example.api.AppLogger;
 import com.example.db.Database;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -23,7 +24,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.example.repositories")
 public class Application {
     // The port this backend runs on.
-    public static String PORT = "8100";
+    @Value("${server.port}")
+    public static String PORT;
     // The port the frontend runs on.
     public static String APP_PORT = "8080";
     /**

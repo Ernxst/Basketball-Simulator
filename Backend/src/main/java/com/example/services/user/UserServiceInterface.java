@@ -2,7 +2,6 @@ package com.example.services.user;
 
 import com.example.entities.user.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface UserServiceInterface extends UserDetailsService {
     /**
@@ -13,9 +12,6 @@ public interface UserServiceInterface extends UserDetailsService {
      * @throws UsernameTakenException if the chosen username is already present in the database.
      */
     User register(User user) throws UsernameTakenException;
-
-    User login(User user) throws UsernameNotFoundException;
-
 
     /**
      * Change a given user's password.

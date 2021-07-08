@@ -48,12 +48,6 @@ public class UserService implements UserServiceInterface {
         throw new UsernameTakenException(MessageFormat.format("The username {0} is already in use, please try another. Did you mean to sign in?", username));
     }
 
-    // TODO - Remove
-    @Override
-    public User login(User user) throws UsernameNotFoundException {
-        return null;
-    }
-
     /**
      * Change a given user's password.
      *

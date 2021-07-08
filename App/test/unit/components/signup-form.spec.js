@@ -1,7 +1,8 @@
-import {mount} from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import SignupForm from "../../../src/app/views/welcome/signup-form.vue";
-import {store} from "../../../src/store/store";
-import {mockRouter, takenUsername, validRegisterPassword, validRegisterUsername} from "../constants.js";
+import { store } from "../../../src/store/store.js";
+import { mockRouter, takenUsername, validRegisterPassword, validRegisterUsername } from "../constants";
+
 
 describe("Signup Form", () => {
     beforeAll(async () => {
@@ -96,5 +97,5 @@ describe("Signup Form", () => {
      * Valid data
      */
     test("valid signup", validRegisterUsername, validRegisterPassword,
-        validRegisterPassword,  true, "");
+        validRegisterPassword, true, "");
 });

@@ -1,6 +1,6 @@
-import {mount} from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import FlatButton from "../../../src/app/components/widgets/buttons/flat-button.vue";
-import {app, mockRouter} from "../constants.js";
+import { app, mockRouter } from "../constants";
 
 
 describe("Flat Button Component", () => {

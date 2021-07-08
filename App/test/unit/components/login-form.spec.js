@@ -1,8 +1,8 @@
-import {mount} from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import LoginForm from "../../../src/app/views/welcome/login-form.vue";
-import {store} from "../../../src/store/store";
-import {invalidUsername, mockRouter, validLoginPassword, validLoginUsername} from "../constants.js";
-import {app} from "../constants.js";
+import { store } from "../../../src/store/store.js";
+import { app, invalidUsername, mockRouter, validLoginPassword, validLoginUsername } from "../constants";
+
 
 describe("Login Form", () => {
     beforeAll(async () => {
@@ -64,6 +64,6 @@ describe("Login Form", () => {
         "Login failed, either your username or password was incorrect, please try again.");
     test("invalid username incorrect password", invalidUsername, "aaa",
         false,
-    `Login failed, the username ${invalidUsername} does not exist; are you trying to sign up?`);
+        `Login failed, the username ${invalidUsername} does not exist; are you trying to sign up?`);
 
 });

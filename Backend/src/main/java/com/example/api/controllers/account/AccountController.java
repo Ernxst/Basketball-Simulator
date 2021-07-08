@@ -4,7 +4,6 @@ import com.example.api.responses.GenericResponse;
 import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.api.responses.UserLoginResponse;
 import com.example.config.JwtTokenUtil;
-import com.example.entities.requests.AuthRequest;
 import com.example.entities.user.User;
 import com.example.services.user.UserService;
 import com.example.services.user.UsernameTakenException;
@@ -17,8 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * Controller managing anything pertaining to the user's account.
@@ -56,17 +53,21 @@ public class AccountController {
      * @return a HTTP response including a JWT token if login succeeds and an error message otherwise.
      */
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse> login(@RequestBody @Valid AuthRequest authRequest) {
+    public ResponseEntity<GenericResponse> login(@RequestBody User authRequest) {
+        String username = authRequest.getUsername();
         try {
             Authentication authenticate = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
             User user = (User) authenticate.getPrincipal();
 
             String accessToken = jwtTokenUtil.generateAccessToken(user);
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, accessToken)
-                    .body(new UserLoginResponse(user.getUsername(), accessToken));
+                    .body(new UserLoginResponse(username, accessToken));
         } catch (BadCredentialsException ex) {
+            if (!userService.usernameExists(username))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new GenericResponse("Login failed, the username " + username + " does not exist; are you trying to sign up?", HttpStatus.UNAUTHORIZED));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new GenericResponse("Login failed, either your username or password was incorrect, please try again.", HttpStatus.UNAUTHORIZED));
         }

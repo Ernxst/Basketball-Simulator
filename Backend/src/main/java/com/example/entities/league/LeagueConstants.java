@@ -20,6 +20,8 @@ public class LeagueConstants {
      */
     public static final int MAX_TEAMS = 45;
 
+    public static final int MAX_LEAGUES = 3;
+
     public static final Month LEAGUE_START_MONTH = Month.OCTOBER;
     public static final int LEAGUE_START_DAY = 29;
 }

@@ -43,9 +43,9 @@ export default {
         "teamCity": String,
         "teamName": String,
         "teamIcon": String,
-        "currentDate": Date,
+        "currentDate": Number,
         "currentSeason": Number,
-        "lastPlayed": Date,
+        "lastPlayed": Number,
         "wins": Number,
         "losses": Number
     },

@@ -12,13 +12,10 @@ import java.util.HashSet;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode
 @Entity(name = "USERS")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
-    //    @Builder.Default
-//    private UserRole userRole = UserRole.USER;
     @Id
     @NonNull
     private String username;
@@ -49,7 +46,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    enum UserRole {
-        USER
+    public boolean equals(User user) {
+        return username.equals(user.getUsername());
     }
 }

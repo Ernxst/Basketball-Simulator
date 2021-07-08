@@ -1,4 +1,13 @@
-import AuthService from '../../services/auth.service';
+import AuthService from './../../services/auth.service';
+import { User } from "../../assets/types";
+// @ts-ignore
+import { Commit } from "vuex";
+
+
+interface State {
+    status: { loggedIn: boolean },
+    user: User | null
+}
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
@@ -9,29 +18,39 @@ export const auth = {
     namespaced: true,
     state: initialState,
     actions: {
-        login({ commit }, user) {
+        /**
+         *
+         * @param commit
+         * @param user
+         */
+        login({ commit }: { commit: Commit }, user: User): Promise<any> {
             return AuthService.login(user).then(
-                user => {
+                (user: { accessToken: string }) => {
                     commit('loginSuccess', user);
                     return Promise.resolve(user);
                 },
-                error => {
+                (error: Error) => {
                     commit('loginFailure');
                     return Promise.reject(error);
                 }
             );
         },
-        logout({ commit }) {
+        logout({ commit }: { commit: Commit }) {
             AuthService.logout();
             commit('logout');
         },
-        register({ commit }, user) {
+        /**
+         *
+         * @param commit
+         * @param user
+         */
+        register({ commit }: { commit: Commit }, user: User): Promise<any> {
             return AuthService.register(user).then(
-                response => {
+                (response: { data: any; }) => {
                     commit('registerSuccess');
                     return Promise.resolve(response.data);
                 },
-                error => {
+                (error: Error) => {
                     commit('registerFailure');
                     return Promise.reject(error);
                 }
@@ -39,22 +58,22 @@ export const auth = {
         }
     },
     mutations: {
-        loginSuccess(state, user) {
+        loginSuccess(state: State, user: User) {
             state.status.loggedIn = true;
             state.user = user;
         },
-        loginFailure(state) {
+        loginFailure(state: State) {
             state.status.loggedIn = false;
             state.user = null;
         },
-        logout(state) {
+        logout(state: State) {
             state.status.loggedIn = false;
             state.user = null;
         },
-        registerSuccess(state) {
+        registerSuccess(state: State) {
             state.status.loggedIn = false;
         },
-        registerFailure(state) {
+        registerFailure(state: State) {
             state.status.loggedIn = false;
         }
     }

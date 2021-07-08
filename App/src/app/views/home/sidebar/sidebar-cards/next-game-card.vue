@@ -4,14 +4,14 @@
         <div class="next-game-info centred">
             <div class="team away centred">
                 <div class="image">
-                    <img :src="away.image" :alt="awayName">
+                    <img :alt="awayName" :src="away.image">
                 </div>
                 <p class="team-name">{{ awayName }}</p>
             </div>
             <span>@</span>
             <div class="team home centred">
                 <div class="image">
-                    <img :src="home.image" :alt="homeName">
+                    <img :alt="homeName" :src="home.image">
                 </div>
                 <p class="team-name">{{ homeName }}</p>
             </div>
@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import {fullTeamName} from "../../../../../assets/util.js";
+import { fullTeamName } from "../../../../../assets/util.ts";
+
 
 export default {
     name: "next-game-card",

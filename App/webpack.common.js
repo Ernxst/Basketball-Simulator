@@ -60,6 +60,11 @@ module.exports = {
                 }
             },
             {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
                 test: /\.css$/,
                 use: [
                     MiniCssExtractPlugin.loader,
@@ -79,4 +84,7 @@ module.exports = {
             },
         ],
     },
+    resolve: {
+        extensions: ['.vue', '.ts', '.js', '.json']
+    }
 };

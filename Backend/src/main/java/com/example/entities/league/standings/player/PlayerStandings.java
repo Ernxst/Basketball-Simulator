@@ -1,7 +1,7 @@
 package com.example.entities.league.standings.player;
 
-import com.google.common.collect.TreeBasedTable;
 import com.example.entities.league.standings.AbstractLeaderboard;
+import com.google.common.collect.TreeBasedTable;
 
 import java.util.Arrays;
 import java.util.List;

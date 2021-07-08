@@ -8,6 +8,7 @@ public class LeagueRecord {
     private int value;
     private int season;
     private LocalDate dateSet;
+
     public LeagueRecord(int playerID, int value, int season, LocalDate dateSet) {
         this.playerID = playerID;
         this.value = value;

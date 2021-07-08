@@ -1,6 +1,5 @@
 package com.example.api.controllers;
 
-import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.entities.league.LeagueConstants;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

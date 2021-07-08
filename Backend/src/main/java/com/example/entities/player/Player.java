@@ -35,7 +35,7 @@ public class Player {
     protected PlayerAttributes playerAttributes;
     protected PlayerAttributes potentialAttributes;
 
-//    @Id
+    //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int playerID;
 

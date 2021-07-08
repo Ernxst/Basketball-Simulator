@@ -17,7 +17,7 @@ import java.util.HashSet;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
-//    @Builder.Default
+    //    @Builder.Default
 //    private UserRole userRole = UserRole.USER;
     @Id
     @NonNull

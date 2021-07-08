@@ -11,6 +11,7 @@ public class Attribute {
     private final String formattedName;
     private final String description;
     private final AttributeCategory category;
+
     public Attribute(String name, String description, AttributeCategory category) {
         this.name = name;
         this.formattedName = WordUtils.capitalizeFully(name.replaceAll("_", " ").toLowerCase(Locale.ROOT));

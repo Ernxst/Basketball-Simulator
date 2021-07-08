@@ -1,7 +1,7 @@
 package com.example.entities.league.standings;
 
-import com.google.common.collect.TreeBasedTable;
 import com.example.entities.league.standings.table.AbstractCustomTable;
+import com.google.common.collect.TreeBasedTable;
 
 public abstract class AbstractLeaderboard extends AbstractCustomTable implements Leaderboard {
     protected final String name;

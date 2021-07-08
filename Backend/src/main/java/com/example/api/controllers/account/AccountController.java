@@ -4,6 +4,7 @@ import com.example.api.responses.GenericResponse;
 import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.api.responses.UserLoginResponse;
 import com.example.config.JwtTokenUtil;
+import com.example.entities.requests.AuthRequest;
 import com.example.entities.user.User;
 import com.example.services.user.UserService;
 import com.example.services.user.UsernameTakenException;
@@ -31,29 +32,30 @@ public class AccountController {
     /**
      * Register a new account and return a JSON response.
      *
-     * @param user the request body, containing a username and password.
+     * @param authRequest the request body, containing a username and password.
      * @return a HTTP response including the username if registration succeeds and an error message otherwise.
      */
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse> register(@RequestBody User user) {
+    public ResponseEntity<GenericResponse> register(@RequestBody User authRequest) {
         try {
-            String username = userService.register(user).getUsername();
+            User registeredUser = userService.register(authRequest);
+            String username = registeredUser.getUsername();
             return ResponseEntity.ok()
                     .body(new RegistrationSuccessResponse(username));
         } catch (UsernameTakenException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(HttpStatus.CONFLICT.value())
                     .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT));
         }
     }
 
     /**
-     * Login into an existing account and return a JSON response with a JWT authenticated token in the header.
+     * Log into an existing account and return a JSON response with a JWT authenticated token in the header.
      *
      * @param authRequest the request body, containing a username and password.
      * @return a HTTP response including a JWT token if login succeeds and an error message otherwise.
      */
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse> login(@RequestBody User authRequest) {
+    public ResponseEntity<GenericResponse> login(@RequestBody AuthRequest authRequest) {
         String username = authRequest.getUsername();
         try {
             Authentication authenticate = authenticationManager
@@ -66,9 +68,9 @@ public class AccountController {
                     .body(new UserLoginResponse(username, accessToken));
         } catch (BadCredentialsException ex) {
             if (!userService.usernameExists(username))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
                         .body(new GenericResponse("Login failed, the username " + username + " does not exist; are you trying to sign up?", HttpStatus.UNAUTHORIZED));
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
                     .body(new GenericResponse("Login failed, either your username or password was incorrect, please try again.", HttpStatus.UNAUTHORIZED));
         }
     }

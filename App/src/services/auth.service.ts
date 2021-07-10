@@ -1,10 +1,8 @@
 // @ts-ignore
 import axios from 'axios';
 import { User } from "../assets/types";
-
-
-const PORT = 8100;
-const BASE_URL = `http://localhost:${PORT}/user/`;
+import { RELATIVE_USER_LOGIN_ENDPOINT, RELATIVE_USER_REGISTER_ENDPOINT } from "./endpoints";
+import { makeRequest } from "./api";
 
 
 class AuthService {
@@ -14,24 +12,18 @@ class AuthService {
      * @returns
      */
     login(user: User) {
-        return axios
-            .post(BASE_URL + 'login', {
-                username: user.username,
-                password: user.password
-            }, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT",
-                    "Access-Control-Max-Age": "1000",
-                    "Access-Control-Allow-Headers": "x-requested-with, Content-Type, origin, authorization, accept, client-security-token"
+        return makeRequest(RELATIVE_USER_LOGIN_ENDPOINT, "POST", {}, {
+            username: user.username,
+            password: user.password
+        })
+            .then(
+                (response: { accessToken: string }) => {
+                    if (response.accessToken) {
+                        localStorage.setItem('user', JSON.stringify(response));
+                    }
+                    return response;
                 }
-            })
-            .then((response: { data: { accessToken: String; }; }) => {
-                if (response.data.accessToken) {
-                    localStorage.setItem('user', JSON.stringify(response.data));
-                }
-                return response.data;
-            });
+            );
     }
 
     logout(): void {
@@ -43,7 +35,7 @@ class AuthService {
      * @param {User} user
      */
     register(user: User) {
-        return axios.post(BASE_URL + 'register', {
+        return makeRequest(RELATIVE_USER_REGISTER_ENDPOINT, "POST", {}, {
             username: user.username,
             password: user.password
         });

@@ -3,6 +3,7 @@ package com.example.services.user;
 import com.example.entities.user.User;
 import com.example.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,9 +57,21 @@ public class UserService implements UserServiceInterface {
      * @return the user with their new password set.
      */
     public User changePassword(User user, String newPassword) {
-        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encryptedPassword);
-        return userRepository.save(user);
+        String username = user.getUsername();
+        if (usernameExists(username)) {
+            String rawPassword = user.getPassword();
+            UserDetails loadedUser = loadUserByUsername(username);
+            // Get real user data from repository.
+            user = new User(username, loadedUser.getPassword());
+
+            if (passwordMatches(user, rawPassword)) {
+                String encryptedNewPassword = passwordEncoder.encode(newPassword);
+                user.setPassword(encryptedNewPassword);
+                return userRepository.save(user);
+            }
+            throw new BadCredentialsException("Your password was incorrect, please try again.");
+        }
+        throw new UsernameNotFoundException(MessageFormat.format("The user with username {0} cannot be found.", username));
     }
 
     /**
@@ -75,11 +88,11 @@ public class UserService implements UserServiceInterface {
      * Test whether an entered password matches the password for a given user.
      *
      * @param user            the user whose password is being matched to.
-     * @param enteredPassword the input password.
+     * @param rawPassword the input password.
      * @return a boolean representing whether the passwords match.
      */
-    public boolean passwordMatches(User user, String enteredPassword) {
-        return passwordEncoder.matches(enteredPassword, user.getPassword());
+    public boolean passwordMatches(User user, String rawPassword) {
+        return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 
     /**
@@ -88,6 +101,19 @@ public class UserService implements UserServiceInterface {
      * @param user the user to remove.
      */
     public void deleteUser(User user) {
-        userRepository.delete(user);
+        String username = user.getUsername();
+        if (usernameExists(username)) {
+            String rawPassword = user.getPassword();
+            UserDetails loadedUser = loadUserByUsername(username);
+            // Get real user data from repository.
+            user = new User(username, loadedUser.getPassword());
+
+            if (passwordMatches(user, rawPassword)) {
+                userRepository.delete(user);
+                return;
+            }
+            throw new BadCredentialsException("Your password was incorrect, please try again.");
+        }
+        throw new UsernameNotFoundException(MessageFormat.format("The user with username {0} cannot be found.", username));
     }
 }

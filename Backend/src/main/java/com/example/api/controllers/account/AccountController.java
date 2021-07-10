@@ -5,6 +5,7 @@ import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.api.responses.UserLoginResponse;
 import com.example.config.JwtTokenUtil;
 import com.example.entities.requests.AuthRequest;
+import com.example.entities.requests.ChangePasswordRequest;
 import com.example.entities.user.User;
 import com.example.services.user.UserService;
 import com.example.services.user.UsernameTakenException;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -78,10 +80,38 @@ public class AccountController {
     /**
      * Delete a user from the database.
      *
-     * @param user the user to delete.
+     * @param authRequest the request body, containing the username and password.
+     * @return a HTTP response indicating whether the deletion was successful.
      */
     @DeleteMapping("/delete")
-    public void deleteUser(@RequestBody User user) {
-        userService.deleteUser(user);
+    public ResponseEntity<GenericResponse> deleteUser(@RequestBody AuthRequest authRequest) {
+        try {
+            User user = new User(authRequest.getUsername(), authRequest.getPassword());
+            userService.deleteUser(user);
+            return ResponseEntity.status(HttpStatus.OK.value())
+                    .body(new GenericResponse("Success"));
+        } catch (UsernameNotFoundException | BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .body(new GenericResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED));
+        }
+    }
+
+    /**
+     * Change a given user's password.
+     *
+     * @param request the request body, containing the username, current and new password.
+     * @return a HTTP response indicating whether the password change was successful.
+     */
+    @PostMapping("/change-password")
+    public ResponseEntity<GenericResponse> changePassword(@RequestBody ChangePasswordRequest request) {
+        try {
+            User user = new User(request.getUsername(), request.getCurrentPassword());
+            userService.changePassword(user, request.getNewPassword());
+            return ResponseEntity.status(HttpStatus.OK.value())
+                    .body(new GenericResponse("Success"));
+        } catch (UsernameNotFoundException | BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .body(new GenericResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED));
+        }
     }
 }

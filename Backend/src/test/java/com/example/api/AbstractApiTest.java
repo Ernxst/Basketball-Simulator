@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -106,6 +105,14 @@ public abstract class AbstractApiTest {
 
     protected ResultActions testAuthenticatedPostEndpoint(String contextPath, String endpoint, Object requestBody, String expectedMessage) throws Exception {
         return testEndpoint(contextPath, endpoint, HttpMethod.POST, requestBody, expectedMessage, true);
+    }
+
+    protected ResultActions testDeleteEndpoint(String contextPath, String endpoint, Object requestBody, String expectedMessage) throws Exception {
+        return testEndpoint(contextPath, endpoint, HttpMethod.DELETE, requestBody, expectedMessage, false);
+    }
+
+    protected ResultActions testAuthenticatedDeleteEndpoint(String contextPath, String endpoint, Object requestBody, String expectedMessage) throws Exception {
+        return testEndpoint(contextPath, endpoint, HttpMethod.DELETE, requestBody, expectedMessage, true);
     }
 
     private static class UserMatcher implements ArgumentMatcher<User> {

@@ -2,10 +2,13 @@ package com.example.api;
 
 import com.example.api.controllers.account.AccountController;
 import com.example.entities.requests.AuthRequest;
+import com.example.entities.requests.ChangePasswordRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.text.MessageFormat;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,15 +40,12 @@ public class AccountControllerTest extends AbstractApiTest {
                 new AuthRequest("doesntexist", TEST_PASSWORD), "does not exist");
         result.andExpect(status().isUnauthorized());
         MvcResult mvcResult = result.andReturn();
-
     }
 
     @Test
     public void registerValidUsernameAndPassword() throws Exception {
-        String validRegisterUsername = "test-register";
-        String validRegisterPassword = "12345";
         ResultActions result = testPostEndpoint("/user", "register",
-                new AuthRequest(validRegisterUsername, validRegisterPassword),
+                new AuthRequest(VALID_REGISTER_USERNAME, VALID_REGISTER_PASSWORD),
                 "Registration success");
         result.andExpect(status().isOk());
         MvcResult mvcResult = result.andReturn();
@@ -60,7 +60,59 @@ public class AccountControllerTest extends AbstractApiTest {
     }
 
     @Test
-    public void deleteUser() throws Exception {
-
+    public void changePasswordValidUsernameAndPassword() throws Exception {
+        ResultActions result = testAuthenticatedPostEndpoint("/user", "change-password",
+                new ChangePasswordRequest(TEST_USERNAME, TEST_PASSWORD, "some-password"),
+                "Success");
+        result.andExpect(status().isOk());
+        MvcResult mvcResult = result.andReturn();
     }
+
+    @Test
+    public void changePasswordValidUsernameWrongPassword() throws Exception {
+        ResultActions result = testAuthenticatedPostEndpoint("/user", "change-password",
+                new ChangePasswordRequest(TEST_USERNAME, "incorrect", "some-password"),
+                "Your password was incorrect, please try again.");
+        result.andExpect(status().isUnauthorized());
+        MvcResult mvcResult = result.andReturn();
+    }
+
+    @Test
+    public void changePasswordWrongUsername() throws Exception {
+        String username = "doesntexist";
+        ResultActions result = testAuthenticatedPostEndpoint("/user", "change-password",
+                new ChangePasswordRequest(username, TEST_PASSWORD, "some-password"),
+                MessageFormat.format("The user with username {0} cannot be found.", username));
+        result.andExpect(status().isUnauthorized());
+        MvcResult mvcResult = result.andReturn();
+    }
+
+    @Test
+    public void deleteUserValidUsernameAndPassword() throws Exception {
+        ResultActions result = testAuthenticatedDeleteEndpoint("/user", "delete",
+                new AuthRequest(TEST_USERNAME, TEST_PASSWORD),
+                "Success");
+        result.andExpect(status().isOk());
+        MvcResult mvcResult = result.andReturn();
+    }
+
+    @Test
+    public void deleteUserValidUsernameWrongPassword() throws Exception {
+        ResultActions result = testAuthenticatedDeleteEndpoint("/user", "delete",
+                new AuthRequest(TEST_USERNAME, "incorrect"),
+                "Your password was incorrect, please try again.");
+        result.andExpect(status().isUnauthorized());
+        MvcResult mvcResult = result.andReturn();
+    }
+
+    @Test
+    public void deleteUserWrongUsername() throws Exception {
+        String username = "doesntexist";
+        ResultActions result = testAuthenticatedDeleteEndpoint("/user", "delete",
+                new AuthRequest(username, TEST_PASSWORD),
+                MessageFormat.format("The user with username {0} cannot be found.", username));
+        result.andExpect(status().isUnauthorized());
+        MvcResult mvcResult = result.andReturn();
+    }
+
 }

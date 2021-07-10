@@ -8,6 +8,7 @@ import com.example.repositories.UserRepository;
 import com.example.services.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,6 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -64,8 +67,10 @@ public abstract class AbstractApiTest {
     @BeforeEach
     private void createTestUser() {
         Mockito.when(userRepository.findByUsername(TEST_USERNAME)).thenReturn(testUser);
-        Optional<User> testUser = Optional.of(new User(VALID_REGISTER_USERNAME, VALID_REGISTER_PASSWORD));
-        Mockito.when(userRepository.save(testUser.get())).thenReturn(newUser.get());
+        Optional<User> registrationRequest = Optional.of(new User(VALID_REGISTER_USERNAME, VALID_REGISTER_PASSWORD));
+        Mockito.when(
+                userRepository.save(argThat(new UserMatcher(registrationRequest.get())))
+        ).thenReturn(newUser.get());
     }
 
     private ResultActions testEndpoint(String contextPath, String endpoint, HttpMethod method,
@@ -101,5 +106,18 @@ public abstract class AbstractApiTest {
 
     protected ResultActions testAuthenticatedPostEndpoint(String contextPath, String endpoint, Object requestBody, String expectedMessage) throws Exception {
         return testEndpoint(contextPath, endpoint, HttpMethod.POST, requestBody, expectedMessage, true);
+    }
+
+    private static class UserMatcher implements ArgumentMatcher<User> {
+        private final User user;
+
+        public UserMatcher(User user) {
+            this.user = user;
+        }
+
+        @Override
+        public boolean matches(User otherUser) {
+            return user.equals(otherUser);
+        }
     }
 }

@@ -14,8 +14,9 @@ module.exports = {
     transform: {
         ".*\\.(vue)$": "vue-jest",
         ".*\\.(js)$": "babel-jest",
+        ".*\\.(ts)$": "ts-jest",
     },
     transformIgnorePatterns: patterns(),
     collectCoverage: true,
-    collectCoverageFrom: ["src/**/*.js", "src/**/*.vue"],
+    collectCoverageFrom: ["src/**/*.ts", "src/**/*.js", "src/**/*.vue"],
 };

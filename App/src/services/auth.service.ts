@@ -18,6 +18,13 @@ class AuthService {
             .post(BASE_URL + 'login', {
                 username: user.username,
                 password: user.password
+            }, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT",
+                    "Access-Control-Max-Age": "1000",
+                    "Access-Control-Allow-Headers": "x-requested-with, Content-Type, origin, authorization, accept, client-security-token"
+                }
             })
             .then((response: { data: { accessToken: String; }; }) => {
                 if (response.data.accessToken) {

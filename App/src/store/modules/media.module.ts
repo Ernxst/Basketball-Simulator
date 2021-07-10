@@ -34,7 +34,7 @@ export const media = {
             }
             // Only fetch images if not currently stored to reduce bandwidth.
             const backgrounds = getters["media/backgrounds"];
-            if (backgrounds && Object.values(backgrounds).length < names.length)
+            if (!backgrounds || Object.values(backgrounds).length < names.length)
                 MediaService.fetchBackgrounds(names).then((backgrounds) => {
                     commit("setBackgrounds", backgrounds);
                 });

@@ -85,6 +85,6 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.vue', '.ts', '.js', '.json']
+        extensions: ['.ts', '.js', '.json']
     }
 };

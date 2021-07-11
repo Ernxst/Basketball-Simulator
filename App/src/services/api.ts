@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, Method } from "axios";
 import { BASE_URL } from "./endpoints";
-import { ApiResponse } from "../assets/types.js";
+import { ApiErrorResponse, ApiResponse } from "../assets/types.js";
 
 
 export async function makeRequest(endpoint: string, method: Method,
@@ -20,9 +20,9 @@ export async function makeRequest(endpoint: string, method: Method,
                 statusText: response.statusText,
             };
         },
-        (error: Error) => {
+        (error: ApiErrorResponse) => {
             return {
-                status: 500,
+                status: error.response.status,
                 statusText: error.message
             }
         }
@@ -31,7 +31,7 @@ export async function makeRequest(endpoint: string, method: Method,
 
 export const api = axios.create({
     baseURL: BASE_URL,
-    timeout: 1000,
+    timeout: 20000,
     headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT",

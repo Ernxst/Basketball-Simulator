@@ -42,7 +42,7 @@ export default {
             this.$refs.password.clearInput();
             this.$refs.username.focus();
         },
-        async login() {
+        login() {
             if (this.user.username !== "" &&
                 this.user.password !== "") {
 

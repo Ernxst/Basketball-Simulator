@@ -1,5 +1,4 @@
-import api from "../../src/api/api";
-import { app } from "./constants";
+import { app } from "./constants.js";
 
 
 const windowScroll = window.scrollTo;
@@ -7,15 +6,7 @@ const windowAlert = window.alert;
 const windowPrompt = window.prompt;
 const windowConfirm = window.confirm;
 
-const waitForBackend = async () => {
-    let response = await api.ping();
-    while (!response.success) {
-        response = await api.ping();
-    }
-};
-
 global.beforeAll(async () => {
-    // await waitForBackend();
     jest.setTimeout(45000);
     prompt = global.scrollTo = scrollTo = alert = window.scrollTo = window.alert = window.prompt = jest.fn();
     confirm = window.confirm = () => {

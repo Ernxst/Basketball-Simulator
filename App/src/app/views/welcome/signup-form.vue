@@ -84,13 +84,16 @@ export default {
             if (messageAndField["message"] === "valid") {
                 this.loading = true;
                 this.$store.dispatch("auth/register", this.user).then(
-                    (data) => {
-                        this.$store.dispatch("auth/login", this.user).then(data => {
+                    (registerResponse) => {
+                        this.$store.dispatch("auth/login", {
+                            username: registerResponse.username,
+                            password: this.user.password
+                        }).then((loginResponse) => {
                             this.loading = false;
                             this.$router.push(
                                 {
                                     name: "team-select",
-                                    params: { "username": this.user.username }
+                                    params: { "username": registerResponse.username }
                                 });
                         });
                     },

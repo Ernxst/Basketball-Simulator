@@ -1,101 +1,129 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import SignupForm from "../../../src/app/views/welcome/signup-form.vue";
+import { FULL_USER_REGISTER_ENDPOINT } from "../../../src/services/endpoints.ts";
 import { store } from "../../../src/store/store.js";
-import { mockRouter, takenUsername, validRegisterPassword, validRegisterUsername } from "../constants";
+import { app, takenUsername, validRegisterPassword, validRegisterUsername } from "../constants.js";
+import { mockApi, mockRouter } from "../mocks.ts";
 
 
 describe("Signup Form", () => {
-    beforeAll(async () => {
-        // TODO - Create valid users with validRegisterUsername and takenUsername
-    });
-    afterAll(async () => {
-        // TODO - Delete valid user with validRegisterUsername and takenUsername
-    });
-
-    const test = (description, username, password,
-                  repeatPassword, success, message) => {
-        it(description, async (done) => {
-            const routerSpy = spyOn(mockRouter, "push");
-            const alertSpy = spyOn(window, "alert");
-
-            const wrapper = mount(SignupForm, {
-                global: {
-                    plugins: [store], // TODO - Mock store
-                    mocks: {
-                        $router: mockRouter
-                    }
-                },
+    beforeAll(() => {
+        mockApi.onPost(FULL_USER_REGISTER_ENDPOINT,
+            { username: validRegisterUsername, password: validRegisterPassword })
+            .reply(200, {
+                username: validRegisterUsername, message: "Registration success", code: "OK"
             });
 
-            const usernameInput = wrapper.find("#signup-username");
-            await usernameInput.setValue(username);
+        mockApi.onPost(FULL_USER_REGISTER_ENDPOINT,
+            { username: takenUsername, password: validRegisterPassword })
+            .reply(200, {
+                message: `The username ${takenUsername} is already in use, please try another. Did you mean to sign in?`,
+                code: "UNAUTHORIZED"
+            });
+    });
+    
+    const testRegister = async (username, password, repeatPassword, success, message) => {
+        const routerSpy = spyOn(mockRouter, "push");
+        const alertSpy = spyOn(window, "alert");
 
-            const passwordInput = wrapper.find("#signup-password");
-            await passwordInput.setValue(password);
-
-            const repeatPasswordInput = wrapper.find("#signup-repeat");
-            await repeatPasswordInput.setValue(repeatPassword);
-
-            expect(wrapper.vm.user.username).toEqual(username);
-            expect(wrapper.vm.user["repeat-password"]).toEqual(repeatPassword);
-            expect(wrapper.vm.user.password).toEqual(password);
-
-            await wrapper.vm.signup();
-            if (success) {
-                expect(routerSpy).toBeCalled();
-            } else {
-                expect(alertSpy).toBeCalledWith(message);
-                expect(repeatPasswordInput.text()).toBe("");
-                expect(passwordInput.text()).toBe("");
-            }
-            wrapper.unmount();
-            done();
+        const wrapper = mount(SignupForm, {
+            attachTo: app,
+            global: {
+                plugins: [store],
+                mocks: {
+                    $router: mockRouter
+                }
+            },
         });
+
+        const usernameInput = wrapper.find("#signup-username");
+        await usernameInput.setValue(username);
+
+        const passwordInput = wrapper.find("#signup-password");
+        await passwordInput.setValue(password);
+
+        const repeatPasswordInput = wrapper.find("#signup-repeat");
+        await repeatPasswordInput.setValue(repeatPassword);
+
+        expect(wrapper.vm.user.username).toEqual(username);
+        expect(wrapper.vm.user["repeat-password"]).toEqual(repeatPassword);
+        expect(wrapper.vm.user.password).toEqual(password);
+
+        await wrapper.vm.signup();
+        await flushPromises();
+
+        if (success) {
+            expect(routerSpy).toBeCalled();
+        } else {
+            expect(alertSpy).toBeCalledWith(message);
+            expect(passwordInput.text()).toBe("");
+            expect(repeatPasswordInput.text()).toBe("");
+        }
+        wrapper.unmount();
     };
 
-    /**
-     * Blank input field tests - dispatch to store should not be made if a field is left empty.
-     */
-    test("no data entered", "", "", "",
-        false, "Please ensure no fields are left blank.");
+    it("No data entered", (done) => {
+        testRegister("", "", "",
+            false, "Sign up failed. Please ensure no fields are left blank.").then(() => {
+            done();
+        });
+    });
 
-    test("no username entered", "", "password",
-        "password", false,
-        "Please ensure no fields are left blank.");
+    it("No username entered", (done) => {
+        testRegister("", validRegisterPassword, validRegisterPassword,
+            false, "Sign up failed. Please ensure no fields are left blank.").then(() => {
+            done();
+        });
+    });
 
-    test("no password entered", "username",
-        "", "password", false,
-        "Please ensure no fields are left blank.");
+    it("No password entered", (done) => {
+        testRegister(validRegisterUsername, "", validRegisterPassword, false,
+            "Sign up failed. Please ensure no fields are left blank.").then(() => {
+            done();
+        });
+    });
 
-    test("no repeat password entered", "username",
-        "password", "",
-        false, "Please ensure no fields are left blank.");
+    it("No repeat password entered", (done) => {
+        testRegister(validRegisterUsername, validRegisterPassword, "",
+            false, "Sign up failed. Please ensure no fields are left blank.").then(() => {
+            done();
+        });
+    });
 
-    /**
-     * Invalid data
-     */
-    test("short username (< 3 chars)", "aa", "password",
-        "password", false,
-        "Your username must be at least three characters long.");
+    it("Short username (< 3 chars)", (done) => {
+        testRegister("aa", validRegisterPassword, validRegisterPassword, false,
+            "Sign up failed. Your username must be at least three characters long.").then(() => {
+            done();
+        });
+    });
 
-    test("short password (< 5 chars)", "username",
-        "aaa", "aaaa", false,
-        "Your password must be at least five characters long.");
+    it("Short password (< 5 chars)", (done) => {
+        testRegister("username", "123", validRegisterPassword, false,
+            "Sign up failed. Your password must be at least five characters long.").then(() => {
+            done();
+        });
+    });
 
-    test("non-matching password repeat", "username", "password",
-        "other", false, "The two entered passwords do not match.");
+    it("Non-matching password repeat", (done) => {
+        testRegister(validRegisterUsername, validRegisterPassword, "other",
+            false, "Sign up failed. The two entered passwords do not match.").then(() => {
+            done();
+        });
+    });
 
-    /**
-     * Taken data
-     */
+    it("Taken username", (done) => {
+        testRegister(takenUsername, validRegisterPassword, "password",
+            false,
+            `The username ${takenUsername} is already in use, please try another. Did you mean to sign in?`).then(() => {
+            done();
+        });
+    });
 
-    test("taken username", takenUsername, "password",
-        "password", false,
-        `The username ${takenUsername} is already in use, please try another. Did you mean to sign in?`);
-
-    /**
-     * Valid data
-     */
-    test("valid signup", validRegisterUsername, validRegisterPassword,
-        validRegisterPassword, true, "");
-});
+    it("Valid signup", (done) => {
+        testRegister(validRegisterUsername, validRegisterPassword,
+            validRegisterPassword, true, "Registration success").then(() => {
+            done();
+        });
+    });
+})
+;

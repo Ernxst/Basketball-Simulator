@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import Welcome from "../../../src/app/views/welcome/Welcome.vue";
 import { store } from "../../../src/store/store.js";
-import { mockRouter } from "../constants";
+import { mockRouter } from "../mocks.ts";
 
 
 const loginTitle = "Sign In";

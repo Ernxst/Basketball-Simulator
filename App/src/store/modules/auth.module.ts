@@ -50,9 +50,13 @@ export const auth = {
          */
         register({ commit }: { commit: Commit }, user: User): Promise<any> {
             return AuthService.register(user).then(
-                (response: { data: any; }) => {
-                    commit('registerSuccess');
-                    return Promise.resolve(response.data);
+                (response: { username : string, message: string, code: string }) => {
+                    if (response.username) {
+                        commit('registerSuccess');
+                        return Promise.resolve(response);
+                    }
+                    commit('registerFailure');
+                    return Promise.reject(response);
                 },
                 (error: Error) => {
                     commit('registerFailure');

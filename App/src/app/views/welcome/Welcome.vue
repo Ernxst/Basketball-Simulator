@@ -48,7 +48,7 @@ export default {
     },
     created() {
         if (this.loggedIn) {
-            this.$router.push({ name: "play" });
+            this.$router.push({ name: "team-select" });
         }
     },
     methods: {

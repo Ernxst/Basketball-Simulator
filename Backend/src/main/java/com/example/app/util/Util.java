@@ -3,6 +3,7 @@ package com.example.app.util;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,6 +13,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * Utility class providing common functionality.
  */
 public class Util {
+    public static int largestKeyInMap(Map<Integer, ?> map) {
+        return (map.size() == 0) ? 1 : Collections.max(map.keySet());
+    }
+
     public static <T> Map<T, Integer> countFrequencies(List<@NotNull T> array) {
         Map<T, Integer> frequencies = new TreeMap<>();
         for (T element : array) {

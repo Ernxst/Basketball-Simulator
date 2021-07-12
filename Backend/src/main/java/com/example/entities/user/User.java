@@ -1,25 +1,42 @@
 package com.example.entities.user;
 
+import com.example.entities.league.League;
+import com.ibm.db2.cmx.annotation.Required;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
+@Builder
+@Entity
+@Table(name = "USER")
 @Getter
 @Setter
-@Builder
-@Entity(name = "USERS")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
     @Id
     @NonNull
+    @Column(name = "USERNAME", nullable = false)
     private String username;
+
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "USERNAME", nullable = false)
+    private Map<Integer, League> leagues;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        leagues = new HashMap<>();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

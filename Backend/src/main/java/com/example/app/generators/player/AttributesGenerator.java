@@ -2,7 +2,6 @@ package com.example.app.generators.player;
 
 import com.example.app.util.MathsUtil;
 import com.example.app.util.Util;
-import com.example.db.interfaces.player.AttributeInterface;
 import com.example.entities.player.util.Archetype;
 import com.example.entities.player.util.PlayerConstants;
 import com.example.entities.player.util.Position;
@@ -64,10 +63,10 @@ public class AttributesGenerator {
      */
     private PlayerAttributes generatePlayerAttributes() {
         PlayerAttributes attributes = new PlayerAttributes();
-        for (Attribute attribute : AttributeInterface.getAttributes()) {
-            int attributeValue = generateAttribute(attribute);
-            attributes.put(attribute, attributeValue);
-        }
+//        for (Attribute attribute : AttributeInterface.getAttributes()) {
+//            int attributeValue = generateAttribute(attribute);
+//            attributes.put(attribute, attributeValue);
+//        }
         return attributes;
     }
 

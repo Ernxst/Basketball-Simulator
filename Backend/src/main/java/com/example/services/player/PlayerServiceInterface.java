@@ -3,14 +3,15 @@ package com.example.services.player;
 import com.example.entities.player.Player;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PlayerServiceInterface {
-    Optional<Player> findPlayerByPlayerID(int playerID);
+    Player findPlayerByPlayerID(int playerID) throws PlayerNotFoundException;
 
-    List<Player> findPlayersByPlayerIDs(List<Integer> playerIDs);
+    List<Player> findPlayersByPlayerIDsIn(Iterable<Integer> playerIDs);
 
     List<Player> findAllPlayersInTeam(int teamID);
 
     void deletePlayer(Player player);
+
+    int insertPlayer(Player player);
 }

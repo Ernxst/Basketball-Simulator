@@ -37,7 +37,13 @@ public class ContractGenerator {
         ContractOption contractOption = ContractOption.randomContractOption(overall, age, yearsPro);
         double salary = generateSalary(age, overall, potentialOverall, contractLength, yearsPro);
         boolean noTradeClause = generateNoTradeClause(yearsPro, overall);
-        return new Contract(contractLength, yearsRemaining, contractOption, salary, noTradeClause);
+        Contract contract = new Contract();
+        contract.setContractLength(contractLength);
+        contract.setYearsRemaining(yearsRemaining);
+        contract.setContractOption(contractOption);
+        contract.setSalary(salary);
+        contract.setNoTradeClause(noTradeClause);
+        return contract;
     }
 
     /**

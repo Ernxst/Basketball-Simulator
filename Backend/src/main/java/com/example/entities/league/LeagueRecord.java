@@ -1,66 +1,98 @@
 package com.example.entities.league;
 
+import com.example.entities.player.Player;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.JoinColumnsOrFormulas;
+import org.hibernate.annotations.JoinFormula;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "LEAGUE_RECORD")
+@IdClass(LeagueRecord.LeagueRecordKey.class)
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class LeagueRecord {
+    // Fields
+    @Id
+    @Column(name = "LEAGUE_ID", nullable = false, insertable = false, updatable = false)
+    private int leagueID;
 
+    @Id
+    @Column(name = "PLAYER_ID", nullable = false, insertable = false, updatable = false)
     private int playerID;
-    private int value;
+
+    @Id
+    @Column(name = "SEASON", nullable = false)
     private int season;
+
+    @Id
+    @Column(name = "RECORD_TITLE", nullable = false)
+    private String title;
+
+    @Column(name = "RECORD_VALUE")
+    private int value;
+
+    @Column(name = "DATE_SET", nullable = false)
     private LocalDate dateSet;
 
-    public LeagueRecord(int playerID, int value, int season, LocalDate dateSet) {
-        this.playerID = playerID;
-        this.value = value;
-        this.season = season;
-        this.dateSet = dateSet;
-    }
+    // Relationships
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PLAYER_ID", nullable = false)
+    private Player player;
 
-    public LeagueRecord() {
-        playerID = -1;
-        value = -1;
-        season = -1;
-        dateSet = null;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumnsOrFormulas(
+            value = {
+                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID")),
+            })
+//    @JoinColumn(name = "LEAGUE_ID", nullable = false)
+    private League league;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "LEAGUE_ID", nullable = false)
+//    @JoinColumn(name = "SEASON", nullable = false)
+    @JoinColumnsOrFormulas(
+            value = {
+                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID", insertable = false, updatable = false)),
+                    @JoinColumnOrFormula(formula = @JoinFormula(referencedColumnName = "SEASON", value = "SEASON"))
+            })
+    private LeagueSeason leagueSeason;
+
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LeagueRecordKey implements Serializable {
+        private int leagueID;
+        private int playerID;
+        private int season;
+        private String title;
     }
 
     public int getPlayerID() {
-        return playerID;
-    }
-
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
+        return player.getPlayerID();
     }
 
     public int getSeason() {
-        return season;
-    }
-
-    public void setSeason(int season) {
-        this.season = season;
-    }
-
-    public LocalDate getDateSet() {
-        return dateSet;
-    }
-
-    public void setDateSet(LocalDate dateSet) {
-        this.dateSet = dateSet;
+        return leagueSeason.getSeason();
     }
 
     @Override
     public String toString() {
         return "{" +
-                "\n    Player ID: " + playerID +
+                "\n    Player ID: " + getPlayerID() +
                 "\n    Value    : " + value +
-                "\n    Season   : " + season +
+                "\n    Season   : " + getSeason() +
                 "\n    Date Set : " + dateSet +
                 '}';
     }

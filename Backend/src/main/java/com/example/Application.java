@@ -5,7 +5,7 @@ TODO - Pass "b" flag from docker/python run script to here
  */
 
 import com.example.api.AppLogger;
-import com.example.db.Database;
+import com.example.repositories.Database;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,10 +28,6 @@ public class Application {
     public static String PORT;
     // The port the frontend runs on.
     public static String APP_PORT = "8080";
-    /**
-     * Whether to broadcast device IP address.
-     */
-    public static boolean broadcast;
 
     public static void main(String[] args) {
         // Connect to cloud database.

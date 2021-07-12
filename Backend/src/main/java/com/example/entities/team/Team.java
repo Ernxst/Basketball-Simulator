@@ -1,129 +1,105 @@
 package com.example.entities.team;
 
+import com.example.entities.league.League;
+import com.example.entities.league.LeagueStandings;
 import com.example.entities.player.Player;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Map;
 
-//@Entity
+@Entity
+@Table(name = "TEAM")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Team {
-    private final int relocations;
-    private final int renames;
-    private final boolean isUserTeam;
-    private final LocalDate dateFounded;
-    private String state;
-    private String name;
-    //    @ElementCollection
-    private Map<Integer, Player> players;
-
-    //    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TEAM_ID", nullable = false)
     private int teamID;
-    private int leagueID;
+
+    @Column(name = "TEAM_STATE", nullable = false)
+    private String state;
+
+    @Column(name = "TEAM_NAME", nullable = false)
+    private String name;
+
+    @Column(name = "RELOCATIONS", nullable = false)
+    private int relocations;
+
+    @Column(name = "RENAMES", nullable = false)
+    private int renames;
+
+    @Column(name = "IS_USER_TEAM", nullable = false)
+    private boolean isUserTeam;
+
+    @Column(name = "DATE_FOUNDED", nullable = false)
+    private LocalDate dateFounded;
+
+    @Column(name = "ICON_ID", nullable = false)
     private int iconID;
 
-    public Team(String state, String name, int relocations, int renames, boolean isUserTeam,
-                LocalDate dateFounded, int iconID) {
-        this.state = state;
-        this.name = name;
-        this.relocations = relocations;
-        this.renames = renames;
-        this.isUserTeam = isUserTeam;
-        this.dateFounded = dateFounded;
-        this.iconID = iconID;
-    }
+    @Column(name = "LEAGUE_ID", nullable = false, insertable = false, updatable = false)
+    private int leagueID;
 
-    public Team(String state, String name, int relocations, int renames, boolean isUserTeam, LocalDate dateFounded,
-                int iconID, Map<Integer, Player> players) {
-        this(state, name, relocations, renames, isUserTeam, dateFounded, iconID);
-        this.players = players;
-    }
+    // Relationships
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    // { playerID : Player }
+    private Map<Integer, Player> players;
 
-    public String getState() {
-        return state;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LEAGUE_ID", nullable = false)
+    private League league;
 
-    public void setState(String state) {
-        this.state = state;
-    }
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    // { seasonNo: Standings }
+    private Map<Integer, LeagueStandings> allStandings;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "ICON_ID", nullable = false)
+//    private TeamIcon teamIcon;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "TEAM_NAME", nullable = false)
+//    private TeamName teamName;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "TEAM_STATE", nullable = false)
+//    private TeamState teamState;
 
     public String getFullName() {
         return getState() + " " + getName();
-    }
-
-    public int getRelocations() {
-        return relocations;
-    }
-
-    public int getRenames() {
-        return renames;
-    }
-
-    public boolean isUserTeam() {
-        return isUserTeam;
     }
 
     public double getCapSpace() {
         return TeamConstants.MAX_CAP - getTotalCap();
     }
 
+    public double getCapSpace(int season) {
+        return TeamConstants.MAX_CAP - getTotalCap(season);
+    }
+
     public double getTotalCap() {
+        // TODO - Pass current season here
+//        int season = Util.largestKeyInMap();
+        return getTotalCap(20);
+    }
+
+    public double getTotalCap(int season) {
         double totalCap = 0;
         for (Player player : players.values()) {
-            totalCap += player.getContract().getSalary();
+            totalCap += player.getContract(season).getSalary();
         }
         return totalCap;
     }
 
-    public LocalDate getDateFounded() {
-        return dateFounded;
-    }
-
-    public Map<Integer, Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(Map<Integer, Player> players) {
-        this.players = players;
-    }
-
-    public int getTeamID() {
-        return teamID;
-    }
-
-    public void setTeamID(int teamID) {
-        this.teamID = teamID;
-    }
-
-    public int getLeagueID() {
-        return leagueID;
-    }
-
-    public void setLeagueID(int leagueID) {
-        this.leagueID = leagueID;
-    }
-
-    public int getIconID() {
-        return iconID;
-    }
-
-    public void setIconID(int iconID) {
-        this.iconID = iconID;
-    }
-
     public Player getPlayerById(int playerId) {
         return players.getOrDefault(playerId, null);
-    }
-
-    public Team copy() {
-        return new Team(state, name, relocations, renames, isUserTeam, dateFounded, iconID, players);
     }
 }

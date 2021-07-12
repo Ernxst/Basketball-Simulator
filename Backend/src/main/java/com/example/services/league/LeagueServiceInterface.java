@@ -1,0 +1,29 @@
+package com.example.services.league;
+
+import com.example.entities.league.League;
+
+import java.time.LocalDate;
+
+public interface LeagueServiceInterface {
+    /**
+     * Randomly generate a new league instance.
+     *
+     * @param username   the user to generate the league for
+     * @param name       the name of the league (to be stored)
+     * @param startDate  the date the league was started.
+     * @param numOfTeams the number of teams to generate.
+     * @param teamName   the name of the user's team.
+     * @param state      the state the user's team is located in.
+     * @return a new randomly generated league instance.
+     */
+    League generateLeague(String username, String name, LocalDate startDate, int numOfTeams,
+                          String teamName, String state);
+
+    int insertLeague(League league);
+
+    League getLeagueByID(int leagueID) throws LeagueNotFoundException;
+
+    void deleteLeague(League league);
+
+    void deleteLeagueByID(int leagueID) throws LeagueNotFoundException;
+}

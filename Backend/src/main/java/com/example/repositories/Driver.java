@@ -1,8 +1,7 @@
-package com.example.db;
+package com.example.repositories;
 
-import com.example.db.interfaces.AbstractInterface;
-import com.example.db.interfaces.NameGenerator;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,7 +9,9 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Driver extends AbstractInterface {
+public class Driver {
+    protected static final Database database = Database.getInstance();
+    protected static final Connection connection = database.getConnection();
 
     private static void insertSingleValue(String stmt, String value) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(stmt)) {
@@ -101,10 +102,10 @@ public class Driver extends AbstractInterface {
         insertViewDescriptions();
         insertTeamIcons();
 
-        System.out.println("College: " + NameGenerator.randomCollege());
-        System.out.println("First Name: " + NameGenerator.randomFirstName());
-        System.out.println("Last Name: " + NameGenerator.randomLastName());
-        System.out.println("Team Name: " + NameGenerator.randomTeamName());
-        System.out.println("State: " + NameGenerator.randomTeamState());
+//        System.out.println("College: " + NameService.randomCollege());
+//        System.out.println("First Name: " + NameGenerator.randomFirstName());
+//        System.out.println("Last Name: " + NameGenerator.randomLastName());
+//        System.out.println("Team Name: " + NameGenerator.randomTeamName());
+//        System.out.println("State: " + NameGenerator.randomTeamState());
     }
 }

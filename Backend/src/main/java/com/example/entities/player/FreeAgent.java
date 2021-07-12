@@ -1,61 +1,55 @@
 package com.example.entities.player;
 
-import com.example.entities.player.util.Archetype;
-import com.example.entities.player.util.Position;
-import com.example.entities.player.util.attributes.PlayerAttributes;
+import com.example.entities.league.League;
 import com.example.entities.player.util.contract.Contract;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * A free agent, a player without a team.
  */
-public class FreeAgent extends Player {
-    private int leagueID;
+@Entity
+@Table(name = "FREE_AGENT")
+@IdClass(FreeAgent.FreeAgentKey.class)
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class FreeAgent extends AbstractPlayer {
+//    @Id
+//    @Column(name = "LEAGUE_ID", nullable = false)
+//    private int leagueID;
 
-    public FreeAgent(String firstName, String lastName, Position position, Position secondaryPosition, double height,
-                     double weight, double wingspan, double standingVertical, double maxVertical, Archetype archetype,
-                     String college, LocalDate birthDate, int yearsPro, int overall, int potentialOverall,
-                     PlayerAttributes playerAttributes, PlayerAttributes potentialAttributes) {
-        super(firstName, lastName, position, secondaryPosition, height, weight, wingspan, standingVertical, maxVertical,
-                archetype, college, birthDate, yearsPro, overall, potentialOverall, null, playerAttributes,
-                potentialAttributes);
-    }
+    // Relationships
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LEAGUE_ID", nullable = false)
+    private League league;
 
-    public FreeAgent(String firstName, String lastName, Position position, Position secondaryPosition, double height,
-                     double weight, double wingspan, double standingVertical, double maxVertical, Archetype archetype,
-                     String college, LocalDate birthDate, int yearsPro, int overall, int potentialOverall, Contract contract,
-                     PlayerAttributes playerAttributes, PlayerAttributes potentialAttributes, int playerID, int teamID) {
-        super(firstName, lastName, position, secondaryPosition, height, weight, wingspan, standingVertical,
-                maxVertical, archetype, college, birthDate, yearsPro, overall, potentialOverall, contract,
-                playerAttributes, potentialAttributes, playerID, teamID);
-    }
-
-    public FreeAgent(String firstName, String lastName, Position position, Position secondaryPosition, double height,
-                     double weight, double wingspan, double standingVertical, double maxVertical, Archetype archetype,
-                     String college, LocalDate birthDate, int yearsPro, int overall, int potentialOverall, Contract contract,
-                     PlayerAttributes playerAttributes, PlayerAttributes potentialAttributes, int playerID, int teamID, int leagueID) {
-        super(firstName, lastName, position, secondaryPosition, height, weight, wingspan, standingVertical,
-                maxVertical, archetype, college, birthDate, yearsPro, overall, potentialOverall, contract,
-                playerAttributes, potentialAttributes, playerID, teamID);
-        this.leagueID = leagueID;
-    }
-
-    @Override
-    public FreeAgent copy() {
-        return new FreeAgent(firstName, lastName, position, secondaryPosition, height, weight, wingspan, standingVertical,
-                maxVertical, archetype, college, birthDate, yearsPro, overall, potentialOverall, contract,
-                playerAttributes, potentialAttributes, playerID, teamID, leagueID);
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FreeAgentKey implements Serializable {
+        private int leagueID;
+        private int playerID;
     }
 
     public int getLeagueID() {
-        return leagueID;
+        return league.getLeagueID();
     }
 
-    public void setLeagueID(int leagueID) {
-        this.leagueID = leagueID;
+    // TODO - Implement toPlayer()
+    public Player toPlayer(Contract contract, int teamID) {
+        Player player = new Player();
+        return player;
     }
 
     @Override
@@ -66,7 +60,7 @@ public class FreeAgent extends Player {
         splitString.removeIf(s -> s.contains("Team ID:"));
         splitString.removeIf(s -> s.contains("Contract:"));
         splitString.add(0, "Free Agent {");
-        splitString.add(2, "        League ID:                  " + leagueID);
+        splitString.add(2, "        League ID:                  " + getLeagueID());
         return String.join("\n", splitString);
     }
 }

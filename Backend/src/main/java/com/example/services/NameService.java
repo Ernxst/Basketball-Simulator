@@ -1,17 +1,23 @@
-package com.example.db.interfaces;
+package com.example.services;
 
 import com.example.app.util.Util;
+import com.example.repositories.Database;
+import lombok.Getter;
+import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Generates random names from Db data.
- */
-public class NameGenerator extends AbstractInterface {
+@Service
+@Getter
+public class NameService {
+    private static final Database database = Database.getInstance();
+    private static final Connection connection = database.getConnection();
+
     private static final List<String> teamNames;
     private static final List<String> teamStates;
     private static final List<String> firstNames;
@@ -26,23 +32,23 @@ public class NameGenerator extends AbstractInterface {
         colleges = getElements("college");
     }
 
-    public static String randomTeamName() {
+    public String randomTeamName() {
         return Util.randomChoice(teamNames);
     }
 
-    public static String randomTeamState() {
+    public String randomTeamState() {
         return Util.randomChoice(teamStates);
     }
 
-    public static String randomFirstName() {
+    public String randomFirstName() {
         return Util.randomChoice(firstNames);
     }
 
-    public static String randomLastName() {
+    public String randomLastName() {
         return Util.randomChoice(lastNames);
     }
 
-    public static String randomCollege() {
+    public String randomCollege() {
         return Util.randomChoice(colleges);
     }
 
@@ -58,25 +64,5 @@ public class NameGenerator extends AbstractInterface {
             exception.printStackTrace();
         }
         return elements;
-    }
-
-    public static List<String> getTeamNames() {
-        return teamNames;
-    }
-
-    public static List<String> getTeamStates() {
-        return teamStates;
-    }
-
-    public static List<String> getFirstNames() {
-        return firstNames;
-    }
-
-    public static List<String> getLastNames() {
-        return lastNames;
-    }
-
-    public static List<String> getColleges() {
-        return colleges;
     }
 }

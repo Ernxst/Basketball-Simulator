@@ -1,6 +1,5 @@
 package com.example.entities.player.util.attributes;
 
-import com.example.db.interfaces.player.AttributeInterface;
 import com.example.entities.player.util.PlayerConstants;
 
 import java.util.HashMap;
@@ -9,12 +8,12 @@ import java.util.Map;
 
 // TODO - Attribute names are capitalised with underscores
 public class PlayerAttributes extends HashMap<Attribute, Integer> {
-    private static final Map<String, Attribute> attributeMap = AttributeInterface.getAttributeMap();
+    private static final Map<String, Attribute> attributeMap = new HashMap<>(); // AttributeInterface.getAttributeMap();
 
     public PlayerAttributes() {
-        for (Attribute attribute : AttributeInterface.getAttributes()) {
-            put(attribute, PlayerConstants.MIN_ATTRIBUTE_VALUE);
-        }
+//        for (Attribute attribute : AttributeInterface.getAttributes()) {
+//            put(attribute, PlayerConstants.MIN_ATTRIBUTE_VALUE);
+//        }
     }
 
     public PlayerAttributes(Map<Attribute, Integer> attributes) {
@@ -36,7 +35,8 @@ public class PlayerAttributes extends HashMap<Attribute, Integer> {
     }
 
     public Integer getAttribute(String name) {
-        return get(AttributeInterface.getAttributeMap().get(name));
+//        return get(AttributeInterface.getAttributeMap().get(name));
+        return 0;
     }
 
     public int getPostHook() {

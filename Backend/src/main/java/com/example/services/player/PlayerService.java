@@ -2,26 +2,32 @@ package com.example.services.player;
 
 import com.example.entities.player.Player;
 import com.example.repositories.PlayerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-//@Service
+@Service
 public class PlayerService implements PlayerServiceInterface {
-    private final PlayerRepository playerRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
-    public PlayerService(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
+    @Override
+    public int insertPlayer(Player player) {
+        player = playerRepository.save(player);
+        return player.getPlayerID();
     }
 
     @Override
-    public Optional<Player> findPlayerByPlayerID(int playerID) {
-        return playerRepository.findPlayerByPlayerID(playerID);
+    public Player findPlayerByPlayerID(int playerID) throws PlayerNotFoundException {
+        Optional<Player> optionalPlayer = playerRepository.findPlayerByPlayerID(playerID);
+        return optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("Could not find player"));
     }
 
     @Override
-    public List<Player> findPlayersByPlayerIDs(List<Integer> playerIDs) {
-        return playerRepository.findPlayersByPlayerID(playerIDs);
+    public List<Player> findPlayersByPlayerIDsIn(Iterable<Integer> playerIDs) {
+        return playerRepository.findPlayersByPlayerIDIn((List<Integer>) playerIDs);
     }
 
     @Override
@@ -31,6 +37,6 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public void deletePlayer(Player player) {
-//        playerRepository.delete(player);
+        playerRepository.delete(player);
     }
 }

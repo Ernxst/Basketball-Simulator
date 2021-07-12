@@ -6,8 +6,13 @@ import com.example.entities.player.Player;
 import com.example.entities.player.util.Archetype;
 import com.example.entities.player.util.Position;
 import com.example.entities.player.util.attributes.PlayerAttributes;
+import com.example.services.NameService;
 
 public class FreeAgentGenerator extends PlayerGenerator {
+    public FreeAgentGenerator(NameService nameService) {
+        super(nameService);
+    }
+
     /**
      * Randomly generate a free agent.
      *
@@ -15,7 +20,7 @@ public class FreeAgentGenerator extends PlayerGenerator {
      *                        the number of years remaining on a player's contract.
      * @return a randomly generated free agent.
      */
-    public static FreeAgent generateFreeAgent(int yearsSinceStart) {
+    public FreeAgent generateFreeAgent(int yearsSinceStart) {
         Player player = generatePlayer(yearsSinceStart);
         int age = player.getAge();
         int yearsPro = Util.randomInt(0, player.getYearsPro());
@@ -33,9 +38,9 @@ public class FreeAgentGenerator extends PlayerGenerator {
         PlayerAttributes potentialAttributes = attributesGenerator.getPotentialAttributes();
 
         player.setOverall(baseOverall);
-        player.setPlayerAttributes(playerAttributes);
+//        player.setPlayerAttributes(playerAttributes);
         player.setPotentialOverall(potentialOverall);
-        player.setPotentialAttributes(potentialAttributes);
+//        player.setPotentialAttributes(potentialAttributes);
         player.setContract(null);
         return player.toFreeAgent();
     }

@@ -1,4 +1,4 @@
-package com.example.db;
+package com.example.repositories;
 
 import com.example.api.AppLogger;
 

@@ -95,7 +95,7 @@ export default {
 .league-card {
     border-radius: 8px;
     cursor: pointer;
-    border: 2px solid #FFF;
+    border: 1px solid #FFF;
     transition: .2s ease-in-out transform;
 }
 
@@ -137,6 +137,7 @@ export default {
     max-width: unset;
     height: 100%;
     object-fit: cover;
+    width: 100%;
 }
 
 .card-img::after {

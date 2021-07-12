@@ -64,7 +64,7 @@ export default {
 
 <style scoped>
 .select-save {
-    padding: 48px 96px;
+    padding: 32px 24px;
     overflow-y: auto;
     max-height: 100vh;
 }
@@ -89,25 +89,28 @@ export default {
 
 .league-container {
     display: grid;
-    grid-column-gap: 48px;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: 32px;
-    height: -webkit-fill-available;
+    grid-row-gap: 32px;
+    grid-template-rows: 1fr 1fr 1fr;
+    padding-top: 32px;
+    padding-bottom: 32px;
 }
 
 .logout-btn {
     padding: 1px 28px;
-    margin-right: 32px;
     margin-left: auto;
 }
 
-/*@media (max-width: 1600px) {*/
-/*    .league-container {*/
-/*        display: grid;*/
-/*        grid-row-gap: 48px;*/
-/*        grid-template-rows: 1fr 1fr 1fr;*/
-/*        grid-template-columns: unset;*/
-/*        grid-column-gap: unset;*/
-/*    }*/
-/*}*/
+@media (min-width: 1200px) {
+    .select-save {
+        padding: 48px 96px;
+    }
+
+    .league-container {
+        grid-column-gap: 32px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: unset;
+        grid-row-gap: unset;
+        height: -webkit-fill-available;
+    }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
     <router-view v-slot="{ Component }">
         <transition>
-            <div>
+            <div class="background-container">
                 <img v-if="background !== ''" :src="background" alt="Background"
                      class="background-img centred">
                 <component :is="Component"/>
@@ -54,5 +54,16 @@ export default {
 </script>
 
 <style scoped>
-
+.background-container::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    background: linear-gradient(0deg, #00000088 40%, #FFFFFF44 100%);
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
 </style>

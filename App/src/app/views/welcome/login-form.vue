@@ -85,7 +85,7 @@ export default {
     width: 100%;
 }
 
-.login-form .text-input, .login-form a {
+.login-form .text-input {
     margin-bottom: 16px;
 }
 
@@ -93,10 +93,5 @@ export default {
 .login-form .text-input {
     flex: 1;
     width: 100%;
-}
-
-.login-form a {
-    margin-left: auto;
-    margin-top: 2px;
 }
 </style>

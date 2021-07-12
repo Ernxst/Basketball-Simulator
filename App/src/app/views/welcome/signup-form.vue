@@ -127,18 +127,12 @@ export default {
 }
 
 .signup-form .text-input {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
-.signup-form .flat-button, .signup-form .text-input {
+.signup-form .flat-button,
+.signup-form .text-input {
     flex: 1;
     width: 100%;
-}
-
-@media (max-width: 640px) {
-    .signup-form .text-input label {
-        color: #FFF !important;
-        text-shadow: -1px -1px 0 var(--blue), 1px -1px 0 var(--blue), -1px 1px 0 var(--blue), 1px 1px 0 var(--blue);
-    }
 }
 </style>

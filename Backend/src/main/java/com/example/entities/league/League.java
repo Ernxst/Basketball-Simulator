@@ -29,9 +29,6 @@ public class League {
     @Column(name = "LEAGUE_ID", nullable = false)
     private int leagueID;
 
-    @Column(name = "USERNAME", nullable = false, insertable = false, updatable = false)
-    private String username;
-
     @Column(name = "NAME", nullable = false)
     private String name;
 
@@ -41,35 +38,24 @@ public class League {
     @Column(name = "LAST_PLAYED", nullable = false)
     private LocalDate lastPlayed;
 
+    // Relationships
     // Map of all seasons
-    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
-    private List<LeagueSeason> seasons = new ArrayList<>();
+    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<LeagueSeason> seasons;
 
     // Teams & Players
     @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
+    @MapKeyColumn(name = "TEAM_ID")
     // { teamID: Team }
     private Map<Integer, Team> teams;
 
     @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
     // { playerID: FreeAgent }
+    @MapKeyColumn(name = "PLAYER_ID")
     private Map<Integer, FreeAgent> freeAgents;
 
-    // Standings
-    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
-    // seasonNo: { playerID: PlayerStats }
-    private Map<Integer, PlayerStats> allSeasonsPlayerStats;
-
-    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
-    // seasonNo: { teamID: LeagueStandings }
-    private Map<Integer, LeagueStandings> allSeasonsTeamStandings;
-
-    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
-    // seasonNo: { title: LeagueRecord }
-    private Map<String, LeagueRecord> allSeasonsLeagueRecords;
-
-    // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USERNAME", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "USERNAME", nullable = false)
     private User user;
 
     public Map<Integer, Player> getAllPlayers() {
@@ -104,15 +90,100 @@ public class League {
         this.leagueID = leagueID;
     }
 
+    public LeagueSeason getSeason(int season) {
+        return seasons.get(season);
+    }
+
+    /**
+     *
+     * @return
+     */
     public LeagueSeason newSeason() {
         int numOfSeasons = getCurrentSeason();
         LocalDate leagueStart = getStartDate();
         int startYear = leagueStart.getYear();
         int year = numOfSeasons == 0 ? startYear : startYear + 1;
         LocalDate date = LocalDate.of(year, LeagueConstants.LEAGUE_START_MONTH, LeagueConstants.LEAGUE_START_DAY);
-        LeagueSeason leagueSeason = new LeagueSeason(getLeagueID(), numOfSeasons + 1, date, this);
+
+        LeagueSeason leagueSeason = new LeagueSeason();
+        int season = numOfSeasons + 1;
+        List<LeagueRecord> records = newLeagueRecord(season, leagueSeason);
+        List<LeagueStandings> standings = newLeagueStandings(season, leagueSeason);
+        List<PlayerStats> playerStats = newPlayerStats(season, leagueSeason);
+
+        leagueSeason.setLeagueID(leagueID);
+        leagueSeason.setSeason(season);
+        leagueSeason.setCurrentDate(date);
+        leagueSeason.setLeagueRecords(records);
+        leagueSeason.setLeagueStandings(standings);
+        leagueSeason.setPlayerStats(playerStats);
+        leagueSeason.setLeague(this);
+
         seasons.add(leagueSeason);
         return leagueSeason;
+    }
+
+    /**
+     *
+     * @param season
+     * @param leagueSeason
+     * @return
+     */
+    public List<LeagueRecord> newLeagueRecord(int season, LeagueSeason leagueSeason) {
+        List<LeagueRecord> records = new ArrayList<>();
+        for (LeagueRecord.Record record : LeagueRecord.Record.allRecords) {
+            String title = record.getLabel();
+            LeagueRecord newRecord = new LeagueRecord();
+            newRecord.setLeagueID(leagueID);
+            newRecord.setSeason(season);
+            newRecord.setTitle(title);
+            newRecord.setPlayerID(null);
+            newRecord.setValue(0);
+            newRecord.setDateSet(null);
+            newRecord.setLeagueSeason(leagueSeason);
+            records.add(newRecord);
+        }
+        return records;
+    }
+
+    /**
+     *
+     * @param season
+     * @param leagueSeason
+     * @return
+     */
+    public List<LeagueStandings> newLeagueStandings(int season, LeagueSeason leagueSeason) {
+        List<LeagueStandings> standings = new ArrayList<>();
+        for (Team team : teams.values()) {
+            LeagueStandings leagueStandings = new LeagueStandings();
+            leagueStandings.setLeagueID(leagueID);
+            leagueStandings.setSeason(season);
+            leagueStandings.setTeamID(team.getTeamID());
+            leagueStandings.setLeagueSeason(leagueSeason);
+            leagueStandings.setTeam(team);
+            standings.add(leagueStandings);
+        }
+        return standings;
+    }
+
+    /**
+     *
+     * @param season
+     * @param leagueSeason
+     * @return
+     */
+    public List<PlayerStats> newPlayerStats(int season, LeagueSeason leagueSeason) {
+        List<PlayerStats> stats = new ArrayList<>();
+        for (Player player : getAllPlayersAsArray()) {
+            PlayerStats playerStats = new PlayerStats();
+            playerStats.setLeagueID(leagueID);
+            playerStats.setPlayerID(player.getPlayerID());
+            playerStats.setSeason(season);
+            playerStats.setPlayer(player);
+            playerStats.setLeagueSeason(leagueSeason);
+            stats.add(playerStats);
+        }
+        return stats;
     }
 
     public int getCurrentSeason() {
@@ -120,42 +191,28 @@ public class League {
     }
 
     public LocalDate getCurrentDate() {
-        LeagueSeason season = seasons.get(getCurrentSeason());
+        LeagueSeason season = seasons.get(getCurrentSeason() - 1);
         return season.getCurrentDate();
     }
 
     public void setCurrentDate(LocalDate newDate) {
-        LeagueSeason season = seasons.get(getCurrentSeason());
+        LeagueSeason season = seasons.get(getCurrentSeason() - 1);
         season.setCurrentDate(newDate);
     }
 
     @Override
     public String toString() {
-        StringBuilder output = new StringBuilder("League " + name + " {" +
+        return "League " + name + " {" +
+                "\n    Belongs to           : " + getUser().getUsername() +
                 "\n    League ID            : " + leagueID +
                 "\n    Start date           : " + startDate +
                 "\n    Current Season       : " + getCurrentSeason() +
-//                "\n    Current Date         : " + getCurrentDate() +
+                "\n    Current Date         : " + getCurrentDate() +
                 "\n    Number of Teams      : " + teams.size() +
                 "\n    Number of Players    : " + getAllPlayersAsArray().size() +
                 "\n    Number of Free Agents: " + getAllFreeAgentsAsArray().size() +
-                "\n    League Records       : ");
-
-//        for (Map.Entry<LeagueRecord.Record, LeagueRecord> entry : leagueRecords.entrySet()) {
-//            output.append("\n        ").append(entry.getKey().getLabel()).append(": ");
-//            String[] record = entry.getValue().toString().split("\n");
-//            for (String line : record)
-//                output.append("\n            ").append(line);
-//        }
-        output.append("\n    teams=")
-                .append(teams)
-                .append("\n    freeAgents=")
-                .append(freeAgents)
-                .append("\n    playerStandings  :")
-                .append(allSeasonsPlayerStats)
-                .append("\n    teamStandings=")
-                .append(allSeasonsTeamStandings)
-                .append("\n}");
-        return output.toString();
+                "\n    Teams                : " + teams +
+                "\n    Free Agents          : " + freeAgents +
+                "\n}";
     }
 }

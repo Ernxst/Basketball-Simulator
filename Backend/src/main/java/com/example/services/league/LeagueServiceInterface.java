@@ -19,11 +19,31 @@ public interface LeagueServiceInterface {
     League generateLeague(String username, String name, LocalDate startDate, int numOfTeams,
                           String teamName, String state);
 
+    /**
+     *
+     * @param league
+     * @return
+     */
     int insertLeague(League league);
 
+    /**
+     *
+     * @param leagueID
+     * @return
+     * @throws LeagueNotFoundException
+     */
     League getLeagueByID(int leagueID) throws LeagueNotFoundException;
 
+    /**
+     *
+     * @param league
+     */
     void deleteLeague(League league);
 
+    /**
+     *
+     * @param leagueID
+     * @throws LeagueNotFoundException
+     */
     void deleteLeagueByID(int leagueID) throws LeagueNotFoundException;
 }

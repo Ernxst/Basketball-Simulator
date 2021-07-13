@@ -1,7 +1,5 @@
 package com.example.entities.player;
 
-import com.example.app.util.MathsUtil;
-import com.example.app.util.Util;
 import com.example.entities.player.util.contract.Contract;
 import com.example.entities.team.Team;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class representing a player.
@@ -29,46 +29,34 @@ public class Player extends AbstractPlayer {
     @JoinColumn(name = "TEAM_ID", nullable = false)
     private Team team;
 
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    // { seasonNo: Contract }
+    protected List<Contract> allContracts;
+
     public int getTeamID() {
         return team.getTeamID();
     }
 
-    @OneToMany
-    // { seasonNo: Contract }
-    protected Map<Integer, Contract> allContracts;
-
-    public String getFullName() {
-        return getFirstName() + " " + getLastName();
-    }
-
-    public String getFirstInitialAndSurname() {
-        return getFirstName().charAt(0) + ". " + getLastName();
-    }
-
-    public int getAge() {
-        return Util.yearsBetweenDateAndToday(getBirthDate());
-    }
-
     public void setContract(int season, Contract contract) {
-        allContracts.put(season, contract);
+        try {
+            allContracts.set(season - 1, contract);
+        } catch (IndexOutOfBoundsException ignored) {
+            allContracts.add(season - 1, contract);
+        }
     }
 
     public void setContract(Contract contract) {
-        int season = Util.largestKeyInMap(allContracts);
-        setContract(season, contract);
+        setContract(team.getCurrentSeason(), contract);
     }
 
     public Contract getContract(int season) {
-        return allContracts.get(season);
+        if (season > allContracts.size())
+            return null;
+        return allContracts.get(season - 1);
     }
 
     public Contract getContract() {
-        int season = Util.largestKeyInMap(allContracts);
-        return getContract(season);
-    }
-
-    public void addContract(int season, Contract contract) {
-        allContracts.put(season, contract);
+        return getContract(team.getCurrentSeason());
     }
 
     /**
@@ -76,47 +64,32 @@ public class Player extends AbstractPlayer {
      *
      * @return a free agent of this player, with no contract or team.
      */
-    // TODO - Implement toFreeAgent()
     public FreeAgent toFreeAgent() {
-        return new FreeAgent();
+        FreeAgent freeAgent = new FreeAgent();
+        freeAgent.setFirstName(firstName);
+        freeAgent.setLastName(lastName);
+        freeAgent.setPosition(getPosition());
+        freeAgent.setSecondaryPosition(getSecondaryPosition());
+        freeAgent.setHeight(height);
+        freeAgent.setWeight(weight);
+        freeAgent.setWingspan(wingspan);
+        freeAgent.setStandingVertical(standingVertical);
+        freeAgent.setMaxVertical(maxVertical);
+        freeAgent.setArchetype(getArchetype());
+        freeAgent.setCollege(college);
+        freeAgent.setBirthDate(birthDate);
+        freeAgent.setYearsPro(yearsPro);
+        freeAgent.setOverall(overall);
+        freeAgent.setPotentialOverall(potentialOverall);
+        return freeAgent;
     }
 
     @Override
     public String toString() {
-        int[] heightFeetInches = MathsUtil.cmToFeetAndInches(height);
-        int[] wingspanFeetInches = MathsUtil.cmToFeetAndInches(wingspan);
-        return "Player {" +
-                "\n        Player ID:                  " + playerID +
-                "\n        Team ID:                    " + getTeamID() +
-                "\n        First Name:                 '" + firstName + '\'' +
-                "\n        Last Name:                  '" + lastName + '\'' +
-                "\n        College:                    '" + college + '\'' +
-                "\n        Date of Birth (Y-m-d):      " + birthDate +
-                "\n        Age:                        " + getAge() +
-                "\n        Height (cm):                " + height +
-                "\n        Height (ft, in):            " + heightFeetInches[0] + "\"" + heightFeetInches[1] +
-                "\n        Wingspan (cm):              " + wingspan +
-                "\n        Wingspan (ft, in):          " + wingspanFeetInches[0] + "\"" + wingspanFeetInches[1] +
-                "\n        Weight (lbs):               " + weight +
-                "\n        Standing Vertical (inches): " + standingVertical +
-                "\n        Max Vertical (inches):      " + maxVertical +
-                "\n        Archetype:                  " + getArchetype().getLabel() +
-                "\n        Primary Position:           " + getPosition().getFullName() +
-                "\n        Secondary Position:         " + secondaryPosition +
-                "\n        Years in League:            " + yearsPro +
-                "\n        Overall:                    " + overall +
-                "\n        Potential Overall:          " + potentialOverall +
-                "\n        Contract:                   " + getContract() +
-//                "\n        Attributes:                 " + playerAttributes +
-//                "\n        Potential Attributes:       " + potentialAttributes +
-                "\n}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return playerID == player.getPlayerID();
+        String playerString = super.toString();
+        ArrayList<String> splitString = new ArrayList<>(Arrays.asList(playerString.split("\n")));
+        splitString.add(2, "        Team ID  :                  " + getTeamID());
+        splitString.add(21, "        Contract :                  " + getContract());
+        return String.join("\n", splitString) + "\n}";
     }
 }

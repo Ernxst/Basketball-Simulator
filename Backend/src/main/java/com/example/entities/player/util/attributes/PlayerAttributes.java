@@ -1,7 +1,5 @@
 package com.example.entities.player.util.attributes;
 
-import com.example.entities.player.util.PlayerConstants;
-
 import java.util.HashMap;
 import java.util.Map;
 

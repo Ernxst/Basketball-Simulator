@@ -152,6 +152,8 @@ public enum Position {
     }
 
     public static Position getPositionByName(String name) {
+        if (name == null)
+            return null;
         return positionsMap.getOrDefault(name, null);
     }
 

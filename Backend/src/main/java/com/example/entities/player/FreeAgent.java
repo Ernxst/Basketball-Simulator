@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,30 +16,16 @@ import java.util.Arrays;
  */
 @Entity
 @Table(name = "FREE_AGENT")
-@IdClass(FreeAgent.FreeAgentKey.class)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class FreeAgent extends AbstractPlayer {
-//    @Id
-//    @Column(name = "LEAGUE_ID", nullable = false)
-//    private int leagueID;
-
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEAGUE_ID", nullable = false)
     private League league;
-
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class FreeAgentKey implements Serializable {
-        private int leagueID;
-        private int playerID;
-    }
 
     public int getLeagueID() {
         return league.getLeagueID();
@@ -57,8 +42,6 @@ public class FreeAgent extends AbstractPlayer {
         String playerString = super.toString();
         ArrayList<String> splitString = new ArrayList<>(Arrays.asList(playerString.split("\n")));
         splitString.removeIf(s -> s.contains("Player {"));
-        splitString.removeIf(s -> s.contains("Team ID:"));
-        splitString.removeIf(s -> s.contains("Contract:"));
         splitString.add(0, "Free Agent {");
         splitString.add(2, "        League ID:                  " + getLeagueID());
         return String.join("\n", splitString);

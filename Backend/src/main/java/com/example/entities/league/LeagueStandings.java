@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,7 +19,7 @@ import java.io.Serializable;
 public class LeagueStandings {
     // Fields
     @Id
-    @Column(name = "LEAGUE_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "LEAGUE_ID", nullable = false)
     private int leagueID;
 
     @Id
@@ -30,37 +27,23 @@ public class LeagueStandings {
     private int season;
 
     @Id
-    @Column(name = "TEAM_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "TEAM_ID", nullable = false)
     private int teamID;
 
-    @Column(name = "WINS", nullable = false)
+    @Column(name = "WINS")
     private int wins;
 
-    @Column(name = "LOSSES", nullable = false)
+    @Column(name = "LOSSES")
     private int losses;
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID")),
-            })
-//    @JoinColumn(name = "LEAGUE_ID", nullable = false, insertable = false, updatable= false)
-    private League league;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "LEAGUE_ID", nullable = false, insertable = false, updatable= false)
-//    @JoinColumn(name = "SEASON", nullable = false)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID",
-                            insertable = false, updatable = false)),
-                    @JoinColumnOrFormula(formula = @JoinFormula(referencedColumnName = "SEASON", value = "SEASON"))
-            })
+    @JoinColumn(name = "LEAGUE_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "SEASON", insertable = false, updatable = false)
     private LeagueSeason leagueSeason;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID", nullable = false)
+    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
     private Team team;
 
     @Embeddable
@@ -72,5 +55,17 @@ public class LeagueStandings {
         private int leagueID;
         private int season;
         private int teamID;
+    }
+
+    @Override
+    public String toString() {
+        return "League Standings {" +
+                "\n    leagueID: " + leagueID +
+                "\n    season  : " + season +
+                "\n    teamID  : " + teamID +
+                "\n    wins    : " + wins +
+                "\n    losses  : " + losses +
+                "\n    team    : " + team +
+                "\n}";
     }
 }

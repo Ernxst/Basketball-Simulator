@@ -4,9 +4,7 @@ import com.example.api.responses.GenericResponse;
 import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.entities.league.League;
 import com.example.services.league.LeagueService;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,7 +32,7 @@ public class LeagueController {
         private String username;
         private String leagueName;
         private String startDate;
-        private int numOfPlayers;
+        private int numOfTeams;
         private String teamState;
         private String teamName;
     }
@@ -44,16 +42,16 @@ public class LeagueController {
         String username = request.getUsername();
         String leagueName = request.getLeagueName();
         String startDate = request.getStartDate();
-        int numOfTeams = request.getNumOfPlayers();
+        int numOfTeams = request.getNumOfTeams();
         String teamState = request.getTeamState();
-        String teamName = request.teamName;
+        String teamName = request.getTeamName();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
         LocalDate date = LocalDate.parse(startDate, formatter);
 
         try {
-            League league = leagueService.generateLeague(username, leagueName, date, numOfTeams, teamState, teamName);
+            League league = leagueService.generateLeague(username, leagueName, date, numOfTeams, teamName, teamState);
             return ResponseEntity.ok()
                     .body(new RegistrationSuccessResponse(username));
         } catch (UsernameNotFoundException e) {

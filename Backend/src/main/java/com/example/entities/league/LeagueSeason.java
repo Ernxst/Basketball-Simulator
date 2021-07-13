@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "LEAGUE_SEASON")
@@ -31,13 +30,17 @@ public class LeagueSeason {
     private LocalDate currentDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(
-                            referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID",
-                            insertable = false, updatable = false)),
-            })
+    @JoinColumn(name = "LEAGUE_ID", insertable = false, updatable = false)
     private League league;
+
+    @OneToMany(mappedBy = "leagueSeason", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<LeagueStandings> leagueStandings;
+
+    @OneToMany(mappedBy = "leagueSeason", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<LeagueRecord> leagueRecords;
+
+    @OneToMany(mappedBy = "leagueSeason", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PlayerStats> playerStats;
 
     @Embeddable
     @Getter
@@ -47,5 +50,17 @@ public class LeagueSeason {
     public static class LeagueSeasonKey implements Serializable {
         private int leagueID;
         private int season;
+    }
+
+    @Override
+    public String toString() {
+        return "League Season {" +
+                "\n    leagueID       : " + leagueID +
+                "\n    season         : " + season +
+                "\n    currentDate    : " + currentDate +
+                "\n    leagueStandings: " + leagueStandings +
+                "\n    leagueRecord   : " + leagueRecords +
+                "\n    playerStats    : " + playerStats +
+                "\n}";
     }
 }

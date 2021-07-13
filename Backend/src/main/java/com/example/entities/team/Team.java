@@ -45,33 +45,23 @@ public class Team {
     @Column(name = "ICON_ID", nullable = false)
     private int iconID;
 
-    @Column(name = "LEAGUE_ID", nullable = false, insertable = false, updatable = false)
-    private int leagueID;
-
     // Relationships
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @MapKeyColumn(name = "PLAYER_ID", insertable = false, updatable = false)
     // { playerID : Player }
     private Map<Integer, Player> players;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LEAGUE_ID", nullable = false)
+    @JoinColumn(name = "LEAGUE_ID")
     private League league;
 
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     // { seasonNo: Standings }
     private Map<Integer, LeagueStandings> allStandings;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "ICON_ID", nullable = false)
-//    private TeamIcon teamIcon;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "TEAM_NAME", nullable = false)
-//    private TeamName teamName;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "TEAM_STATE", nullable = false)
-//    private TeamState teamState;
+    public int getLeagueID() {
+        return getLeague().getLeagueID();
+    }
 
     public String getFullName() {
         return getState() + " " + getName();
@@ -86,9 +76,11 @@ public class Team {
     }
 
     public double getTotalCap() {
-        // TODO - Pass current season here
-//        int season = Util.largestKeyInMap();
-        return getTotalCap(20);
+        return getTotalCap(getCurrentSeason());
+    }
+
+    public int getCurrentSeason() {
+        return league.getCurrentSeason();
     }
 
     public double getTotalCap(int season) {

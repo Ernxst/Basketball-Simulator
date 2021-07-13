@@ -14,7 +14,7 @@ public class TeamService implements TeamServiceInterface {
 
     @Override
     public int randomTeamIconID() {
-        return 0;
+        return 1; // TODO - Implement once icons are in DB
     }
 
     @Override

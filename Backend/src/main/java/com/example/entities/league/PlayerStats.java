@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,11 +18,11 @@ import java.io.Serializable;
 @Setter
 public class PlayerStats {
     @Id
-    @Column(name = "LEAGUE_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "LEAGUE_ID", nullable = false)
     private int leagueID;
 
     @Id
-    @Column(name = "PLAYER_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "PLAYER_ID", nullable = false)
     private int playerID;
 
     @Id
@@ -73,23 +70,12 @@ public class PlayerStats {
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER_ID", nullable = false)
+    @JoinColumn(name = "PLAYER_ID", insertable = false, updatable = false)
     private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID")),
-            })
-    private League league;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID",
-                            insertable = false, updatable = false)),
-                    @JoinColumnOrFormula(formula = @JoinFormula(referencedColumnName = "SEASON", value = "SEASON"))
-            })
+    @JoinColumn(name = "LEAGUE_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "SEASON", insertable = false, updatable = false)
     private LeagueSeason leagueSeason;
 
     @Embeddable
@@ -101,5 +87,27 @@ public class PlayerStats {
         private int leagueID;
         private int playerID;
         private int season;
+    }
+
+    @Override
+    public String toString() {
+        return "Player Stats {" +
+                "\n    leagueID: " + leagueID +
+                "\n    playerID: " + playerID +
+                "\n    season: " + season +
+                "\n    points: " + points +
+                "\n    rebounds: " + rebounds +
+                "\n    assists: " + assists +
+                "\n    steals: " + steals +
+                "\n    blocks: " + blocks +
+                "\n    turnovers: " + turnovers +
+                "\n    gamesPlayed: " + gamesPlayed +
+                "\n    freeThrowsAttempted: " + freeThrowsAttempted +
+                "\n    freeThrowsMade: " + freeThrowsMade +
+                "\n    fieldGoalsAttempted: " + fieldGoalsAttempted +
+                "\n    fieldGoalsMade: " + fieldGoalsMade +
+                "\n    threePointersAttempted: " + threePointersAttempted +
+                "\n    threePointersMade: " + threePointersMade +
+                "\n}";
     }
 }

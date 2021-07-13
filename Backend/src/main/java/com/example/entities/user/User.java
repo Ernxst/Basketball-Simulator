@@ -1,7 +1,6 @@
 package com.example.entities.user;
 
 import com.example.entities.league.League;
-import com.ibm.db2.cmx.annotation.Required;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +28,7 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany
-    @JoinColumn(name = "USERNAME", nullable = false)
+    @JoinColumn(name = "USERNAME", insertable = false, updatable = false)
     private Map<Integer, League> leagues;
 
     public User(String username, String password) {

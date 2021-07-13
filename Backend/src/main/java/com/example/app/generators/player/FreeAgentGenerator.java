@@ -41,7 +41,7 @@ public class FreeAgentGenerator extends PlayerGenerator {
 //        player.setPlayerAttributes(playerAttributes);
         player.setPotentialOverall(potentialOverall);
 //        player.setPotentialAttributes(potentialAttributes);
-        player.setContract(null);
+//        player.setContract(null);
         return player.toFreeAgent();
     }
 }

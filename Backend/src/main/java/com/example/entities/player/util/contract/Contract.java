@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,11 +24,11 @@ import java.io.Serializable;
 @Setter
 public class Contract {
     @Id
-    @Column(name = "PLAYER_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "PLAYER_ID", nullable = false)
     private int playerID;
 
     @Id
-    @Column(name = "LEAGUE_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "LEAGUE_ID", nullable = false)
     private int leagueID;
 
     @Id
@@ -55,23 +52,16 @@ public class Contract {
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLAYER_ID", nullable = false)
+    @JoinColumn(name = "PLAYER_ID", insertable = false, updatable = false)
     private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID")),
-            })
+    @JoinColumn(name = "LEAGUE_ID", insertable = false, updatable = false)
     private League league;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumnsOrFormulas(
-            value = {
-                    @JoinColumnOrFormula(column = @JoinColumn(referencedColumnName = "LEAGUE_ID", name = "LEAGUE_ID",
-                            insertable = false, updatable = false)),
-                    @JoinColumnOrFormula(formula = @JoinFormula(referencedColumnName = "SEASON", value = "SEASON"))
-            })
+    @JoinColumn(name = "LEAGUE_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "SEASON", insertable = false, updatable = false)
     private LeagueSeason leagueSeason;
 
     @Embeddable
@@ -90,7 +80,7 @@ public class Contract {
     }
 
     public void setContractOption(ContractOption contractOption) {
-       this.contractOption = contractOption.getLabel();
+        this.contractOption = contractOption.getLabel();
     }
 
     public boolean hasNoTradeClause() {

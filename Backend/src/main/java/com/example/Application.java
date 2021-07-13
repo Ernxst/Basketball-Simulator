@@ -27,7 +27,7 @@ public class Application {
     @Value("${server.port}")
     public static String PORT;
     // The port the frontend runs on.
-    public static String APP_PORT = "8080";
+    public static final String APP_PORT = "8080";
 
     public static void main(String[] args) {
         // Connect to cloud database.

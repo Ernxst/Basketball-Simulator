@@ -12,6 +12,7 @@ import com.example.services.NameService;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 /**
@@ -77,7 +78,8 @@ public class PlayerGenerator {
         player.setYearsPro(yearsPro);
         player.setOverall(baseOverall);
         player.setPotentialOverall(potentialOverall);
-        player.setContract(contract);
+        player.setAllContracts(new ArrayList<>());
+        player.setContract(1, contract);
 
 //        player.setPlayerAttributes(playerAttributes);
 //        player.setPotentialAttributes(potentialAttributes);

@@ -1,5 +1,7 @@
 package com.example.entities.player;
 
+import com.example.app.util.MathsUtil;
+import com.example.app.util.Util;
 import com.example.entities.player.util.Archetype;
 import com.example.entities.player.util.Position;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,7 @@ public abstract class AbstractPlayer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PLAYER_ID", nullable = false)
+    @Column(name = "PLAYER_ID", insertable = false, updatable = false)
     protected int playerID;
 
     @Column(name = "FIRST_NAME", nullable = false)
@@ -60,14 +62,26 @@ public abstract class AbstractPlayer {
     @Column(name = "POTENTIAL", nullable = false)
     protected int potentialOverall;
 
-    @Column(name = "ARCHETYPE_ID", nullable = false)
+    @Column(name = "ARCHETYPE_NAME", nullable = false)
     protected String archetype;
 
     @Column(name = "POSITION", nullable = false)
-    protected String position;
+    protected String playerPosition;
 
-    @Column(name = "SECONDARY_POSITION", nullable = false)
-    protected String secondaryPosition;
+    @Column(name = "SECONDARY_POSITION")
+    protected String playerSecondaryPosition;
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
+
+    public String getFirstInitialAndSurname() {
+        return getFirstName().charAt(0) + ". " + getLastName();
+    }
+
+    public int getAge() {
+        return Util.yearsBetweenDateAndToday(getBirthDate());
+    }
 
     public Archetype getArchetype() {
         return Archetype.getArchetypeByName(archetype);
@@ -78,19 +92,56 @@ public abstract class AbstractPlayer {
     }
 
     public Position getPosition() {
-        return Position.getPositionByName(position);
+        return Position.getPositionByName(playerPosition);
     }
 
     public Position getSecondaryPosition() {
-        return Position.getPositionByName(secondaryPosition);
+        return Position.getPositionByName(playerSecondaryPosition);
     }
 
     public void setPosition(Position position) {
-        this.position = position.getShortName();
+        this.playerPosition = position.getShortName();
     }
 
     public void setSecondaryPosition(Position position) {
         if (position != null)
-            this.secondaryPosition = position.getShortName();
+            this.playerSecondaryPosition = position.getShortName();
+    }
+
+    @Override
+    public String toString() {
+        int[] heightFeetInches = MathsUtil.cmToFeetAndInches(height);
+        int[] wingspanFeetInches = MathsUtil.cmToFeetAndInches(wingspan);
+        return "Player {" +
+                "\n        Player ID:                  " + playerID +
+                "\n        First Name:                 '" + firstName + '\'' +
+                "\n        Last Name:                  '" + lastName + '\'' +
+                "\n        College:                    '" + college + '\'' +
+                "\n        Date of Birth (Y-m-d):      " + birthDate +
+                "\n        Age:                        " + getAge() +
+                "\n        Height (cm):                " + height +
+                "\n        Height (ft, in):            " + heightFeetInches[0] + "\"" + heightFeetInches[1] +
+                "\n        Wingspan (cm):              " + wingspan +
+                "\n        Wingspan (ft, in):          " + wingspanFeetInches[0] + "\"" + wingspanFeetInches[1] +
+                "\n        Weight (lbs):               " + weight +
+                "\n        Standing Vertical (inches): " + standingVertical +
+                "\n        Max Vertical (inches):      " + maxVertical +
+                "\n        Archetype:                  " + getArchetype().getLabel() +
+                "\n        Primary Position:           " + getPosition().getFullName() +
+                "\n        Secondary Position:         " + getPlayerSecondaryPosition() +
+                "\n        Years in League:            " + yearsPro +
+                "\n        Overall:                    " + overall +
+                "\n        Potential Overall:          " + potentialOverall +
+//                "\n        Attributes:                 " + playerAttributes +
+//                "\n        Potential Attributes:       " + potentialAttributes +
+                "\n}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return playerID == player.getPlayerID();
     }
 }

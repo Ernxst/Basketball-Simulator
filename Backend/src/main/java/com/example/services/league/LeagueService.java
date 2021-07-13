@@ -5,12 +5,18 @@ import com.example.app.generators.team.TeamGenerator;
 import com.example.app.util.Util;
 import com.example.entities.league.League;
 import com.example.entities.league.LeagueConstants;
+import com.example.entities.league.LeagueSeason;
+import com.example.entities.league.LeagueStandings;
 import com.example.entities.player.FreeAgent;
 import com.example.entities.team.Team;
 import com.example.entities.user.User;
 import com.example.repositories.LeagueRepository;
 import com.example.services.NameService;
 import com.example.services.freeAgent.FreeAgentService;
+import com.example.services.league.player.PlayerStatsService;
+import com.example.services.league.record.LeagueRecordService;
+import com.example.services.league.season.LeagueSeasonService;
+import com.example.services.league.standings.LeagueStandingsService;
 import com.example.services.player.PlayerService;
 import com.example.services.team.TeamService;
 import com.example.services.user.UserService;
@@ -36,55 +42,68 @@ public class LeagueService implements LeagueServiceInterface {
     private PlayerService playerService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LeagueSeasonService leagueSeasonService;
+    @Autowired
+    private LeagueStandingsService leagueStandingsService;
+    @Autowired
+    private LeagueRecordService leagueRecordService;
+    @Autowired
+    private PlayerStatsService playerStatsService;
 
     @Override
     public League generateLeague(String username, String name, LocalDate startDate, int numOfTeams, String teamName, String state) {
         League league = new League();
-        league.setUsername(username);
         league.setName(name);
         league.setStartDate(startDate);
         league.setLastPlayed(LocalDate.now());
         league.setTeams(new HashMap<>());
-        league.setAllSeasonsLeagueRecords(new HashMap<>());
-        league.setAllSeasonsPlayerStats(new HashMap<>());
-        league.setAllSeasonsTeamStandings(new HashMap<>());
         league.setFreeAgents(new HashMap<>());
+        league.setSeasons(new ArrayList<>());
+
         UserDetails userDetails = userService.loadUserByUsername(username);
         User user = new User(username, userDetails.getPassword());
         league.setUser(user);
-        league.newSeason();
+
         int leagueID = insertLeague(league);
-        Map<Integer, Team> teams = generateTeams(leagueID, numOfTeams, startDate, teamName, state);
+        Map<Integer, Team> teams = generateTeams(league, numOfTeams, startDate, teamName, state);
         Map<Integer, FreeAgent> freeAgents = generateFreeAgents(league, numOfTeams, startDate);
         league.setTeams(teams);
         league.setFreeAgents(freeAgents);
         league.setLeagueID(leagueID);
+
+        LeagueSeason season = league.newSeason();
+//        playerStatsService.batchInsertPlayerStats(season.getPlayerStats());
+//        leagueRecordService.batchInsertLeagueRecords(season.getLeagueRecords());
+//        leagueStandingsService.batchInsertLeagueStandings(season.getLeagueStandings());
         return league;
     }
 
     /**
      * Generate a map of basketball teams.
      *
-     * @param leagueID   the ID of the league the teams will belong to.
+     * @param league     the league the teams will belong to.
      * @param numOfTeams the number of teams to generate.
      * @param startDate  the date the league was started.
      * @param teamName   the name of the user's team.
      * @param state      the state the user's team is located in.
      * @return a map of randomly generated teams, including the user's team.
      */
-    private Map<Integer, Team> generateTeams(int leagueID, int numOfTeams, LocalDate startDate, String teamName, String state) {
+    private Map<Integer, Team> generateTeams(League league, int numOfTeams, LocalDate startDate, String teamName, String state) {
         Map<Integer, Team> teams = new HashMap<>();
         TeamGenerator teamGenerator = new TeamGenerator(teamService, nameService, playerService);
         for (int i = 0; i < numOfTeams - 1; i++) {
             Collection<Team> existingTeams = teams.values();
             List<String> existingTeamNames = existingTeams.stream().map(Team::getName).collect(Collectors.toList());
-            Team team = teamGenerator.generateTeam(leagueID, startDate);
+            Team team = teamGenerator.generateTeam(league, startDate);
             while (existingTeamNames.contains(team.getName())) {
-                team = teamGenerator.generateTeam(leagueID, startDate);
+                team = teamGenerator.generateTeam(league, startDate);
             }
             teams.put(team.getTeamID(), team);
         }
-        Team userTeam = teamGenerator.generateTeam(leagueID, state, teamName, startDate);
+
+        // TODO - Note that user cannot enter their own team name as it is not in database.
+        Team userTeam = teamGenerator.generateTeam(league, state, teamName, startDate);
         teams.put(userTeam.getTeamID(), userTeam);
         return teams;
     }

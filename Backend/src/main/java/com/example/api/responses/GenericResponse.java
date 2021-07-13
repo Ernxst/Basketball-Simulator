@@ -18,11 +18,6 @@ public class GenericResponse {
         this.code = code;
     }
 
-    public GenericResponse(String message, HttpStatus code, String error) {
-        this.message = message;
-        this.code = code;
-    }
-
     public String getMessage() {
         return message;
     }

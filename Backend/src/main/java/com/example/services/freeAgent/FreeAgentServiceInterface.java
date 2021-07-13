@@ -9,8 +9,6 @@ public interface FreeAgentServiceInterface {
 
     List<FreeAgent> findFreeAgentsByPlayerIDs(List<Integer> playerIDs);
 
-    List<FreeAgent> findAllFreeAgentsInTeam(int teamID);
-
     void deleteFreeAgent(FreeAgent freeAgent);
 
     int insertFreeAgent(FreeAgent freeAgent);

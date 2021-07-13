@@ -31,11 +31,6 @@ public class FreeAgentService implements FreeAgentServiceInterface {
     }
 
     @Override
-    public List<FreeAgent> findAllFreeAgentsInTeam(int teamID) {
-        return null;
-    }
-
-    @Override
     public void deleteFreeAgent(FreeAgent freeAgent) {
         freeAgentRepository.delete(freeAgent);
     }

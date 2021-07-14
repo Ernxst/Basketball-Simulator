@@ -85,6 +85,7 @@ public class LeagueService implements LeagueServiceInterface {
             while (existingTeamNames.contains(team.getName())) {
                 team = teamGenerator.generateTeam(league, startDate);
             }
+            teamService.insertTeam(team);
             teams.put(team.getTeamID(), team);
         }
 

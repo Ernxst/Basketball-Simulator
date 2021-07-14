@@ -81,10 +81,8 @@ public class TeamGenerator {
         team.setPlayers(new HashMap<>());
         team.setAllStandings(new HashMap<>());
         team.setLeague(league);
-        int teamID = teamService.insertTeam(team);
         Map<Integer, Player> mappedPlayers = getPlayerIDs(players, team);
         team.setPlayers(mappedPlayers);
-        teamService.insertTeam(team);
         return team;
     }
 

@@ -79,13 +79,13 @@ public class LeagueService implements LeagueServiceInterface {
         Map<Integer, Team> teams = new HashMap<>();
         TeamGenerator teamGenerator = new TeamGenerator(teamService, nameService, playerService);
         for (int i = 0; i < numOfTeams - 1; i++) {
+            // TODO - Optimise, existing team names and states can be stored in TeamGenerator object and appended
+            //  to here after generation instead of recalculating array and passing as parameter.
             Collection<Team> existingTeams = teams.values();
             List<String> existingTeamNames = existingTeams.stream().map(Team::getName).collect(Collectors.toList());
-            Team team = teamGenerator.generateTeam(league, startDate);
-            while (existingTeamNames.contains(team.getName())) {
-                team = teamGenerator.generateTeam(league, startDate);
-            }
-            teamService.insertTeam(team);
+            List<String> existingTeamStates = existingTeams.stream().map(Team::getState).collect(Collectors.toList());
+            Team team = teamGenerator.generateTeam(league, startDate,
+                    existingTeamNames, existingTeamStates, teamName, state);
             teams.put(team.getTeamID(), team);
         }
 

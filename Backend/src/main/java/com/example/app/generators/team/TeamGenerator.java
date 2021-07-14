@@ -13,9 +13,7 @@ import com.example.services.team.TeamService;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -35,11 +33,25 @@ public class TeamGenerator {
      *
      * @param league          the league the team plays in.
      * @param leagueStartDate the date the league started.
+     * @param existingNames   an array of the team names of teams that have already been generated.
+     * @param existingStates  an array of the team states of teams that have already been generated.
+     * @param userTeamName    the name of the user's team.
+     * @param userTeamState   the state the user's team is located in.
      * @return a CPU team.
      */
-    public Team generateTeam(League league, LocalDate leagueStartDate) {
+    public Team generateTeam(League league, LocalDate leagueStartDate,
+                             List<String> existingNames, List<String> existingStates,
+                             String userTeamName, String userTeamState) {
         String state = nameService.randomTeamState();
         String name = nameService.randomTeamName();
+        // Ensures no duplicate team names.
+        while (existingNames.contains(name) || name.equals(userTeamName))
+            name = nameService.randomTeamName();
+        // Ensures there are no more than the maximum number of teams in a single state.
+        int frequency = Collections.frequency(existingStates, state);
+        while (frequency >= TeamConstants.MAX_TEAMS_IN_STATE ||
+                state.equals(userTeamState) && frequency == TeamConstants.MAX_TEAMS_IN_STATE - 1)
+            state = nameService.randomTeamState();
         return generateTeam(league, state, name, false, leagueStartDate);
     }
 
@@ -81,16 +93,18 @@ public class TeamGenerator {
         team.setPlayers(new HashMap<>());
         team.setAllStandings(new HashMap<>());
         team.setLeague(league);
+        int teamID = teamService.insertTeam(team);
         Map<Integer, Player> mappedPlayers = getPlayerIDs(players, team);
         team.setPlayers(mappedPlayers);
+        teamService.insertTeam(team);
         return team;
     }
 
     /**
      * Insert players into the database and retrieve their IDs into a map.
      *
-     * @param players  the players to insert.
-     * @param team     the team the players play for.
+     * @param players the players to insert.
+     * @param team    the team the players play for.
      * @return a map of IDs to players.
      */
     private Map<Integer, Player> getPlayerIDs(Player[] players, Team team) {

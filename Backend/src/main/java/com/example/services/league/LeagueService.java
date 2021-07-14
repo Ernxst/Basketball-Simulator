@@ -5,18 +5,13 @@ import com.example.app.generators.team.TeamGenerator;
 import com.example.app.util.Util;
 import com.example.entities.league.League;
 import com.example.entities.league.LeagueConstants;
-import com.example.entities.league.LeagueSeason;
-import com.example.entities.league.LeagueStandings;
 import com.example.entities.player.FreeAgent;
 import com.example.entities.team.Team;
 import com.example.entities.user.User;
 import com.example.repositories.LeagueRepository;
 import com.example.services.NameService;
 import com.example.services.freeAgent.FreeAgentService;
-import com.example.services.league.player.PlayerStatsService;
-import com.example.services.league.record.LeagueRecordService;
 import com.example.services.league.season.LeagueSeasonService;
-import com.example.services.league.standings.LeagueStandingsService;
 import com.example.services.player.PlayerService;
 import com.example.services.team.TeamService;
 import com.example.services.user.UserService;
@@ -44,12 +39,6 @@ public class LeagueService implements LeagueServiceInterface {
     private UserService userService;
     @Autowired
     private LeagueSeasonService leagueSeasonService;
-    @Autowired
-    private LeagueStandingsService leagueStandingsService;
-    @Autowired
-    private LeagueRecordService leagueRecordService;
-    @Autowired
-    private PlayerStatsService playerStatsService;
 
     @Override
     public League generateLeague(String username, String name, LocalDate startDate, int numOfTeams, String teamName, String state) {
@@ -72,10 +61,7 @@ public class LeagueService implements LeagueServiceInterface {
         league.setFreeAgents(freeAgents);
         league.setLeagueID(leagueID);
 
-        LeagueSeason season = league.newSeason();
-//        playerStatsService.batchInsertPlayerStats(season.getPlayerStats());
-//        leagueRecordService.batchInsertLeagueRecords(season.getLeagueRecords());
-//        leagueStandingsService.batchInsertLeagueStandings(season.getLeagueStandings());
+        leagueSeasonService.insertNewSeason(league);
         return league;
     }
 

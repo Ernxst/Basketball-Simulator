@@ -39,8 +39,7 @@ public class League {
     private LocalDate lastPlayed;
 
     // Relationships
-    // Map of all seasons
-    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "league", fetch = FetchType.LAZY)
     private List<LeagueSeason> seasons;
 
     // Teams & Players
@@ -95,7 +94,6 @@ public class League {
     }
 
     /**
-     *
      * @return
      */
     public LeagueSeason newSeason() {
@@ -124,7 +122,6 @@ public class League {
     }
 
     /**
-     *
      * @param season
      * @param leagueSeason
      * @return
@@ -147,7 +144,6 @@ public class League {
     }
 
     /**
-     *
      * @param season
      * @param leagueSeason
      * @return
@@ -167,7 +163,6 @@ public class League {
     }
 
     /**
-     *
      * @param season
      * @param leagueSeason
      * @return

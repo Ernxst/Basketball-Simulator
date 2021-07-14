@@ -55,12 +55,12 @@ public class LeagueSeason {
     @Override
     public String toString() {
         return "League Season {" +
-                "\n    leagueID       : " + leagueID +
-                "\n    season         : " + season +
-                "\n    currentDate    : " + currentDate +
-                "\n    leagueStandings: " + leagueStandings +
-                "\n    leagueRecord   : " + leagueRecords +
-                "\n    playerStats    : " + playerStats +
+                "\n    leagueID        : " + leagueID +
+                "\n    season          : " + season +
+                "\n    currentDate     : " + currentDate +
+                "\n    leagueStandings : " + leagueStandings +
+                "\n    leagueRecords   : " + leagueRecords +
+                "\n    playerStats     : " + playerStats +
                 "\n}";
     }
 }

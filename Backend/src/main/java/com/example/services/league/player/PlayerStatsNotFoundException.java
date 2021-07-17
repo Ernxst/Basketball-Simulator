@@ -1,6 +1,8 @@
 package com.example.services.league.player;
 
-public class PlayerStatsNotFoundException extends Exception {
+import com.example.services.league.util.LeagueItemNotFoundException;
+
+public class PlayerStatsNotFoundException extends LeagueItemNotFoundException {
     public PlayerStatsNotFoundException(String message) {
         super(message);
     }

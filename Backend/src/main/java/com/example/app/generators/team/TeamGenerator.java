@@ -28,27 +28,26 @@ public class TeamGenerator {
     private final NameService nameService;
     private final PlayerService playerService;
 
+    private final String userTeamName;
+    private final String userTeamState;
+    private final List<String> existingTeamNames = new ArrayList<>();
+    private final List<String> existingTeamStates = new ArrayList<>();
+
     /**
      * Generate a CPU team.
      *
      * @param league          the league the team plays in.
      * @param leagueStartDate the date the league started.
-     * @param existingNames   an array of the team names of teams that have already been generated.
-     * @param existingStates  an array of the team states of teams that have already been generated.
-     * @param userTeamName    the name of the user's team.
-     * @param userTeamState   the state the user's team is located in.
      * @return a CPU team.
      */
-    public Team generateTeam(League league, LocalDate leagueStartDate,
-                             List<String> existingNames, List<String> existingStates,
-                             String userTeamName, String userTeamState) {
+    public Team generateAiTeam(League league, LocalDate leagueStartDate) {
         String state = nameService.randomTeamState();
         String name = nameService.randomTeamName();
         // Ensures no duplicate team names.
-        while (existingNames.contains(name) || name.equals(userTeamName))
+        while (existingTeamNames.contains(name) || name.equals(userTeamName))
             name = nameService.randomTeamName();
         // Ensures there are no more than the maximum number of teams in a single state.
-        int frequency = Collections.frequency(existingStates, state);
+        int frequency = Collections.frequency(existingTeamStates, state);
         while (frequency >= TeamConstants.MAX_TEAMS_IN_STATE ||
                 state.equals(userTeamState) && frequency == TeamConstants.MAX_TEAMS_IN_STATE - 1)
             state = nameService.randomTeamState();
@@ -59,13 +58,11 @@ public class TeamGenerator {
      * Generate the user's team, with the given state and name.
      *
      * @param league          the league the team plays in.
-     * @param state           the state the team is located in.
-     * @param name            the name of the team.
      * @param leagueStartDate the date the league started.
      * @return a team for the user.
      */
-    public Team generateTeam(League league, String state, String name, LocalDate leagueStartDate) {
-        return generateTeam(league, state, name, true, leagueStartDate);
+    public Team generateUserTeam(League league, LocalDate leagueStartDate) {
+        return generateTeam(league, userTeamName, userTeamState, true, leagueStartDate);
     }
 
     /**
@@ -97,6 +94,8 @@ public class TeamGenerator {
         Map<Integer, Player> mappedPlayers = getPlayerIDs(players, team);
         team.setPlayers(mappedPlayers);
         teamService.insertTeam(team);
+        existingTeamNames.add(name);
+        existingTeamStates.add(state);
         return team;
     }
 

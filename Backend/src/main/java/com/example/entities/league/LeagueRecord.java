@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LeagueRecord {
+public class LeagueRecord extends LeagueItem<LeagueRecord.LeagueRecordKey> {
     // Fields
     @Id
     @Column(name = "LEAGUE_ID", nullable = false)
@@ -80,6 +80,18 @@ public class LeagueRecord {
         String getLabel() {
             return label;
         }
+    }
+
+    @Override
+    public LeagueRecordKey getId() {
+        return new LeagueRecordKey(leagueID, season, title);
+    }
+
+    @Override
+    public void setId(LeagueRecordKey id) {
+        leagueID = id.getLeagueID();
+        season = id.getSeason();
+        title = id.getTitle();
     }
 
     @Override

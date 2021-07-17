@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LeagueStandings {
+public class LeagueStandings extends LeagueItem<LeagueStandings.LeagueStandingsKey> {
     // Fields
     @Id
     @Column(name = "LEAGUE_ID", nullable = false)
@@ -55,6 +55,18 @@ public class LeagueStandings {
         private int leagueID;
         private int season;
         private int teamID;
+    }
+
+    @Override
+    public LeagueStandingsKey getId() {
+        return new LeagueStandingsKey(leagueID, season, teamID);
+    }
+
+    @Override
+    public void setId(LeagueStandingsKey id) {
+        leagueID = id.getLeagueID();
+        season = id.getSeason();
+        teamID = id.getTeamID();
     }
 
     @Override

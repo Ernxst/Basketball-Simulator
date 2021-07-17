@@ -1,7 +1,6 @@
 package com.example.api.controllers.league;
 
 import com.example.api.responses.GenericResponse;
-import com.example.api.responses.RegistrationSuccessResponse;
 import com.example.entities.league.League;
 import com.example.services.league.LeagueService;
 import lombok.*;
@@ -51,9 +50,9 @@ public class LeagueController {
         LocalDate date = LocalDate.parse(startDate, formatter);
 
         try {
-            League league = leagueService.generateLeague(username, leagueName, date, numOfTeams, teamName, teamState);
+            League league = leagueService.newLeague(username, leagueName, date, numOfTeams, teamName, teamState);
             return ResponseEntity.ok()
-                    .body(new RegistrationSuccessResponse(username));
+                    .body(new GenericResponse("Success", HttpStatus.OK));
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT.value())
                     .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT));

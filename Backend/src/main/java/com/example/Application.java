@@ -1,9 +1,5 @@
 package com.example;
 
-/*
-TODO - Pass "b" flag from docker/python run script to here
- */
-
 import com.example.api.AppLogger;
 import com.example.repositories.Database;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,28 +1,23 @@
-FROM maven:3.6-jdk-11
+# syntax=docker/dockerfile:1
+FROM maven:3.6-jdk-11 AS build
 
-ENV DEBIAN_FRONTEND=noninteractive
+# Prepare working directory
+WORKDIR /build
+COPY src src
+COPY pom.xml .
+RUN mvn clean package -DskipTests
 
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends python3 2>&1 \
-    && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
-    && apt-get -y install git procps lsb-release \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+FROM openjdk:11-jre-slim AS runtime
 
-WORKDIR /Backend
+# Add a script to be executed every time the container starts.
+COPY tools/entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 
-COPY . .
+WORKDIR /app
+#COPY --from=build /build/target .
+ARG JAR_FILE=build/target/*.jar
+COPY --from=build ${JAR_FILE} app.jar
 
-RUN chmod u+x com
-RUN chmod u+x tools/test
-RUN chmod u+x tools/coverage
-RUN chmod u+x tools/analysis
-
-RUN mvn package -DskipTests
-
-#ENV DEBIAN_FRONTEND=
-
-ENTRYPOINT /Backend/com
-
-EXPOSE 8100
+# Configure the main process to run when running the image
+CMD ["java" ,"-jar", "app.jar"]

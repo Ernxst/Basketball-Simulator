@@ -1,3 +1,0 @@
-#!/bin/bash
-
-cd .. && mvn surefire-report:report && cd target/site/ && python3 -m http.server

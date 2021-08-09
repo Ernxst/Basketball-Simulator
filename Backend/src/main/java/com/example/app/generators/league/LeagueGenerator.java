@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +82,6 @@ public class LeagueGenerator {
             Team team = teamGenerator.generateAiTeam(league, startDate);
             teams.put(team.getTeamID(), team);
         }
-
         // TODO - Note that user cannot enter their own team name as it is not in database.
         Team userTeam = teamGenerator.generateUserTeam(league, startDate);
         teams.put(userTeam.getTeamID(), userTeam);
@@ -98,15 +98,21 @@ public class LeagueGenerator {
     private Map<Integer, FreeAgent> generateFreeAgents(League league, int numOfTeams, LocalDate leagueStartDate) {
         int yearsSinceStart = Util.yearsBetweenDateAndToday(leagueStartDate);
         int numOfPlayers = Util.randomInt(numOfTeams * LeagueConstants.MIN_FREE_AGENTS_MULTIPLIER, numOfTeams * LeagueConstants.MAX_FREE_AGENTS_MULTIPLIER + 1);
-        Map<Integer, FreeAgent> freeAgents = new HashMap<>();
         FreeAgentGenerator freeAgentGenerator = new FreeAgentGenerator(nameService);
+        FreeAgent[] freeAgents = new FreeAgent[numOfPlayers];
         for (int i = 0; i < numOfPlayers; i++) {
             FreeAgent freeAgent = freeAgentGenerator.generateFreeAgent(yearsSinceStart);
             freeAgent.setLeague(league);
-            int playerID = freeAgentService.insertFreeAgent(freeAgent);
-            freeAgent.setPlayerID(playerID);
-            freeAgents.put(playerID, freeAgent);
+            freeAgents[i] = freeAgent;
         }
-        return freeAgents;
+        return setFreeAgentIds(freeAgents);
+    }
+
+    private Map<Integer, FreeAgent> setFreeAgentIds(FreeAgent[] freeAgents) {
+        Map<Integer, FreeAgent> mappedFreeAgents = new HashMap<>();
+        for (FreeAgent freeAgent : freeAgentService.insertFreeAgents(Arrays.asList(freeAgents))) {
+            mappedFreeAgents.put(freeAgent.getPlayerID(), freeAgent);
+        }
+        return mappedFreeAgents;
     }
 }

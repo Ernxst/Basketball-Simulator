@@ -10,7 +10,6 @@ import com.example.entities.team.TeamConstants;
 import com.example.services.NameService;
 import com.example.services.player.PlayerService;
 import com.example.services.team.TeamService;
-import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -22,7 +21,6 @@ import static java.util.stream.Collectors.summingInt;
 /**
  * A class to randomly generate a team.
  */
-@AllArgsConstructor
 public class TeamGenerator {
     private final TeamService teamService;
     private final NameService nameService;
@@ -30,8 +28,19 @@ public class TeamGenerator {
 
     private final String userTeamName;
     private final String userTeamState;
-    private final List<String> existingTeamNames = new ArrayList<>();
     private final List<String> existingTeamStates = new ArrayList<>();
+    private final List<String> availableTeamNames;
+    private final List<String> availableTeamStates;
+
+    public TeamGenerator(TeamService teamService, NameService nameService, PlayerService playerService, String userTeamName, String userTeamState) {
+        this.teamService = teamService;
+        this.nameService = nameService;
+        this.playerService = playerService;
+        this.userTeamName = userTeamName;
+        this.userTeamState = userTeamState;
+        this.availableTeamNames = NameService.teamNames;
+        this.availableTeamStates = NameService.teamStates;
+    }
 
     /**
      * Generate a CPU team.
@@ -41,16 +50,15 @@ public class TeamGenerator {
      * @return a CPU team.
      */
     public Team generateAiTeam(League league, LocalDate leagueStartDate) {
-        String state = nameService.randomTeamState();
-        String name = nameService.randomTeamName();
-        // Ensures no duplicate team names.
-        while (existingTeamNames.contains(name) || name.equals(userTeamName))
-            name = nameService.randomTeamName();
+        String state = Util.randomChoice(availableTeamStates);
+        String name = Util.randomChoice(availableTeamNames);
         // Ensures there are no more than the maximum number of teams in a single state.
         int frequency = Collections.frequency(existingTeamStates, state);
-        while (frequency >= TeamConstants.MAX_TEAMS_IN_STATE ||
-                state.equals(userTeamState) && frequency == TeamConstants.MAX_TEAMS_IN_STATE - 1)
-            state = nameService.randomTeamState();
+        if (frequency >= TeamConstants.MAX_TEAMS_IN_STATE ||
+                state.equals(userTeamState) && frequency == TeamConstants.MAX_TEAMS_IN_STATE - 1) {
+            availableTeamStates.remove(state);
+            state = Util.randomChoice(availableTeamStates);
+        }
         return generateTeam(league, state, name, false, leagueStartDate);
     }
 
@@ -62,7 +70,7 @@ public class TeamGenerator {
      * @return a team for the user.
      */
     public Team generateUserTeam(League league, LocalDate leagueStartDate) {
-        return generateTeam(league, userTeamName, userTeamState, true, leagueStartDate);
+        return generateTeam(league, userTeamState, userTeamName, true, leagueStartDate);
     }
 
     /**
@@ -76,7 +84,6 @@ public class TeamGenerator {
      * @return a team.
      */
     private Team generateTeam(League league, String state, String name, boolean isUserTeam, LocalDate leagueStartDate) {
-        Player[] players = generatePlayers(leagueStartDate);
         LocalDate dateFounded = isUserTeam ? leagueStartDate : Util.randomDate(leagueStartDate, LocalDate.now());
         int iconID = teamService.randomTeamIconID();
         Team team = new Team();
@@ -91,10 +98,10 @@ public class TeamGenerator {
         team.setAllStandings(new HashMap<>());
         team.setLeague(league);
         int teamID = teamService.insertTeam(team);
-        Map<Integer, Player> mappedPlayers = getPlayerIDs(players, team);
-        team.setPlayers(mappedPlayers);
-        teamService.insertTeam(team);
-        existingTeamNames.add(name);
+        team.setTeamID(teamID);
+        Map<Integer, Player> players = getPlayers(team, leagueStartDate);
+        team.setPlayers(players);
+        availableTeamNames.remove(name);
         existingTeamStates.add(state);
         return team;
     }
@@ -102,17 +109,15 @@ public class TeamGenerator {
     /**
      * Insert players into the database and retrieve their IDs into a map.
      *
-     * @param players the players to insert.
-     * @param team    the team the players play for.
+     * @param team the team the players play for.
      * @return a map of IDs to players.
      */
-    private Map<Integer, Player> getPlayerIDs(Player[] players, Team team) {
+    private Map<Integer, Player> getPlayers(Team team, LocalDate leagueStartDate) {
+        Player[] players = generatePlayers(team, leagueStartDate);
         Map<Integer, Player> mappedPlayers = new HashMap<>();
-        for (Player player : players) {
-            player.setTeam(team);
-            int playerID = playerService.insertPlayer(player);
-            player.setPlayerID(playerID);
-            mappedPlayers.put(playerID, player);
+        Iterable<Player> savedPlayers = playerService.insertPlayers(players);
+        for (Player player : savedPlayers) {
+            mappedPlayers.put(player.getPlayerID(), player);
         }
         return mappedPlayers;
     }
@@ -120,10 +125,11 @@ public class TeamGenerator {
     /**
      * Generate the players in the team.
      *
+     * @param team            the team to generate players for.
      * @param leagueStartDate the date the league started.
      * @return the players in the team.
      */
-    private Player[] generatePlayers(LocalDate leagueStartDate) {
+    private Player[] generatePlayers(Team team, LocalDate leagueStartDate) {
         int yearsSinceStart = Util.yearsBetweenDateAndToday(leagueStartDate);
         int numOfPlayers = Util.randomInt(TeamConstants.MIN_PLAYERS, TeamConstants.MAX_PLAYERS + 1);
         Map<Position, Integer> playersInEachPosition = generatePositionNumbers(numOfPlayers);
@@ -136,13 +142,11 @@ public class TeamGenerator {
             int maxPlayersInPosition = playersInEachPosition.get(position);
             positionFrequency.put(position, 1);
             while (positionFrequency.get(position) <= maxPlayersInPosition) {
-                Player player = playerGenerator.generatePlayer(yearsSinceStart);
-                Position playerPosition = player.getPosition();
-                if (playerPosition.equals(position)) {
-                    players[i] = player;
-                    positionFrequency.merge(position, 1, Integer::sum);
-                    i++;
-                }
+                Player player = playerGenerator.generatePlayer(yearsSinceStart, position);
+                players[i] = player;
+                player.setTeam(team);
+                positionFrequency.merge(position, 1, Integer::sum);
+                i++;
             }
         }
         return players;

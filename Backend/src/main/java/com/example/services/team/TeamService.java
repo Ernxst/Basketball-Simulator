@@ -5,6 +5,7 @@ import com.example.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,11 @@ public class TeamService implements TeamServiceInterface {
     public int insertTeam(Team team) {
         team = teamRepository.save(team);
         return team.getTeamID();
+    }
+
+    @Override
+    public Iterable<Team> insertTeams(Collection<Team> teams) {
+        return teamRepository.saveAll(teams);
     }
 
     @Override

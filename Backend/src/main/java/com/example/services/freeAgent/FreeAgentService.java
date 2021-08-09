@@ -5,6 +5,7 @@ import com.example.repositories.FreeAgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,11 @@ public class FreeAgentService implements FreeAgentServiceInterface {
     public int insertFreeAgent(FreeAgent freeAgent) {
         freeAgent = freeAgentRepository.save(freeAgent);
         return freeAgent.getPlayerID();
+    }
+
+    @Override
+    public Iterable<FreeAgent> insertFreeAgents(Collection<FreeAgent> freeAgents) {
+        return freeAgentRepository.saveAll(freeAgents);
     }
 
     @Override

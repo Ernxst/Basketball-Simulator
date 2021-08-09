@@ -18,8 +18,8 @@ public class NameService {
     private static final Database database = Database.getInstance();
     private static final Connection connection = database.getConnection();
 
-    private static final List<String> teamNames;
-    private static final List<String> teamStates;
+    public static final List<String> teamNames;
+    public static final List<String> teamStates;
     private static final List<String> firstNames;
     private static final List<String> lastNames;
     private static final List<String> colleges;

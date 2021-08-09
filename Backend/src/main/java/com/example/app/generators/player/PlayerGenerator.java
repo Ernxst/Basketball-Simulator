@@ -23,17 +23,17 @@ public class PlayerGenerator {
     private final NameService nameService;
 
     /**
-     * Randomly generate a player.
+     * Randomly generate a player at a specific position.
      *
      * @param yearsSinceStart the number of years since the league started - this affects
      *                        the number of years remaining on a player's contract.
+     * @param position        the position the player will play in.
      * @return a randomly generated player.
      */
-    public Player generatePlayer(int yearsSinceStart) {
+    public Player generatePlayer(int yearsSinceStart, Position position) {
         String firstName = nameService.randomFirstName();
         String lastName = nameService.randomLastName();
         String college = nameService.randomCollege();
-        Position position = Position.randomPosition();
 
         double weight = position.randomWeight();
         double height = position.randomHeight();
@@ -85,6 +85,18 @@ public class PlayerGenerator {
 //        player.setPotentialAttributes(potentialAttributes);
 
         return player;
+    }
+
+    /**
+     * Randomly generate a player.
+     *
+     * @param yearsSinceStart the number of years since the league started - this affects
+     *                        the number of years remaining on a player's contract.
+     * @return a randomly generated player.
+     */
+    public Player generatePlayer(int yearsSinceStart) {
+        Position position = Position.randomPosition();
+        return generatePlayer(yearsSinceStart, position);
     }
 
     /**

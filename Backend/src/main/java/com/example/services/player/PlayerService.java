@@ -5,6 +5,7 @@ import com.example.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public List<Player> findPlayersByPlayerIDsIn(Iterable<Integer> playerIDs) {
-        return playerRepository.findPlayersByPlayerIDIn((List<Integer>) playerIDs);
+        return playerRepository.findPlayersByPlayerIDsIn((List<Integer>) playerIDs);
     }
 
     @Override
@@ -38,5 +39,11 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public void deletePlayer(Player player) {
         playerRepository.delete(player);
+    }
+
+    @Override
+    public Iterable<Player> insertPlayers(Player[] players) {
+        Iterable<Player> playersToSave = Arrays.asList(players);
+         return playerRepository.saveAll(playersToSave);
     }
 }

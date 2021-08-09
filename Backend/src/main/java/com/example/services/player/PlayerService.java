@@ -28,7 +28,7 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public List<Player> findPlayersByPlayerIDsIn(Iterable<Integer> playerIDs) {
-        return playerRepository.findPlayersByPlayerIDsIn((List<Integer>) playerIDs);
+        return playerRepository.findPlayersByPlayerIDIn((List<Integer>) playerIDs);
     }
 
     @Override

@@ -38,8 +38,9 @@ public class TeamGenerator {
         this.playerService = playerService;
         this.userTeamName = userTeamName;
         this.userTeamState = userTeamState;
-        this.availableTeamNames = NameService.teamNames;
-        this.availableTeamStates = NameService.teamStates;
+        this.availableTeamNames = new ArrayList<>(NameService.teamNames);
+        this.availableTeamNames.add(userTeamName);
+        this.availableTeamStates = new ArrayList<>(NameService.teamStates);
     }
 
     /**
@@ -54,10 +55,11 @@ public class TeamGenerator {
         String name = Util.randomChoice(availableTeamNames);
         // Ensures there are no more than the maximum number of teams in a single state.
         int frequency = Collections.frequency(existingTeamStates, state);
-        if (frequency >= TeamConstants.MAX_TEAMS_IN_STATE ||
-                state.equals(userTeamState) && frequency == TeamConstants.MAX_TEAMS_IN_STATE - 1) {
+        while (frequency >= TeamConstants.MAX_TEAMS_IN_STATE ||
+                (state.equals(userTeamState) && frequency == TeamConstants.MAX_TEAMS_IN_STATE - 1)) {
             availableTeamStates.remove(state);
             state = Util.randomChoice(availableTeamStates);
+            frequency = Collections.frequency(existingTeamStates, state);
         }
         return generateTeam(league, state, name, false, leagueStartDate);
     }

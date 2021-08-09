@@ -10,6 +10,8 @@ stop:
 	docker stop app
 junit:
 	mvn surefire-report:report && make server
+unit-test:
+	mvn test
 coverage:
 	cd .. && mvn jacoco:prepare-agent test jacoco:report && make server
 analysis:
@@ -20,9 +22,10 @@ bash:
 	docker -ti web /bin/bash
 wait:
 	until nc -w 10 127.0.0.1 $(port); do sleep 1; done
-ci:
+ci: # TODO - Fix, run mvn test in container
 	set -e
-	make & make wait port=8100 && make junit
+	make build
+	make unit-test
 prune:
 	make stop
 	docker container prune -f

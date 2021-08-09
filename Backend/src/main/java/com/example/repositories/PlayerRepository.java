@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
     Optional<Player> findPlayerByPlayerID(int playerID);
 
-    List<Player> findPlayersByPlayerIDsIn(List<Integer> playerIDs);
+    List<Player> findPlayersByPlayerIDIn(List<Integer> playerIDs);
 }

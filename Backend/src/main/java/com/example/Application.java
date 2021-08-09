@@ -4,20 +4,12 @@ import com.example.api.AppLogger;
 import com.example.repositories.Database;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Driver code to start RESTful API.
  */
-@ConfigurationPropertiesScan({"com.example.config"})
-@EnableAutoConfiguration
-@ComponentScan({"com.example.services", "com.example.config", "com.example.api"})
-@EntityScan("com.example.entities")
-@EnableJpaRepositories("com.example.repositories")
+@SpringBootApplication
 public class Application {
     // The port this backend runs on.
     @Value("${server.port}")

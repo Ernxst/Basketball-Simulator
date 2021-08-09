@@ -21,27 +21,27 @@ public enum Position {
     POINT_GUARD("PG", "Point Guard", 27.66, 4.67,
             175, 200.66, 190, 9.19, 183,
             202, 193, 12.58, 22, 38,
-            30, 0, 5, 10),
+            30, 0, 5, 14),
 
     SHOOTING_GUARD("SG", "Shooting Guard", 26.276, 3.583,
             188, 203.2, 194.056, 9.19, 195, 215,
             202, 12.58, 24, 37, 28,
-            0, 4, 10),
+            0, 4, 13),
 
     SMALL_FORWARD("SF", "Small Forward", 26.376, 3.586,
             195.58, 213.36, 199.136, 9.19, 205, 260,
             213, 12.58, 26, 38, 30,
-            0, 4, 9),
+            0, 4, 12),
 
     POWER_FORWARD("PF", "Power Forward", 26.817, 4.375,
             198.12, 218.44, 203.708, 9.19, 215, 280,
             231, 12.58, 22, 33, 28,
-            0, 3, 8),
+            0, 3, 11),
 
     CENTER("C", "Center", 27.0666, 4.03,
             203.2, 228.6, 209.804, 9.19, 225, 295,
             248, 12.58, 21, 31, 27,
-            0, 3, 8);
+            0, 3, 11);
 
     public static final Position[] positions = values();
     public static final int numOfPositions = positions.length;

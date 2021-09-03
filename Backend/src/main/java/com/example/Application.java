@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Collections;
+
 /**
  * Driver code to start RESTful API.
  */
@@ -23,6 +25,14 @@ public class Application {
         Database.getInstance();
         // Output startup logging information
         AppLogger.start();
-        SpringApplication.run(Application.class, args);
+
+        String port = System.getenv("PORT");
+        PORT = port == null ? PORT : port;
+        System.out.println(port);
+        System.out.println(PORT);
+        SpringApplication app = new SpringApplication(Application.class);
+        app.setDefaultProperties(Collections
+                .singletonMap("server.port", PORT));
+        app.run(args);
     }
 }

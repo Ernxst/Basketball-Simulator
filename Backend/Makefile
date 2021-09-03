@@ -30,3 +30,13 @@ prune:
 	make stop
 	docker container prune -f
 	docker volume prune -f
+deploy:
+	docker buildx build --platform linux/amd64 -t app .
+	docker tag app registry.heroku.com/basketball-simulator-app/web
+	docker push registry.heroku.com/basketball-simulator-app/web
+	heroku container:release web -a basketball-simulator-app
+reset:
+	heroku pg:reset -a --confirm basketball-simulator-app
+.PHONY: list
+list:
+	@LC_ALL=C $(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'

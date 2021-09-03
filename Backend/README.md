@@ -30,7 +30,7 @@ Any external migrations made to the database require both the Docker containers 
 First, stop the application:
 
 ```bash
-docker stop backend
+docker stop app
 ```
 
 Then, list all running containers:
@@ -103,7 +103,7 @@ system, and nothing else.
 To run a shell in the container, assuming it is already running:
 
 ```bash
-docker -ti backend /bin/bash
+docker -ti app /bin/bash
 ```
 
 And quit it using:
@@ -112,14 +112,14 @@ And quit it using:
 exit
 ```
 
-When in a shell in the container, the prefix `docker exec backend` is not needed.
+When in a shell in the container, the prefix `docker exec app` is not needed.
 
 ## Testing
 
 To run the test suites ([assuming the container is running](#deployment)):
 
 ```bash
-docker exec backend mvn test
+docker exec app mvn test
 ```
 
 This will generate a coverage report with a summary printed in the terminal.
@@ -139,13 +139,13 @@ The application is containerised to make for simple deployment.
 To start the application in a Docker container, you must first build the image with:
 
 ```bash
-docker build --tag backend .
+docker build --tag app .
 ```
 
 And then to start the application on port `8100`:
 
 ```bash
-docker run --rm -it -p 8100:8100 backend backend
+docker run --rm -it -p 8100:8100 app app
 ```
 
 ## Makefile
@@ -153,8 +153,6 @@ docker run --rm -it -p 8100:8100 backend backend
 A `Makefile` is included to shorten common `Docker` commands to the following:
 
 * Note that if a `make` action has arguments (all optional), a value must be given to it.
-* The `env` argument can either be `dev` or `prod`. If no `env` is provided, it defaults to the development (`dev`)
-  environment.
 
 ## Production Deployment
 

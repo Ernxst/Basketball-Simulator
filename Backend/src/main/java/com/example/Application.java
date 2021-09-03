@@ -18,8 +18,9 @@ public class Application {
     public static final String APP_PORT = "8080";
 
     public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Inside Shutdown Hook")));
         // Connect to cloud database.
-        Database database = Database.getInstance();
+        Database.getInstance();
         // Output startup logging information
         AppLogger.start();
         SpringApplication.run(Application.class, args);

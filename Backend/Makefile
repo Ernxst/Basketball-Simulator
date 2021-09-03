@@ -13,9 +13,9 @@ junit:
 unit-test:
 	mvn test
 coverage:
-	cd .. && mvn jacoco:prepare-agent test jacoco:report && make server
-analysis:
-	cd .. && mvn pmd:pmd &&  make server
+	mvn jacoco:prepare-agent test jacoco:report && make server
+pmd:
+	mvn pmd:pmd &&  make server
 server:
 	cd target/site/ && python3 -m http.server
 bash:

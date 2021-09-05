@@ -20,4 +20,5 @@ jobs:
       with:
         java-version: 13.0.0
     - name: Build and run tests
+      working-directory: Backend
       run: make build

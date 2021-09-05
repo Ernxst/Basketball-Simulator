@@ -11,7 +11,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_DB: bb_dev
-      POSTGRES_USER: bb_user_dev
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
   app:
     build:

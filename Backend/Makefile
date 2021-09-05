@@ -38,7 +38,7 @@ ci: # TODO - Fix, run mvn test in container
 	make build
 	make unit-test
 prune:
-	make stop
+	make down
 	docker container prune -f
 	docker volume prune -f
 deploy:

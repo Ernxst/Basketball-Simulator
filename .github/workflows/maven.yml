@@ -20,4 +20,4 @@ jobs:
       with:
         java-version: 13.0.0
     - name: Build and run tests
-      run: docker build -t app .
+      run: make build

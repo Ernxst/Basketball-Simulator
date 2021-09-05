@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
  */
 public class AppLogger {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
-    public static boolean LOG_API_CALLS;
+    public static boolean LOG_API_CALLS = true;
 
     /**
      * Log a message to the console.
@@ -51,10 +51,5 @@ public class AppLogger {
             System.out.print("-");
         }
         System.out.println();
-    }
-
-    public static void start() {
-        log("Backend API Started");
-        log("Listening on port " + Application.PORT);
     }
 }

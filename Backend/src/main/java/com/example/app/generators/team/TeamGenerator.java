@@ -38,9 +38,9 @@ public class TeamGenerator {
         this.playerService = playerService;
         this.userTeamName = userTeamName;
         this.userTeamState = userTeamState;
-        this.availableTeamNames = new ArrayList<>(NameService.teamNames);
+        this.availableTeamNames = new ArrayList<>(nameService.getTeamNames());
         this.availableTeamNames.add(userTeamName);
-        this.availableTeamStates = new ArrayList<>(NameService.teamStates);
+        this.availableTeamStates = new ArrayList<>(nameService.getTeamStates());
     }
 
     /**

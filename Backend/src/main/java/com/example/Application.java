@@ -1,12 +1,13 @@
 package com.example;
 
 import com.example.api.AppLogger;
-import com.example.repositories.Database;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * Driver code to start RESTful API.
@@ -14,23 +15,27 @@ import java.util.Collections;
 @SpringBootApplication
 public class Application {
     // The port this backend runs on.
-    @Value("${server.port}")
     public static String PORT;
     // The port the frontend runs on.
     public static final String APP_PORT = "8080";
 
-    public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Inside Shutdown Hook")));
-        // Connect to cloud database.
-        Database.getInstance();
-        // Output startup logging information
-        AppLogger.start();
+    private static String getPort() throws IOException {
+        String envPort = System.getenv("PORT");
+        if (envPort != null)
+            return envPort;
+        Properties properties = new Properties();
+        InputStream inputStream = Application.class.getClassLoader().getResourceAsStream("application.properties");
+        properties.load(inputStream);
+        return properties.getProperty("server.port");
+    }
 
-        String port = System.getenv("PORT");
-        PORT = port == null ? PORT : port;
+    public static void main(String[] args) throws IOException {
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Inside Shutdown Hook")));
+        PORT = getPort();
+        AppLogger.log("Backend API Started");
         SpringApplication app = new SpringApplication(Application.class);
-        app.setDefaultProperties(Collections
-                .singletonMap("server.port", PORT));
+        app.setDefaultProperties(Collections.singletonMap("server.port", PORT));
         app.run(args);
+        AppLogger.log("Listening on 0.0.0.0:" + PORT);
     }
 }

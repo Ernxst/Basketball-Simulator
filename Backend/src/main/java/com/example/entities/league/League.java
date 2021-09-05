@@ -4,7 +4,6 @@ import com.example.entities.player.FreeAgent;
 import com.example.entities.player.Player;
 import com.example.entities.team.Team;
 import com.example.entities.user.User;
-import com.ibm.db2.cmx.annotation.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

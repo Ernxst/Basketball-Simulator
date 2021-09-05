@@ -1,8 +1,8 @@
 package com.example.services;
 
 import com.example.app.util.Util;
-import com.example.repositories.Database;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -15,16 +15,17 @@ import java.util.List;
 @Service
 @Getter
 public class NameService {
-    private static final Database database = Database.getInstance();
-    private static final Connection connection = database.getConnection();
+    @Autowired
+    private final Connection connection;
 
-    public static final List<String> teamNames;
-    public static final List<String> teamStates;
-    private static final List<String> firstNames;
-    private static final List<String> lastNames;
-    private static final List<String> colleges;
+    private final List<String> teamNames;
+    private final List<String> teamStates;
+    private final List<String> firstNames;
+    private final List<String> lastNames;
+    private final List<String> colleges;
 
-    static {
+    public NameService(Connection connection) {
+        this.connection = connection;
         teamNames = getElements("team_name");
         teamStates = getElements("team_state");
         firstNames = getElements("first_name");
@@ -52,7 +53,7 @@ public class NameService {
         return Util.randomChoice(colleges);
     }
 
-    private static List<String> getElements(String table) {
+    private List<String> getElements(String table) {
         List<String> elements = new ArrayList<>();
         String stmt = "SELECT * FROM " + table;
         try (PreparedStatement preparedStatement = connection.prepareStatement(stmt)) {

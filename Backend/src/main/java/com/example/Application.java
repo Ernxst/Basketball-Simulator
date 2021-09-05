@@ -28,8 +28,6 @@ public class Application {
 
         String port = System.getenv("PORT");
         PORT = port == null ? PORT : port;
-        System.out.println(port);
-        System.out.println(PORT);
         SpringApplication app = new SpringApplication(Application.class);
         app.setDefaultProperties(Collections
                 .singletonMap("server.port", PORT));

@@ -2,6 +2,9 @@
 FROM maven:3.6-jdk-11 AS build
 
 COPY ./pom.xml ./pom.xml
+#RUN mvn dependency:go-offline -B
+RUN mvn -B dependency:resolve-plugins dependency:resolve
+
 COPY ./src ./src
 RUN mvn clean package -DskipTests
 

@@ -16,6 +16,7 @@ ENTRYPOINT ["entrypoint.sh"]
 
 WORKDIR /home/app
 COPY --from=build target/*.jar ./app.jar
+COPY src/main/resources/text-files/sql/Postgres-Schema.sql .
 
 # Configure the main process to run when running the image
 CMD ["java" ,"-jar", "app.jar"]

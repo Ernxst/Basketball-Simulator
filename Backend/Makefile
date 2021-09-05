@@ -1,13 +1,24 @@
+build =
+silent =
+build_flag=
+silent_flag=
+
+ifdef build
+	build_flag = --build
+endif
+
+ifdef silent
+	silent_flag = --detach
+endif
+
 all:
-	set -e
-	make build
-	make run
+	make up build=1 silent=$(silent)
 build:
-	docker build -t app .
-run:
-	docker run --rm -it -p 8100:8100 app
-stop:
-	docker stop app
+	docker-compose build $(silent_flag)
+up:
+	docker-compose up --abort-on-container-exit --renew-anon-volumes $(build_flag) $(silent_flag)
+down:
+	docker-compose down
 junit:
 	mvn surefire-report:report && make server
 unit-test:

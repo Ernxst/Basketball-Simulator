@@ -166,16 +166,25 @@ public class DatabaseSeeder {
     public void seed() {
         createTables();
         AppLogger.log("=== Inserting Default Data ===");
+        AppLogger.log("=== Inserting Archetypes ===");
         insertArchetypes();
+        AppLogger.log("=== Inserting Colleges ===");
         insertColleges();
+        AppLogger.log("=== Inserting US States ===");
         insertStates();
+        AppLogger.log("=== Inserting First Names ===");
         insertFirstNames();
+        AppLogger.log("=== Inserting Last Names ===");
         insertLastNames();
+        AppLogger.log("=== Inserting Team Names ===");
         insertTeamNames();
+        AppLogger.log("=== Inserting App Tips ===");
         insertAppTips();
+        AppLogger.log("=== Inserting Attributes ===");
         insertAttributes();
-        insertArchetypes();
+        AppLogger.log("=== Inserting View Descriptions ===");
         insertViewDescriptions();
+        AppLogger.log("=== Inserting Team Icons ===");
         insertTeamIcons();
         AppLogger.log("=== Default Data Inserted ===");
     }

@@ -1,4 +1,3 @@
-// TODO: Log incoming requests
 package com.example;
 
 import com.example.api.AppLogger;

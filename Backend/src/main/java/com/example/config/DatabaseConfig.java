@@ -34,7 +34,7 @@ public class DatabaseConfig {
     @Bean
     public DataSource dataSource() throws URISyntaxException, SQLException {
         if (dataSourceObj == null) {
-            System.out.println("Creating new data source");
+            AppLogger.log("Creating new data source");
             dataSourceObj = createDataSource();
             seed();
         }
@@ -45,7 +45,7 @@ public class DatabaseConfig {
         HikariConfig config = new HikariConfig();
         jdbcUrl = getJdbcURL();
         config.setJdbcUrl(jdbcUrl);
-        config.setAutoCommit(false);
+        config.setAutoCommit(true);
         config.setDriverClassName(driver);
         config.setUsername(username);
         config.setPassword(password);

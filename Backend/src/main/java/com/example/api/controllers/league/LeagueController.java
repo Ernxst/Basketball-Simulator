@@ -55,8 +55,8 @@ public class LeagueController {
             return ResponseEntity.ok()
                     .body(new LeagueGenerationResponse("Success", HttpStatus.OK, league.getLeagueID()));
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT.value())
-                    .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND.value())
+                    .body(new GenericResponse(e.getMessage(), HttpStatus.NOT_FOUND));
         }
     }
 }

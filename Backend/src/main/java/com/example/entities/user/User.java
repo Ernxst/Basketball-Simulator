@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Builder
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 @Getter
 @Setter
 @NoArgsConstructor

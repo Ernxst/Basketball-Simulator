@@ -18,9 +18,10 @@ services:
       - db
     build:
       args:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/bb_dev
-        SPRING_DATASOURCE_USERNAME: postgres
-        SPRING_DATASOURCE_PASSWORD: password
         ENV: development
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bb_dev
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
 volumes:
   app_postgres:

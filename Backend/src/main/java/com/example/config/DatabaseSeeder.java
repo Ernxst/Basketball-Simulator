@@ -37,9 +37,6 @@ public class DatabaseSeeder {
     }
 
     private String readFile(String filename) throws IOException, URISyntaxException {
-        // Use when running outside container
-//        URL resource = getClass().getResource(filename);
-//        Path path = Paths.get(resource.toURI());
         Path path = Path.of(filename);
         return Files.readString(path, StandardCharsets.UTF_8);
     }
@@ -59,8 +56,6 @@ public class DatabaseSeeder {
             }
 //            System.out.println();
             preparedStatement.executeUpdate();
-            connection.commit();
-
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

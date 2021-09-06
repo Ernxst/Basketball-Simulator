@@ -1,3 +1,4 @@
+env = development
 build =
 silent =
 build_flag=
@@ -11,29 +12,35 @@ ifdef silent
 	silent_flag = --detach
 endif
 
+compose = docker-compose
+ifeq ($(env), production)
+	compose = docker-compose -f docker-compose.yml -f docker-compose.production.yml
+endif
+exec = $(compose) exec app
+
 all:
 	make up build=1 silent=$(silent)
 build:
-	docker-compose build $(silent_flag)
+	${compose} build $(silent_flag)
 up:
-	docker-compose up --abort-on-container-exit --renew-anon-volumes $(build_flag) $(silent_flag)
+	${compose} up --abort-on-container-exit --renew-anon-volumes $(build_flag) $(silent_flag)
 down:
-	docker-compose down
+	${compose} down
 junit:
-	mvn surefire-report:report && make server
+	${exec} mvn surefire-report:report && ${exec} make server
 unit-test:
-	mvn test
+	${exec} mvn test
 coverage:
 	mvn jacoco:prepare-agent test jacoco:report && make server
 pmd:
 	mvn pmd:pmd &&  make server
 server:
-	cd target/site/ && python3 -m http.server
+	${exec} cd target/site/ && ${exec} python3 -m http.server
 bash:
-	docker -ti web /bin/bash
+	${exec} sh
 wait:
 	until nc -w 10 127.0.0.1 $(port); do sleep 1; done
-ci: # TODO - Fix, run mvn test in container
+ci:
 	set -e
 	make build
 	make unit-test

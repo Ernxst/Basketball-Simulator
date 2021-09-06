@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  db:
+    image: library/postgres:13-alpine
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+      - app_postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: bb_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+  app:
+    depends_on:
+      - db
+volumes:
+  app_postgres:

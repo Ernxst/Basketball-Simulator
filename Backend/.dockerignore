@@ -172,3 +172,4 @@ test
 target
 Dockerfile
 Makefile
+docker-compose*

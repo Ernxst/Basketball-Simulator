@@ -1,25 +1,11 @@
 # TODO - Store db and app ports, database credentials in environment variables for dev and prod environments
 version: "3.9"
 services:
-  db:
-    image: postgres
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - "/etc/timezone:/etc/timezone:ro"
-      - app_postgres:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: bb_dev
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
   app:
     build:
       context: .
       dockerfile: Dockerfile
     command: [ "java" ,"-jar", "app.jar" ]
-    depends_on:
-      - db
     entrypoint: /usr/bin/entrypoint.sh
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
@@ -27,5 +13,3 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
     ports:
       - "8100:8100"
-volumes:
-  app_postgres:

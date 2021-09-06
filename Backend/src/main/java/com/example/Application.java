@@ -1,3 +1,4 @@
+// TODO: Convert request fields to camelCase and response fields to snake_case
 package com.example;
 
 import com.example.api.AppLogger;

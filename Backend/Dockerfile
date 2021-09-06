@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1
-ARG ENV=development
 
 FROM maven:3.6-jdk-11 AS build
 
@@ -12,7 +11,7 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:11-jre-slim AS runtime
 
-RUN if [[ "$ENV" == "development" ]] ; then apt-get update -qq && apt-get install -y postgresql-client ; fi
+RUN apt-get update -qq && apt-get install -y postgresql-client
 
 COPY tools/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh

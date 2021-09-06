@@ -1,4 +1,4 @@
-ENV = development
+env = development
 build =
 silent =
 build_flag=
@@ -13,7 +13,7 @@ ifdef silent
 endif
 
 compose = docker-compose
-ifeq ($(ENV), production)
+ifeq ($(env), production)
 	compose = docker-compose -f docker-compose.yml -f docker-compose.production.yml
 endif
 exec = $(compose) exec app
@@ -21,9 +21,9 @@ exec = $(compose) exec app
 all:
 	make up build=1 silent=$(silent)
 build:
-	${compose} build $(silent_flag)
+	${compose} build $(silent_flag) --build-arg ENV=$(env)
 up:
-	${compose} up --abort-on-container-exit --renew-anon-volumes $(build_flag) $(silent_flag)
+	${compose} up --abort-on-container-exit --renew-anon-volumes --remove-orphans $(build_flag) $(silent_flag)
 down:
 	${compose} down
 junit:
@@ -48,6 +48,7 @@ prune:
 	make down
 	docker container prune -f
 	docker volume prune -f
+	docker image prune -f
 deploy:
 	docker buildx build --platform linux/amd64 --build-arg ENV=production -t app .
 	docker tag app registry.heroku.com/basketball-simulator-app/web

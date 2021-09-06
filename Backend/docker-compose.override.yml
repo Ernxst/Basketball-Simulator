@@ -12,8 +12,12 @@ services:
       POSTGRES_DB: bb_dev
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      ENV: development
   app:
     depends_on:
       - db
+    build:
+      args:
+        ENV: development
 volumes:
   app_postgres:

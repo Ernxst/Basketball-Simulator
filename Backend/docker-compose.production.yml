@@ -3,4 +3,7 @@ services:
   app:
     environment:
       SPRING_DATASOURCE_URL: ${DATABASE_URL}
-
+      ENV: production
+    build:
+      args:
+          ENV: production

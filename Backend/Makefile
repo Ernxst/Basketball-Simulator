@@ -1,4 +1,4 @@
-env = development
+ENV = development
 build =
 silent =
 build_flag=
@@ -13,7 +13,7 @@ ifdef silent
 endif
 
 compose = docker-compose
-ifeq ($(env), production)
+ifeq ($(ENV), production)
 	compose = docker-compose -f docker-compose.yml -f docker-compose.production.yml
 endif
 exec = $(compose) exec app
@@ -49,7 +49,7 @@ prune:
 	docker container prune -f
 	docker volume prune -f
 deploy:
-	docker buildx build --platform linux/amd64 -t app .
+	docker buildx build --platform linux/amd64 --build-arg ENV=production -t app .
 	docker tag app registry.heroku.com/basketball-simulator-app/web
 	docker push registry.heroku.com/basketball-simulator-app/web
 	heroku container:release web -a basketball-simulator-app

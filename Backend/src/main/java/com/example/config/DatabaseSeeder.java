@@ -31,12 +31,12 @@ public class DatabaseSeeder {
                 insertValues(command.strip() + ";", new ArrayList<>(), true);
             }
             AppLogger.log("=== Tables Created");
-        } catch (NullPointerException | IOException | URISyntaxException e) {
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String readFile(String filename) throws IOException, URISyntaxException {
+    private String readFile(String filename) throws IOException {
         Path path = Path.of(filename);
         return Files.readString(path, StandardCharsets.UTF_8);
     }

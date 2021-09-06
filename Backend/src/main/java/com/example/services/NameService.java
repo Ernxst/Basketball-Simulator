@@ -2,7 +2,6 @@ package com.example.services;
 
 import com.example.app.util.Util;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;

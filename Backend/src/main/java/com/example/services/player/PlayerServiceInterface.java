@@ -2,8 +2,6 @@ package com.example.services.player;
 
 import com.example.entities.player.Player;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public interface PlayerServiceInterface {

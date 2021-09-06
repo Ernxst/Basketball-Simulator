@@ -23,12 +23,12 @@ public class LeagueSeasonService implements LeagueSeasonServiceInterface {
     }
 
     @Override
-    public LeagueSeason getSeason(League league, int season) throws LeagueSeasonNotFoundException {
+    public LeagueSeason getSeason(League league, int season) {
         return null;
     }
 
     @Override
-    public LeagueSeason getSeason(League league) throws LeagueSeasonNotFoundException {
+    public LeagueSeason getSeason(League league) {
         return null;
     }
 }

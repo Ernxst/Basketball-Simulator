@@ -24,7 +24,7 @@ public interface LeagueSeasonServiceInterface {
      * @param season
      * @return
      */
-    LeagueSeason getSeason(League league, int season) throws LeagueSeasonNotFoundException;
+    LeagueSeason getSeason(League league, int season);
 
 
     /**
@@ -32,5 +32,5 @@ public interface LeagueSeasonServiceInterface {
      * @param league
      * @return
      */
-    LeagueSeason getSeason(League league) throws LeagueSeasonNotFoundException;
+    LeagueSeason getSeason(League league);
 }

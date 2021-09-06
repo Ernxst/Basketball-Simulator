@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
  */
 public class AppLogger {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
-    public static boolean LOG_API_CALLS = true;
+    public static final boolean LOG_API_CALLS = true;
 
     /**
      * Log a message to the console.

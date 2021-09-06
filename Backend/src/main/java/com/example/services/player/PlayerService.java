@@ -2,7 +2,7 @@ package com.example.services.player;
 
 import com.example.entities.player.Player;
 import com.example.repositories.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class PlayerService implements PlayerServiceInterface {
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     @Override
     public int insertPlayer(Player player) {

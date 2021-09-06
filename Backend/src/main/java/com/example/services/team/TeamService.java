@@ -2,16 +2,16 @@ package com.example.services.team;
 
 import com.example.entities.team.Team;
 import com.example.repositories.TeamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class TeamService implements TeamServiceInterface {
-    @Autowired
-    private TeamRepository teamRepository;
+    private final TeamRepository teamRepository;
 
     @Override
     public int randomTeamIconID() {

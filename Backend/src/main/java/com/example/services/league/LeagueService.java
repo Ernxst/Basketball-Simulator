@@ -10,7 +10,7 @@ import com.example.services.league.season.LeagueSeasonService;
 import com.example.services.player.PlayerService;
 import com.example.services.team.TeamService;
 import com.example.services.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,21 +18,15 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class LeagueService implements LeagueServiceInterface {
-    @Autowired
-    private LeagueRepository leagueRepository;
-    @Autowired
-    private FreeAgentService freeAgentService;
-    @Autowired
-    private TeamService teamService;
-    @Autowired
-    private NameService nameService;
-    @Autowired
-    private PlayerService playerService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private LeagueSeasonService leagueSeasonService;
+    private final LeagueRepository leagueRepository;
+    private final FreeAgentService freeAgentService;
+    private final TeamService teamService;
+    private final NameService nameService;
+    private final PlayerService playerService;
+    private final UserService userService;
+    private final LeagueSeasonService leagueSeasonService;
 
     @Override
     public League newLeague(String username, String name, LocalDate startDate,

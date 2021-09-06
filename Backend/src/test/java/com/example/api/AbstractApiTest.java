@@ -2,7 +2,6 @@ package com.example.api;
 
 import com.example.ApiTestConfig;
 import com.example.Application;
-import com.example.config.AppConfig;
 import com.example.config.JwtTokenFilter;
 import com.example.config.JwtTokenUtil;
 import com.example.entities.user.User;

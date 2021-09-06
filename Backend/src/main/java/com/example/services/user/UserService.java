@@ -2,7 +2,7 @@ package com.example.services.user;
 
 import com.example.entities.user.User;
 import com.example.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,11 +13,10 @@ import java.text.MessageFormat;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserService implements UserServiceInterface {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     /**
      * Load a user from the database by their (unique) username.

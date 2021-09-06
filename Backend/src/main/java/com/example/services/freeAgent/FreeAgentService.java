@@ -2,7 +2,7 @@ package com.example.services.freeAgent;
 
 import com.example.entities.player.FreeAgent;
 import com.example.repositories.FreeAgentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class FreeAgentService implements FreeAgentServiceInterface {
-    @Autowired
-    private FreeAgentRepository freeAgentRepository;
+    private final FreeAgentRepository freeAgentRepository;
 
     @Override
     public int insertFreeAgent(FreeAgent freeAgent) {

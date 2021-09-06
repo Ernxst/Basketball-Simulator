@@ -3,13 +3,13 @@ package com.example.services.league.season;
 import com.example.entities.league.League;
 import com.example.entities.league.LeagueSeason;
 import com.example.repositories.LeagueSeasonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class LeagueSeasonService implements LeagueSeasonServiceInterface {
-    @Autowired
-    private LeagueSeasonRepository leagueSeasonRepository;
+    private final LeagueSeasonRepository leagueSeasonRepository;
 
     @Override
     public LeagueSeason insertNewSeason(League league) {

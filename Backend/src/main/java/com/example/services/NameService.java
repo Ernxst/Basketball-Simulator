@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 @Getter
 public class NameService {
-    @Autowired
     private final Connection connection;
 
     private final List<String> teamNames;

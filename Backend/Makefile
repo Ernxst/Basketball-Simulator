@@ -14,7 +14,7 @@ endif
 
 compose = docker-compose
 ifeq ($(env), production)
-	compose = docker-compose -f docker-compose.yml -f docker-compose.production.yml
+	compose = docker-compose -f docker-compose.yml -f docker-compose.production.yml --env-file .env
 endif
 exec = $(compose) exec app
 
@@ -54,6 +54,8 @@ deploy:
 	docker tag app registry.heroku.com/basketball-simulator-app/web
 	docker push registry.heroku.com/basketball-simulator-app/web
 	heroku container:release web -a basketball-simulator-app
+push:
+	git push production main
 reset:
 	heroku pg:reset -a --confirm basketball-simulator-app
 .PHONY: list

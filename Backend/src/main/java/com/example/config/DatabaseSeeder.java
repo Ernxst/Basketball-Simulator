@@ -24,14 +24,13 @@ public class DatabaseSeeder {
     }
 
     private void createTables() {
-        AppLogger.log("=== Creating Tables ===");
         try {
             String contents = readFile("Postgres-Schema.sql");
             String[] commands = contents.split(";");
             for (String command : commands) {
                 insertValues(command.strip() + ";", new ArrayList<>(), true);
             }
-            AppLogger.log("=== Tables Created ===");
+            AppLogger.log("=== Tables Created");
         } catch (NullPointerException | IOException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -59,20 +58,11 @@ public class DatabaseSeeder {
                 preparedStatement.setString(i + 1, value);
             }
 //            System.out.println();
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (!create && rowsAffected == 0) {
-                throw new SQLException("No rows affected when executing\n" + stmt);
-            }
+            preparedStatement.executeUpdate();
             connection.commit();
 
         } catch (SQLException exception) {
-            String state = exception.getSQLState();
-            Throwable cause = exception.getCause();
-            if (state.equals("23505") || (cause != null && cause.getMessage().contains("duplicate key"))) {
-//                AppLogger.log("Duplicate item encountered, skipping\n");
-            } else {
-                exception.printStackTrace();
-            }
+            exception.printStackTrace();
         }
     }
 
@@ -88,7 +78,7 @@ public class DatabaseSeeder {
 
     private void insertFromCSV(String filename, String table, String columnName) {
         ArrayList<String> data = readCSV("/text-files/csv/" + filename + ".csv");
-        String statement = "INSERT INTO " + table + " (" + columnName + ") VALUES (?)";
+        String statement = "INSERT INTO " + table + " (" + columnName + ") VALUES (?) ON CONFLICT (" + columnName + ") DO NOTHING;";
         for (String line : data) {
             insertValues(statement, Collections.singletonList(line));
         }
@@ -97,7 +87,7 @@ public class DatabaseSeeder {
     private void insertFromJSON(String filename, String table, String keyName, String valueName) {
         HashMap<String, String> data = readJSON("/text-files/json/" + filename + ".json");
         String statement = "INSERT INTO " + table + " (" + keyName + ", " + valueName + ") VALUES (";
-        statement = addPlaceholders(statement, 2) + ")";
+        statement = addPlaceholders(statement, 2) + ") ON CONFLICT (" + keyName + ") DO NOTHING;";
         for (Map.Entry<String, String> keyValuePair : data.entrySet()) {
             insertValues(statement, new ArrayList<>(Arrays.asList(keyValuePair.getKey(), keyValuePair.getValue())));
         }
@@ -164,27 +154,28 @@ public class DatabaseSeeder {
     }
 
     public void seed() {
+        AppLogger.log("=== Creating Tables ===");
         createTables();
-        AppLogger.log("=== Inserting Default Data ===");
-        AppLogger.log("=== Inserting Archetypes ===");
+        AppLogger.log("=== Inserting Default Data");
+        AppLogger.log("  > Inserting Archetypes");
         insertArchetypes();
-        AppLogger.log("=== Inserting Colleges ===");
+        AppLogger.log("  > Inserting Colleges");
         insertColleges();
-        AppLogger.log("=== Inserting US States ===");
+        AppLogger.log("  > Inserting US States");
         insertStates();
-        AppLogger.log("=== Inserting First Names ===");
+        AppLogger.log("  > Inserting First Names");
         insertFirstNames();
-        AppLogger.log("=== Inserting Last Names ===");
+        AppLogger.log("  > Inserting Last Names");
         insertLastNames();
-        AppLogger.log("=== Inserting Team Names ===");
+        AppLogger.log("  > Inserting Team Names");
         insertTeamNames();
-        AppLogger.log("=== Inserting App Tips ===");
+        AppLogger.log("  > Inserting App Tips");
         insertAppTips();
-        AppLogger.log("=== Inserting Attributes ===");
+        AppLogger.log("  > Inserting Attributes");
         insertAttributes();
-        AppLogger.log("=== Inserting View Descriptions ===");
+        AppLogger.log("  > Inserting View Descriptions");
         insertViewDescriptions();
-        AppLogger.log("=== Inserting Team Icons ===");
+        AppLogger.log("  > Inserting Team Icons");
         insertTeamIcons();
         AppLogger.log("=== Default Data Inserted ===");
     }

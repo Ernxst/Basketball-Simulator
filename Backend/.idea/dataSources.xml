@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="IBM Db2 - database" uuid="80c13bd3-c4c2-445b-a610-7d9072156967">
-      <driver-ref>db2.11</driver-ref>
-      <jdbc-driver>com.ibm.db2.jcc.DB2Driver</jdbc-driver>
-      <jdbc-url>jdbc:db2://dashdb-txn-sbox-yp-lon02-04.services.eu-gb.bluemix.net:50000/BLUDB</jdbc-url>
+    <data-source source="LOCAL" name="Heroku Postgres" uuid="85cfd686-b0a2-48f5-a96e-89af4080da0d">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-34-249-247-7.eu-west-1.compute.amazonaws.com:5432/dfphfqa68r35uq</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="postgres@db" uuid="6cd28c4b-1cd1-4a2a-931a-13dd3a4c244c">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://db:5432/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

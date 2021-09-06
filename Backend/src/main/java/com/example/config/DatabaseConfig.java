@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -26,28 +28,63 @@ public class DatabaseConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
+    private DataSource dataSourceObj = null;
+    private String jdbcUrl;
+
     @Bean
-    public DataSource dataSource() throws SQLException {
+    public DataSource dataSource() throws URISyntaxException, SQLException {
+        if (dataSourceObj == null) {
+            System.out.println("Creating new data source");
+            dataSourceObj = createDataSource();
+            seed();
+        }
+        return dataSourceObj;
+    }
+
+    private DataSource createDataSource() throws URISyntaxException {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
+        jdbcUrl = getJdbcURL();
+        config.setJdbcUrl(jdbcUrl);
         config.setAutoCommit(false);
         config.setDriverClassName(driver);
         config.setUsername(username);
         config.setPassword(password);
-        DataSource dataSource = new HikariDataSource(config);
-        seed(dataSource.getConnection());
-        return dataSource;
+        return new HikariDataSource(config);
     }
 
-    private void seed(Connection connection) {
+    /**
+     * Convert Heroku Postgres URL (postgres://[username]:[password]@[host]:[port]/[database] into JDBC format.
+     *
+     * @return the URL converted into JDBC format.
+     * @throws URISyntaxException
+     */
+    private String getJdbcURL() throws URISyntaxException {
+        String prefix = "jdbc:postgresql://";
+        // Already in JDBC format
+        if (dbUrl.startsWith(prefix))
+            return dbUrl;
+        URI dbUri = new URI(dbUrl);
+        String host = dbUri.getHost();
+        String port = String.valueOf(dbUri.getPort());
+        String[] splitUrl = dbUrl.split("/");
+        String dbName = splitUrl[splitUrl.length - 1];
+        username = dbUri.getUserInfo().split(":")[0];
+        password = dbUri.getUserInfo().split(":")[1];
+        return prefix + host + ":" + port + "/" + dbName;
+    }
+
+    /**
+     * Create tables and insert default data into the database.
+     */
+    private void seed() throws SQLException {
         AppLogger.log("=== Seeding Database ===");
-        DatabaseSeeder seeder = new DatabaseSeeder(connection);
+        DatabaseSeeder seeder = new DatabaseSeeder(connection());
         seeder.seed();
         AppLogger.log("=== Database Seeded ===");
     }
 
     @Bean
     public Connection connection() throws SQLException {
-        return dataSource().getConnection();
+        return dataSourceObj.getConnection();
     }
 }

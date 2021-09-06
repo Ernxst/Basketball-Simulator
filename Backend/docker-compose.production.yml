@@ -2,7 +2,9 @@ version: "3.9"
 services:
   app:
     environment:
-      SPRING_DATASOURCE_URL: ${DATABASE_URL}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       ENV: production
     build:
       args:

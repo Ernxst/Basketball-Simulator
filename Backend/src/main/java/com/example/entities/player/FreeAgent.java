@@ -2,6 +2,7 @@ package com.example.entities.player;
 
 import com.example.entities.league.League;
 import com.example.entities.player.util.contract.Contract;
+import com.example.entities.team.Team;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,9 +32,25 @@ public class FreeAgent extends AbstractPlayer {
         return league.getLeagueID();
     }
 
-    // TODO - Implement toPlayer()
-    public Player toPlayer(Contract contract, int teamID) {
+    public Player toPlayer(Contract contract, Team team) {
         Player player = new Player();
+        player.setFirstName(firstName);
+        player.setLastName(lastName);
+        player.setPosition(getPosition());
+        player.setSecondaryPosition(getSecondaryPosition());
+        player.setHeight(height);
+        player.setWeight(weight);
+        player.setWingspan(wingspan);
+        player.setStandingVertical(standingVertical);
+        player.setMaxVertical(maxVertical);
+        player.setArchetype(getArchetype());
+        player.setCollege(college);
+        player.setBirthDate(birthDate);
+        player.setYearsPro(yearsPro);
+        player.setOverall(overall);
+        player.setPotentialOverall(potentialOverall);
+        player.setTeam(team);
+        player.setContract(contract);
         return player;
     }
 

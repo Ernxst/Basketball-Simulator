@@ -11,10 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,11 +24,11 @@ import java.util.Locale;
 public class LeagueController {
     private final LeagueService leagueService;
 
-    @PostMapping("/new")
+    @PostMapping("/{username}/new")
     @ApiOperation("Generate a new league for the given user.")
-    public ResponseEntity<LeagueGenerationResponse> generateLeague(@RequestBody GenerateLeagueRequest request)
+    public ResponseEntity<LeagueGenerationResponse> generateLeague(@PathVariable String username,
+                                                                   @RequestBody GenerateLeagueRequest request)
             throws UsernameNotFoundException {
-        String username = request.getUsername();
         String leagueName = request.getLeagueName();
         String startDate = request.getStartDate();
         int numOfTeams = request.getNumOfTeams();

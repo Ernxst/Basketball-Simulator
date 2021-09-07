@@ -45,7 +45,7 @@ public class AccountController {
     @PostMapping("/register")
     @ApiOperation("Register a new user.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User successfully registered.", response = AuthSuccessResponse.class),
+            @ApiResponse(code = 201, message = "User successfully registered.", response = AuthSuccessResponse.class),
             @ApiResponse(code = 409, message = "Username is already taken.", response = GenericErrorResponse.class),
     })
     public ResponseEntity<AuthSuccessResponse> register(@RequestBody AuthRequest authRequest)
@@ -66,7 +66,7 @@ public class AccountController {
     @PostMapping("/login")
     @ApiOperation("Authenticate an existing user.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User successfully authenticated.", response = AuthSuccessResponse.class),
+            @ApiResponse(code = 201, message = "User successfully authenticated.", response = AuthSuccessResponse.class),
             @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
     })
     public ResponseEntity<AuthSuccessResponse> login(@RequestBody AuthRequest authRequest)

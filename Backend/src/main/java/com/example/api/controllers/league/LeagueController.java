@@ -19,12 +19,12 @@ import java.util.Locale;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/leagues")
+@RequestMapping("/{username}/leagues")
 @Api(tags = "Leagues")
 public class LeagueController {
     private final LeagueService leagueService;
 
-    @PostMapping(value = "/{username}/new", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/new", consumes = "application/json", produces = "application/json")
     @ApiOperation("Generate a new league for the given user.")
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<LeagueGenerationResponse> generateLeague(@PathVariable String username,

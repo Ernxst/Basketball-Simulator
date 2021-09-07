@@ -1,12 +1,14 @@
 package com.example.config;
 
 import com.example.services.user.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,8 +17,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -30,10 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
-
-    public WebSecurityConfig() {
-        super();
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -48,35 +51,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable().httpBasic().and();
-
-        // Set session management to stateless
-        http = http
+        // Set permissions on endpoints
+        http.authorizeRequests()
+                // Public endpoints
+                .antMatchers("/actuator").permitAll()
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
+                // Private endpoints
+                .anyRequest().authenticated().and()
+                // Set session management to stateless
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Set unauthorized requests exception handler
         http = http
                 .exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {
-                            ex.printStackTrace();
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
-                        }
-                )
-                .and();
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("timestamp", System.currentTimeMillis());
+                            data.put("error", "You need to be signed up, or signed in, to continue.");
+                            data.put("path", request.getRequestURL().toString());
+                            response.resetBuffer();
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                                    objectMapper.writeValueAsString(data));
+                            response.flushBuffer();
+                        }).and();
 
-        // Set permissions on endpoints
-        http.authorizeRequests()
-                // Swagger endpoints must be publicly accessible
-                .antMatchers("/").permitAll()
-                // Public endpoints
-                .antMatchers(HttpMethod.POST, "/user/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/user/register").permitAll()
-                // Our private endpoints
-//                .anyRequest().authenticated();
-        ;
-//        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     // Expose authentication manager bean

@@ -52,7 +52,7 @@ public class AccountController {
     public ResponseEntity<AuthSuccessResponse> register(@RequestBody AuthRequest authRequest)
             throws UsernameTakenException {
         User registeredUser = userService.register(new User(authRequest.getUsername(), authRequest.getPassword()));
-        String token = jwtTokenUtil.generateAccessToken(registeredUser);
+        String token = jwtTokenUtil.generateToken(registeredUser);
         String username = registeredUser.getUsername();
         AuthSuccessResponse body = new AuthSuccessResponse(username, token);
         return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
@@ -77,7 +77,7 @@ public class AccountController {
         Authentication authenticate = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
         User user = (User) authenticate.getPrincipal();
-        String token = jwtTokenUtil.generateAccessToken(user);
+        String token = jwtTokenUtil.generateToken(user);
         AuthSuccessResponse body = new AuthSuccessResponse(username, token);
         return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
     }

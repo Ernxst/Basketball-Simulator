@@ -5,7 +5,7 @@ const getBaseUrl = (environment: string): string => {
 };
 export const BASE_URL: string = getBaseUrl('development');
 
-export const RELATIVE_USER_ENDPOINT: string = "user/";
+export const RELATIVE_USER_ENDPOINT: string = "users/";
 export const RELATIVE_USER_LOGIN_ENDPOINT: string = RELATIVE_USER_ENDPOINT + "login";
 export const RELATIVE_USER_REGISTER_ENDPOINT: string = RELATIVE_USER_ENDPOINT + "register";
 

@@ -1,7 +1,11 @@
 package com.example.config;
 
+import com.example.api.AppLogger;
 import com.example.entities.user.User;
-import io.jsonwebtoken.*;
+import com.example.repositories.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,65 +16,48 @@ import static java.lang.String.format;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtil {
-    private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
-    private final String jwtIssuer = "com.example";
+    // TODO: Store secret and environment variable
+    private static final String JWT_SECRET = "zdtlD3JK56m6wTTgsNFhqzjqP";
+    private static final String JWT_ISSUER = "com.example";
+    private static final int TOKEN_LIFE = 7 * 24 * 60 * 60 * 1000; // 1 week from issue
 
-//    @Autowired
-//    private Logger logger;
-
-    public String generateAccessToken(User user) {
+    public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(format("%s", user.getUsername()))
-                .setIssuer(jwtIssuer)
+                .setIssuer(JWT_ISSUER)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 1 week
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_LIFE))
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
-    public String getUserId(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getSubject().split(",")[0];
-    }
-
     public String getUsername(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getSubject().split(",")[1];
+        return getClaims(token).getSubject();
     }
 
     public Date getExpirationDate(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getExpiration();
+        return getClaims(token).getExpiration();
     }
 
-    public boolean validate(String token) {
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(JWT_SECRET)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean validate(String token, UserRepository userRepository) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException ex) {
-//            logger.error("Invalid JWT signature - {}", ex.getMessage());
-        } catch (MalformedJwtException ex) {
-//            logger.error("Invalid JWT token - {}", ex.getMessage());
-        } catch (ExpiredJwtException ex) {
-//            logger.error("Expired JWT token - {}", ex.getMessage());
-        } catch (UnsupportedJwtException ex) {
-//            logger.error("Unsupported JWT token - {}", ex.getMessage());
+            String username = getUsername(token);
+            return userRepository.findByUsername(username).isPresent() && !isTokenExpired(token);
         } catch (IllegalArgumentException ex) {
-//            logger.error("JWT claims string is empty - {}", ex.getMessage());
+            AppLogger.log("JWT claims string is empty - " + ex.getMessage());
         }
         return false;
     }
 
+    private Boolean isTokenExpired(String token) {
+        Date expiration = getExpirationDate(token);
+        return expiration.before(new Date());
+    }
 }

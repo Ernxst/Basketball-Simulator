@@ -1,8 +1,9 @@
 package com.example.api;
 
 import com.example.api.controllers.account.AccountController;
-import com.example.entities.requests.AuthRequest;
-import com.example.entities.requests.ChangePasswordRequest;
+import com.example.api.controllers.account.requests.AuthRequest;
+import com.example.api.controllers.account.requests.ChangePasswordRequest;
+import com.example.api.controllers.account.requests.DeleteUserRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,6 +21,7 @@ public class AccountControllerTest extends AbstractApiTest {
 
     @Test
     public void loginValidUsernameAndPassword() throws Exception {
+        // TODO: Expect JWT token to be returned in header
         ResultActions result = testPostEndpoint("/user", "login",
                 new AuthRequest(TEST_USERNAME, TEST_PASSWORD), "Login success");
         result.andExpect(status().isOk());
@@ -44,6 +46,7 @@ public class AccountControllerTest extends AbstractApiTest {
 
     @Test
     public void registerValidUsernameAndPassword() throws Exception {
+        // TODO: Expect JWT token to be returned in header
         ResultActions result = testPostEndpoint("/user", "register",
                 new AuthRequest(VALID_REGISTER_USERNAME, VALID_REGISTER_PASSWORD),
                 "Registration success");
@@ -62,7 +65,7 @@ public class AccountControllerTest extends AbstractApiTest {
     @Test
     public void changePasswordValidUsernameAndPassword() throws Exception {
         ResultActions result = testAuthenticatedPostEndpoint("/user", "change-password",
-                new ChangePasswordRequest(TEST_USERNAME, TEST_PASSWORD, "some-password"),
+                new ChangePasswordRequest(TEST_PASSWORD, "some-password"),
                 "Success");
         result.andExpect(status().isOk());
         MvcResult mvcResult = result.andReturn();
@@ -71,7 +74,7 @@ public class AccountControllerTest extends AbstractApiTest {
     @Test
     public void changePasswordValidUsernameWrongPassword() throws Exception {
         ResultActions result = testAuthenticatedPostEndpoint("/user", "change-password",
-                new ChangePasswordRequest(TEST_USERNAME, "incorrect", "some-password"),
+                new ChangePasswordRequest("incorrect", "some-password"),
                 "Your password was incorrect, please try again.");
         result.andExpect(status().isUnauthorized());
         MvcResult mvcResult = result.andReturn();
@@ -81,7 +84,7 @@ public class AccountControllerTest extends AbstractApiTest {
     public void changePasswordWrongUsername() throws Exception {
         String username = "doesntexist";
         ResultActions result = testAuthenticatedPostEndpoint("/user", "change-password",
-                new ChangePasswordRequest(username, TEST_PASSWORD, "some-password"),
+                new ChangePasswordRequest(TEST_PASSWORD, "some-password"),
                 MessageFormat.format("The user with username {0} cannot be found.", username));
         result.andExpect(status().isUnauthorized());
         MvcResult mvcResult = result.andReturn();
@@ -89,8 +92,8 @@ public class AccountControllerTest extends AbstractApiTest {
 
     @Test
     public void deleteUserValidUsernameAndPassword() throws Exception {
-        ResultActions result = testAuthenticatedDeleteEndpoint("/user", "delete",
-                new AuthRequest(TEST_USERNAME, TEST_PASSWORD),
+        ResultActions result = testAuthenticatedDeleteEndpoint("/user", TEST_USERNAME + "/delete",
+                new DeleteUserRequest(TEST_PASSWORD),
                 "Success");
         result.andExpect(status().isOk());
         MvcResult mvcResult = result.andReturn();
@@ -98,8 +101,8 @@ public class AccountControllerTest extends AbstractApiTest {
 
     @Test
     public void deleteUserValidUsernameWrongPassword() throws Exception {
-        ResultActions result = testAuthenticatedDeleteEndpoint("/user", "delete",
-                new AuthRequest(TEST_USERNAME, "incorrect"),
+        ResultActions result = testAuthenticatedDeleteEndpoint("/user", TEST_USERNAME + "/delete",
+                new DeleteUserRequest("incorrect"),
                 "Your password was incorrect, please try again.");
         result.andExpect(status().isUnauthorized());
         MvcResult mvcResult = result.andReturn();
@@ -108,8 +111,8 @@ public class AccountControllerTest extends AbstractApiTest {
     @Test
     public void deleteUserWrongUsername() throws Exception {
         String username = "doesntexist";
-        ResultActions result = testAuthenticatedDeleteEndpoint("/user", "delete",
-                new AuthRequest(username, TEST_PASSWORD),
+        ResultActions result = testAuthenticatedDeleteEndpoint("/user", username + "/delete",
+                new DeleteUserRequest(TEST_PASSWORD),
                 MessageFormat.format("The user with username {0} cannot be found.", username));
         result.andExpect(status().isUnauthorized());
         MvcResult mvcResult = result.andReturn();

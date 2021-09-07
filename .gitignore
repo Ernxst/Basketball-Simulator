@@ -276,6 +276,7 @@ target/
 **target/
 Backend/target/
 Backend/target
+Backend/docs/spec.yml
 **/target/
 */target/
 *target/

@@ -1,23 +1,27 @@
 package com.example.api.controllers.account;
 
-import com.example.api.responses.GenericResponse;
-import com.example.api.responses.RegistrationSuccessResponse;
-import com.example.api.responses.UserLoginResponse;
+import com.example.api.controllers.account.requests.AuthRequest;
+import com.example.api.controllers.account.requests.ChangePasswordRequest;
+import com.example.api.controllers.account.requests.DeleteUserRequest;
+import com.example.api.controllers.account.responses.AuthSuccessResponse;
+import com.example.api.util.AbstractResponse;
+import com.example.api.util.GenericErrorResponse;
+import com.example.api.util.ResponseBuilder;
 import com.example.config.JwtTokenUtil;
-import com.example.entities.requests.AuthRequest;
-import com.example.entities.requests.ChangePasswordRequest;
 import com.example.entities.user.User;
 import com.example.services.user.UserService;
 import com.example.services.user.UsernameTakenException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +29,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
+@Api(tags = "Users")
 public class AccountController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -37,17 +42,20 @@ public class AccountController {
      * @param authRequest the request body, containing a username and password.
      * @return a HTTP response including the username if registration succeeds and an error message otherwise.
      */
-    @PostMapping("/register")
-    public ResponseEntity<GenericResponse> register(@RequestBody User authRequest) {
-        try {
-            User registeredUser = userService.register(authRequest);
-            String username = registeredUser.getUsername();
-            return ResponseEntity.ok()
-                    .body(new RegistrationSuccessResponse(username));
-        } catch (UsernameTakenException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT.value())
-                    .body(new GenericResponse(e.getMessage(), HttpStatus.CONFLICT));
-        }
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+    @ApiOperation("Register a new user.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User successfully registered.", response = AuthSuccessResponse.class),
+            @ApiResponse(code = 409, message = "Username is already taken.", response = GenericErrorResponse.class),
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<AuthSuccessResponse> register(@RequestBody AuthRequest authRequest)
+            throws UsernameTakenException {
+        User registeredUser = userService.register(new User(authRequest.getUsername(), authRequest.getPassword()));
+        String token = jwtTokenUtil.generateToken(registeredUser);
+        String username = registeredUser.getUsername();
+        AuthSuccessResponse body = new AuthSuccessResponse(username, token);
+        return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
     }
 
     /**
@@ -56,62 +64,65 @@ public class AccountController {
      * @param authRequest the request body, containing a username and password.
      * @return a HTTP response including a JWT token if login succeeds and an error message otherwise.
      */
-    @PostMapping("/login")
-    public ResponseEntity<GenericResponse> login(@RequestBody AuthRequest authRequest) {
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    @ApiOperation("Authenticate an existing user.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User successfully authenticated.", response = AuthSuccessResponse.class),
+            @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<AuthSuccessResponse> login(@RequestBody AuthRequest authRequest)
+            throws BadCredentialsException, UsernameTakenException {
         String username = authRequest.getUsername();
-        try {
-            Authentication authenticate = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
-            User user = (User) authenticate.getPrincipal();
-
-            String accessToken = jwtTokenUtil.generateAccessToken(user);
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, accessToken)
-                    .body(new UserLoginResponse(username, accessToken));
-        } catch (BadCredentialsException ex) {
-            if (!userService.usernameExists(username))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-                        .body(new GenericResponse("Login failed, the username " + username + " does not exist; are you trying to sign up?", HttpStatus.UNAUTHORIZED));
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-                    .body(new GenericResponse("Login failed, either your username or password was incorrect, please try again.", HttpStatus.UNAUTHORIZED));
-        }
+        Authentication authenticate = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
+        User user = (User) authenticate.getPrincipal();
+        String token = jwtTokenUtil.generateToken(user);
+        AuthSuccessResponse body = new AuthSuccessResponse(username, token);
+        return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
     }
 
     /**
      * Delete a user from the database.
      *
-     * @param authRequest the request body, containing the username and password.
+     * @param username
+     * @param request  the request body, containing the user's password.
      * @return a HTTP response indicating whether the deletion was successful.
      */
-    @DeleteMapping("/delete")
-    public ResponseEntity<GenericResponse> deleteUser(@RequestBody AuthRequest authRequest) {
-        try {
-            User user = new User(authRequest.getUsername(), authRequest.getPassword());
-            userService.deleteUser(user);
-            return ResponseEntity.status(HttpStatus.OK.value())
-                    .body(new GenericResponse("Success"));
-        } catch (UsernameNotFoundException | BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-                    .body(new GenericResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED));
-        }
+    @DeleteMapping(value = "/{username}/delete", consumes = "application/json", produces = "application/json")
+    @ApiOperation("Delete an existing user.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "User successfully deleted."),
+            @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
+    })
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public ResponseEntity<AbstractResponse> deleteUser(@PathVariable String username,
+                                                       @RequestBody DeleteUserRequest request)
+            throws BadCredentialsException {
+        User user = new User(username, request.getPassword());
+        userService.deleteUser(user);
+        return new ResponseBuilder<>(HttpStatus.NO_CONTENT).build();
     }
 
     /**
      * Change a given user's password.
      *
-     * @param request the request body, containing the username, current and new password.
+     * @param username
+     * @param request  the request body, containing the username, current and new password.
      * @return a HTTP response indicating whether the password change was successful.
      */
-    @PostMapping("/change-password")
-    public ResponseEntity<GenericResponse> changePassword(@RequestBody ChangePasswordRequest request) {
-        try {
-            User user = new User(request.getUsername(), request.getCurrentPassword());
-            userService.changePassword(user, request.getNewPassword());
-            return ResponseEntity.status(HttpStatus.OK.value())
-                    .body(new GenericResponse("Success"));
-        } catch (UsernameNotFoundException | BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-                    .body(new GenericResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED));
-        }
+    @PostMapping(value = "/{username}/change_password", consumes = "application/json", produces = "application/json")
+    @ApiOperation("Change a user's password.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "User password successfully changed."),
+            @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
+    })
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public ResponseEntity<AbstractResponse> changePassword(@PathVariable String username,
+                                                           @RequestBody ChangePasswordRequest request)
+            throws BadCredentialsException {
+        User user = new User(username, request.getCurrentPassword());
+        userService.changePassword(user, request.getNewPassword());
+        return new ResponseBuilder<>(HttpStatus.NO_CONTENT).build();
     }
 }

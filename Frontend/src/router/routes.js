@@ -3,7 +3,7 @@ export const routes = [
         path: "/",
         redirect: (route) => {
             const user = JSON.parse(localStorage.getItem('user'));
-            return user && user.accessToken
+            return user && user.access_token
                 ? `/${user.username}/select`
                 : "/welcome";
         },

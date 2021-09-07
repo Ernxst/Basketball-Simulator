@@ -13,7 +13,7 @@
     "start": "set -e; webpack --mode production  --config webpack.prod.js; open http://localhost:8080 & serve -s dist -p 8080 --no-clipboard",
     "unused-modules": "npx depcheck",
     "profile": "webpack --profile --json > stats.json",
-    "deploy": "",
+    "deploy": "set -e; build; firebase deploy",
     "test": "jest",
     "coverage": "jest; open coverage/lcov-report/index.html"
   },

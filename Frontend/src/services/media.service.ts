@@ -1,6 +1,5 @@
 // @ts-ignore
 import Reference from "firebase-storage-lite";
-import { routes } from "../router/routes.js";
 
 
 const base = "gs://basketball-simulator-4f6a7.appspot.com/";

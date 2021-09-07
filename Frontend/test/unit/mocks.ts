@@ -36,13 +36,13 @@ export const mockApi = new MockAdapter(api, {});
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,
     { username: validLoginUsername, password: validLoginPassword })
     .reply(200, {
-        username: validLoginUsername, accessToken: "aaaa"
+        username: validLoginUsername, access_token: "aaaa"
     });
 
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,
     { username: validRegisterUsername, password: validRegisterPassword })
     .reply(200, {
-        username: validRegisterUsername, accessToken: "aaaa"
+        username: validRegisterUsername, access_token: "aaaa"
     });
 
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,

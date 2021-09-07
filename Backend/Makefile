@@ -49,6 +49,12 @@ prune:
 	docker container prune -f
 	docker volume prune -f
 	docker image prune -f
+swagger:
+	set -e
+	swagger-cli bundle -t yaml -o docs/spec.yml docs/openapi.yaml
+	swagger-cli validate --no-schema docs/spec.yml
+	cat docs/spec.yml | pbcopy
+	open https://editor.swagger.io
 deploy:
 	docker buildx build --platform linux/amd64 --build-arg ENV=production -t app .
 	docker tag app registry.heroku.com/basketball-simulator-web/web

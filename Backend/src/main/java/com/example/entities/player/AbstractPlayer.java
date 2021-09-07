@@ -95,12 +95,12 @@ public abstract class AbstractPlayer {
         return Position.getPositionByName(playerPosition);
     }
 
-    public Position getSecondaryPosition() {
-        return Position.getPositionByName(playerSecondaryPosition);
-    }
-
     public void setPosition(Position position) {
         this.playerPosition = position.getShortName();
+    }
+
+    public Position getSecondaryPosition() {
+        return Position.getPositionByName(playerSecondaryPosition);
     }
 
     public void setSecondaryPosition(Position position) {

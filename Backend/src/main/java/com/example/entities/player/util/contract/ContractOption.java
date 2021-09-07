@@ -33,12 +33,8 @@ public enum ContractOption {
         return NONE;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
     public static ContractOption getByName(String name) {
-        switch(name) {
+        switch (name) {
             case "Team":
                 return TEAM;
             case "Player":
@@ -47,5 +43,9 @@ public enum ContractOption {
                 return NONE;
         }
         return null;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

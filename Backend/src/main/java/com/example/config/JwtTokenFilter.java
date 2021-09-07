@@ -1,7 +1,6 @@
 package com.example.config;
 
 import com.example.repositories.UserRepository;
-import com.example.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

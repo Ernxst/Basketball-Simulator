@@ -8,7 +8,6 @@ import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +30,11 @@ import java.util.Map;
         prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private UserService userService;
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

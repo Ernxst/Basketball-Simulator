@@ -5,21 +5,18 @@ import com.example.entities.league.LeagueSeason;
 
 public interface LeagueSeasonServiceInterface {
     /**
-     *
      * @param league
      * @return
      */
     LeagueSeason insertNewSeason(League league);
 
     /**
-     *
      * @param leagueSeason
      * @return
      */
     LeagueSeason insertSeason(LeagueSeason leagueSeason);
 
     /**
-     *
      * @param league
      * @param season
      * @return
@@ -28,7 +25,6 @@ public interface LeagueSeasonServiceInterface {
 
 
     /**
-     *
      * @param league
      * @return
      */

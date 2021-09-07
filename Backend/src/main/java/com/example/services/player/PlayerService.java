@@ -44,6 +44,6 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public Iterable<Player> insertPlayers(Player[] players) {
         Iterable<Player> playersToSave = Arrays.asList(players);
-         return playerRepository.saveAll(playersToSave);
+        return playerRepository.saveAll(playersToSave);
     }
 }

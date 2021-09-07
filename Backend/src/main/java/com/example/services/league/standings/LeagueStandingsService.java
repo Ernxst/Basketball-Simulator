@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LeagueStandingsService extends AbstractLeagueItemService<LeagueStandings, Integer,
-                LeagueStandingsNotFoundException, LeagueStandings.LeagueStandingsKey>
+        LeagueStandingsNotFoundException, LeagueStandings.LeagueStandingsKey>
         implements LeagueStandingsServiceInterface {
 
-            /**
-             * 
-             * @param repository
-             */
+    /**
+     * @param repository
+     */
     public LeagueStandingsService(@Autowired LeagueStandingsRepository repository) {
         super(repository, "LeagueStandings");
     }

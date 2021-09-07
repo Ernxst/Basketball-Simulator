@@ -1,7 +1,6 @@
 package com.example.api.controllers.league.responses;
 
 import com.example.api.util.GenericResponse;
-import org.springframework.http.HttpStatus;
 
 public class LeagueGenerationResponse extends GenericResponse {
     private final int leagueID;

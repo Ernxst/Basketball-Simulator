@@ -7,27 +7,23 @@ import java.util.Collection;
 
 public interface TeamServiceInterface {
     /**
-     *
      * @return
      */
     int randomTeamIconID();
 
     /**
-     *
      * @param team
      * @return
      */
     int insertTeam(Team team);
 
     /**
-     *
      * @param teams
      * @return
      */
     Iterable<Team> insertTeams(Collection<Team> teams);
 
     /**
-     *
      * @param teamID
      * @return
      * @throws TeamNotFoundException
@@ -35,13 +31,11 @@ public interface TeamServiceInterface {
     Team getTeamByID(int teamID) throws TeamNotFoundException;
 
     /**
-     *
      * @param team
      */
     void deleteTeam(Team team);
 
     /**
-     *
      * @param teamID
      * @throws TeamNotFoundException
      */

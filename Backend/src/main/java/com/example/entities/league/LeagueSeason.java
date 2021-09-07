@@ -42,16 +42,6 @@ public class LeagueSeason {
     @OneToMany(mappedBy = "leagueSeason", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PlayerStats> playerStats;
 
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class LeagueSeasonKey implements Serializable {
-        private int leagueID;
-        private int season;
-    }
-
     @Override
     public String toString() {
         return "League Season {" +
@@ -62,5 +52,15 @@ public class LeagueSeason {
                 "\n    leagueRecords   : " + leagueRecords +
                 "\n    playerStats     : " + playerStats +
                 "\n}";
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LeagueSeasonKey implements Serializable {
+        private int leagueID;
+        private int season;
     }
 }

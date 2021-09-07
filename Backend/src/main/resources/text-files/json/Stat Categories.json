@@ -1,66 +1,66 @@
 {
-  "Post Scoring": [
-    "Post Hook",
-    "Post Fadeaway",
-    "Post Moves"
-  ],
-  "Inside Scoring": [
-    "Standing Layup",
-    "Driving Layup",
-    "Standing Dunk",
-    "Driving Dunk",
-    "Contact Dunk",
-    "Shot Close",
-    "Free Throw"
-  ],
-  "Outside Scoring": [
-    "Mid-Range Open",
-    "Mid-Range Off Dribble",
-    "Mid-Range Contested",
-    "3PT Open",
-    "3PT Off Dribble",
-    "3PT Contested"
-  ],
-  "Playmaking": [
-    "Passing Accuracy",
-    "Passing Vision",
-    "Ball-Handling",
-    "Speed with Ball",
-    "Passing IQ"
-  ],
-  "Rebounding": [
-    "Offensive Rebound",
-    "Defensive Rebound",
-    "Box-Out"
-  ],
-  "Defending": [
-    "Lateral Quickness",
-    "Defensive Awareness",
-    "Play Recognition",
-    "Steal",
-    "Block",
-    "Pass-Perception",
-    "Shot Contest",
-    "Interior Defense",
-    "Perimeter Defense"
-  ],
-  "Physical": [
-    "Speed",
-    "Stamina",
-    "Strength",
-    "Vertical",
-    "Durability",
-    "Agility",
-    "Acceleration"
-  ],
-  "Mental": [
-    "Shot IQ",
-    "Basketball IQ",
-    "Offensive Consistency",
-    "Defensive Consistency",
-    "Confidence",
-    "Reaction Time",
-    "Hands",
-    "Draw Foul"
-  ]
+    "Post Scoring": [
+        "Post Hook",
+        "Post Fadeaway",
+        "Post Moves"
+    ],
+    "Inside Scoring": [
+        "Standing Layup",
+        "Driving Layup",
+        "Standing Dunk",
+        "Driving Dunk",
+        "Contact Dunk",
+        "Shot Close",
+        "Free Throw"
+    ],
+    "Outside Scoring": [
+        "Mid-Range Open",
+        "Mid-Range Off Dribble",
+        "Mid-Range Contested",
+        "3PT Open",
+        "3PT Off Dribble",
+        "3PT Contested"
+    ],
+    "Playmaking": [
+        "Passing Accuracy",
+        "Passing Vision",
+        "Ball-Handling",
+        "Speed with Ball",
+        "Passing IQ"
+    ],
+    "Rebounding": [
+        "Offensive Rebound",
+        "Defensive Rebound",
+        "Box-Out"
+    ],
+    "Defending": [
+        "Lateral Quickness",
+        "Defensive Awareness",
+        "Play Recognition",
+        "Steal",
+        "Block",
+        "Pass-Perception",
+        "Shot Contest",
+        "Interior Defense",
+        "Perimeter Defense"
+    ],
+    "Physical": [
+        "Speed",
+        "Stamina",
+        "Strength",
+        "Vertical",
+        "Durability",
+        "Agility",
+        "Acceleration"
+    ],
+    "Mental": [
+        "Shot IQ",
+        "Basketball IQ",
+        "Offensive Consistency",
+        "Defensive Consistency",
+        "Confidence",
+        "Reaction Time",
+        "Hands",
+        "Draw Foul"
+    ]
 }

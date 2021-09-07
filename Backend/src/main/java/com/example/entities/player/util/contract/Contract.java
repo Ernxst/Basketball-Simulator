@@ -64,17 +64,6 @@ public class Contract {
     @JoinColumn(name = "SEASON", insertable = false, updatable = false)
     private LeagueSeason leagueSeason;
 
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ContractKey implements Serializable {
-        private int playerID;
-        private int leagueID;
-        private int season;
-    }
-
     public ContractOption getContractOption() {
         return ContractOption.getByName(contractOption);
     }
@@ -96,5 +85,16 @@ public class Contract {
                 "\n    Salary ($):       " + salary +
                 "\n    No Trade Clause?: " + noTradeClause +
                 "\n}";
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContractKey implements Serializable {
+        private int playerID;
+        private int leagueID;
+        private int season;
     }
 }

@@ -24,14 +24,13 @@ import java.util.List;
 @Getter
 @Setter
 public class Player extends AbstractPlayer {
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    // { seasonNo: Contract }
+    protected List<Contract> allContracts;
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID", nullable = false)
     private Team team;
-
-    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
-    // { seasonNo: Contract }
-    protected List<Contract> allContracts;
 
     public int getTeamID() {
         return team.getTeamID();
@@ -45,10 +44,6 @@ public class Player extends AbstractPlayer {
         }
     }
 
-    public void setContract(Contract contract) {
-        setContract(team.getCurrentSeason(), contract);
-    }
-
     public Contract getContract(int season) {
         if (season > allContracts.size())
             return null;
@@ -57,6 +52,10 @@ public class Player extends AbstractPlayer {
 
     public Contract getContract() {
         return getContract(team.getCurrentSeason());
+    }
+
+    public void setContract(Contract contract) {
+        setContract(team.getCurrentSeason(), contract);
     }
 
     /**

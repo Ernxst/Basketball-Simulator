@@ -24,8 +24,9 @@ import java.util.Locale;
 public class LeagueController {
     private final LeagueService leagueService;
 
-    @PostMapping("/{username}/new")
+    @PostMapping(value = "/{username}/new", consumes = "application/json", produces = "application/json")
     @ApiOperation("Generate a new league for the given user.")
+    @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<LeagueGenerationResponse> generateLeague(@PathVariable String username,
                                                                    @RequestBody GenerateLeagueRequest request)
             throws UsernameNotFoundException {

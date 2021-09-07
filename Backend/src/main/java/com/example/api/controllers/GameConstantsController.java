@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags="Constants")
 public class GameConstantsController {
 
-    @GetMapping("/max_leagues")
+    @GetMapping(value = "/max_leagues", produces = "application/json")
     @ApiOperation("Return the maximum number of leagues for a single user.")
     public ResponseEntity<Integer> getMaxLeagues() {
         return ResponseEntity.ok()
                 .body(LeagueConstants.MAX_LEAGUES);
     }
 
-    @GetMapping("/min_teams")
+    @GetMapping(value = "/min_teams", produces = "application/json")
     @ApiOperation("Return the minimum number of teams in a league.")
     public ResponseEntity<Integer> getMinTeams() {
         return ResponseEntity.ok()
                 .body(LeagueConstants.MIN_TEAMS);
     }
 
+    @GetMapping(value = "/max_teams", produces = "application/json")
     @ApiOperation("Return the maximum number of teams in a league.")
-    @GetMapping("/max_teams")
     public ResponseEntity<Integer> getMaxTeams() {
         return ResponseEntity.ok()
                 .body(LeagueConstants.MAX_TEAMS);

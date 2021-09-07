@@ -42,12 +42,13 @@ public class AccountController {
      * @param authRequest the request body, containing a username and password.
      * @return a HTTP response including the username if registration succeeds and an error message otherwise.
      */
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     @ApiOperation("Register a new user.")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User successfully registered.", response = AuthSuccessResponse.class),
             @ApiResponse(code = 409, message = "Username is already taken.", response = GenericErrorResponse.class),
     })
+    @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<AuthSuccessResponse> register(@RequestBody AuthRequest authRequest)
             throws UsernameTakenException {
         User registeredUser = userService.register(new User(authRequest.getUsername(), authRequest.getPassword()));
@@ -63,12 +64,13 @@ public class AccountController {
      * @param authRequest the request body, containing a username and password.
      * @return a HTTP response including a JWT token if login succeeds and an error message otherwise.
      */
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     @ApiOperation("Authenticate an existing user.")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User successfully authenticated.", response = AuthSuccessResponse.class),
             @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
     })
+    @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<AuthSuccessResponse> login(@RequestBody AuthRequest authRequest)
             throws BadCredentialsException, UsernameTakenException {
         String username = authRequest.getUsername();
@@ -87,12 +89,13 @@ public class AccountController {
      * @param request  the request body, containing the user's password.
      * @return a HTTP response indicating whether the deletion was successful.
      */
-    @DeleteMapping("/{username}/delete")
+    @DeleteMapping(value = "/{username}/delete", consumes = "application/json", produces = "application/json")
     @ApiOperation("Delete an existing user.")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "User successfully deleted."),
             @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
     })
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<AbstractResponse> deleteUser(@PathVariable String username,
                                                        @RequestBody DeleteUserRequest request)
             throws BadCredentialsException {
@@ -108,12 +111,13 @@ public class AccountController {
      * @param request  the request body, containing the username, current and new password.
      * @return a HTTP response indicating whether the password change was successful.
      */
-    @PostMapping("/{username}/change_password")
+    @PostMapping(value = "/{username}/change_password", consumes = "application/json", produces = "application/json")
     @ApiOperation("Change a user's password.")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "User password successfully changed."),
             @ApiResponse(code = 401, message = "User authentication failed.", response = GenericErrorResponse.class),
     })
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<AbstractResponse> changePassword(@PathVariable String username,
                                                            @RequestBody ChangePasswordRequest request)
             throws BadCredentialsException {

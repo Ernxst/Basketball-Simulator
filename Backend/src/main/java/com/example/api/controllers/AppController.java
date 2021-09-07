@@ -17,7 +17,7 @@ public class AppController {
      *
      * @return a message confirming the backend is running.
      */
-    @GetMapping("/")
+    @GetMapping(value = "/", produces = "application/json")
     @ApiOperation("Return a message to confirm the API is running.")
     public ResponseEntity<AbstractResponse> ping() {
         return new ResponseBuilder<>(HttpStatus.OK).build();

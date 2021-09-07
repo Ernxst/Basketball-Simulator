@@ -1,5 +1,6 @@
-package com.example.api.responses;
+package com.example.api.controllers.league.responses;
 
+import com.example.api.util.GenericResponse;
 import org.springframework.http.HttpStatus;
 
 public class LeagueGenerationResponse extends GenericResponse {
@@ -7,11 +8,6 @@ public class LeagueGenerationResponse extends GenericResponse {
 
     public LeagueGenerationResponse(String message, int leagueID) {
         super(message);
-        this.leagueID = leagueID;
-    }
-
-    public LeagueGenerationResponse(String message, HttpStatus code, int leagueID) {
-        super(message, code);
         this.leagueID = leagueID;
     }
 

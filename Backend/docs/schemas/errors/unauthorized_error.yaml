@@ -1,7 +1,0 @@
-type: object
-required:
-  - error
-properties:
-  error:
-    type: string
-    example: You need to sign up or sign in before continuing

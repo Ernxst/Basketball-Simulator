@@ -28,6 +28,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
+    // TODO: Use this method to authenticate JWT token header.
     public String getUserId(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)

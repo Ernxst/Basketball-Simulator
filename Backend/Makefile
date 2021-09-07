@@ -33,7 +33,7 @@ unit-test:
 coverage:
 	mvn jacoco:prepare-agent test jacoco:report && make server
 pmd:
-	mvn pmd:pmd &&  make server
+	mvn pmd:pmd && make server
 server:
 	${exec} cd target/site/ && ${exec} python3 -m http.server
 bash:
@@ -51,10 +51,9 @@ prune:
 	docker image prune -f
 swagger:
 	set -e
-	swagger-cli bundle -t yaml -o docs/spec.yml docs/openapi.yaml
-	swagger-cli validate --no-schema docs/spec.yml
-	cat docs/spec.yml | pbcopy
-	open https://editor.swagger.io
+	make down
+	make build
+	make up & open "http://localhost:8100/swagger-ui/index.html"
 deploy:
 	docker buildx build --platform linux/amd64 --build-arg ENV=production -t app .
 	docker tag app registry.heroku.com/basketball-simulator-web/web

@@ -23,7 +23,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<GenericErrorResponse> handleException(BadCredentialsException e) {
-        GenericErrorResponse body = new GenericErrorResponse(e.getMessage());
+        GenericErrorResponse body = new GenericErrorResponse("Your username or password was incorrect, please try again.");
         return new ResponseBuilder<>(HttpStatus.UNAUTHORIZED, body).build();
     }
 
@@ -63,6 +63,12 @@ public class ErrorHandler {
     @ExceptionHandler(UnsupportedJwtException.class)
     public ResponseEntity<GenericErrorResponse> handleException(UnsupportedJwtException e) {
         AppLogger.log("Unsupported JWT token - " + e.getMessage());
+        GenericErrorResponse body = new GenericErrorResponse(e.getMessage());
+        return new ResponseBuilder<>(HttpStatus.UNAUTHORIZED, body).build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<GenericErrorResponse> handleException(IllegalArgumentException e) {
         GenericErrorResponse body = new GenericErrorResponse(e.getMessage());
         return new ResponseBuilder<>(HttpStatus.UNAUTHORIZED, body).build();
     }

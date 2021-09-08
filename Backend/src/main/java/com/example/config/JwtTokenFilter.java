@@ -4,6 +4,7 @@ import com.example.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -36,14 +38,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 // Get user identity and set it on the spring security context
                 String username = jwtTokenUtil.getUsername(token);
                 UserDetails userDetails = userRepository.findByUsername(username).orElse(null);
-
+                List<GrantedAuthority> authorities = userDetails == null ? List.of() :
+                        new ArrayList<>(userDetails.getAuthorities());
                 UsernamePasswordAuthenticationToken
-                        authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null,
-                        userDetails == null ? List.of() : userDetails.getAuthorities()
-                );
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
+                        authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                        null, authorities);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

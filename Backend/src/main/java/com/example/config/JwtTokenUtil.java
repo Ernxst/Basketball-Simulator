@@ -6,40 +6,37 @@ import com.example.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-import static java.lang.String.format;
-
 @Component
-@RequiredArgsConstructor
 public class JwtTokenUtil {
-    // TODO: Store secret and environment variable
+    // TODO: Store secret in environment variable
     private static final String JWT_SECRET = "zdtlD3JK56m6wTTgsNFhqzjqP";
     private static final String JWT_ISSUER = "com.example";
     private static final int TOKEN_LIFE = 7 * 24 * 60 * 60 * 1000; // 1 week from issue
 
     public String generateToken(User user) {
+        long now = System.currentTimeMillis();
         return Jwts.builder()
-                .setSubject(format("%s", user.getUsername()))
+                .setSubject(user.getUsername())
                 .setIssuer(JWT_ISSUER)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_LIFE))
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + TOKEN_LIFE))
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
     public String getUsername(String token) {
-        return getClaims(token).getSubject();
+        return decodeToken(token).getSubject();
     }
 
     public Date getExpirationDate(String token) {
-        return getClaims(token).getExpiration();
+        return decodeToken(token).getExpiration();
     }
 
-    private Claims getClaims(String token) {
+    private Claims decodeToken(String token) {
         return Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)

@@ -76,7 +76,7 @@ public class DatabaseConfig {
     /**
      * Create tables and insert default data into the database.
      */
-    private void seed() throws SQLException {
+    private void seed() throws SQLException, URISyntaxException {
         AppLogger.log("=== Seeding Database ===");
         DatabaseSeeder seeder = new DatabaseSeeder(connection());
         seeder.seed();
@@ -84,7 +84,7 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public Connection connection() throws SQLException {
-        return dataSourceObj.getConnection();
+    public Connection connection() throws SQLException, URISyntaxException {
+        return dataSource().getConnection();
     }
 }

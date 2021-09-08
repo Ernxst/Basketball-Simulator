@@ -25,10 +25,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods("GET", "POST", "DELETE")
+                .allowedMethods("GET", "POST", "DELETE", "PATCH")
                 .allowedHeaders("*")
                 .allowedOrigins("http://localhost:" + Application.APP_PORT, "https://basketball-simulator-4f6a7.web.app") // Only allow requests from the frontend.
-//                .allowedOrigins("*") // For debugging
                 .allowCredentials(true) // Allow authenticated requests.
                 .maxAge(3600);
     }

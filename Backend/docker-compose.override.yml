@@ -16,6 +16,11 @@ services:
   app:
     depends_on:
       - db
+    environment:
+      ENV: development
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bb_dev
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
     build:
       args:
         ENV: development

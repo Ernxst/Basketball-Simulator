@@ -2,12 +2,19 @@
 
 FROM maven:3.6-jdk-11 AS build
 
+ARG SPRING_DATASOURCE_URL
+ARG SPRING_DATASOURCE_USERNAME
+ARG SPRING_DATASOURCE_PASSWORD
+
+ENV SPRING_DATASOURCE_URL ${SPRING_DATASOURCE_URL}
+ENV SPRING_DATASOURCE_USERNAME ${SPRING_DATASOURCE_USERNAME}
+ENV SPRING_DATASOURCE_PASSWORD ${SPRING_DATASOURCE_PASSWORD}
+
 COPY ./pom.xml ./pom.xml
-#RUN mvn dependency:go-offline -B
 RUN mvn -B dependency:resolve-plugins dependency:resolve
 
 COPY ./src ./src
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 FROM openjdk:11-jre-slim AS runtime
 

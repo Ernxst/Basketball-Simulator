@@ -31,11 +31,11 @@ junit:
 unit-test:
 	${exec} mvn test
 coverage:
-	mvn jacoco:prepare-agent test jacoco:report && make server
+	${exec} mvn jacoco:prepare-agent test jacoco:report && ${exec} make server
 pmd:
 	mvn pmd:pmd && make server
 server:
-	${exec} cd target/site/ && ${exec} python3 -m http.server
+	cd target/site/ && python3 -m http.server
 bash:
 	${exec} sh
 wait:

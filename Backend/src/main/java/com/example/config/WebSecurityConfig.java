@@ -89,6 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> userService.loadUserByUsername(username));
+        auth.userDetailsService(username -> userService.loadUserByUsername(username))
+                .passwordEncoder(bCryptPasswordEncoder());
     }
 }

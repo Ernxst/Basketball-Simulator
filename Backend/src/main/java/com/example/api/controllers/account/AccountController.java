@@ -89,7 +89,7 @@ public class AccountController {
      * @param request  the request body, containing the user's password.
      * @return a HTTP response indicating whether the deletion was successful.
      */
-    @DeleteMapping(value = "/{username}/delete", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/{username}", consumes = "application/json", produces = "application/json")
     @ApiOperation("Delete an existing user.")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "User successfully deleted."),
@@ -111,7 +111,7 @@ public class AccountController {
      * @param request  the request body, containing the username, current and new password.
      * @return a HTTP response indicating whether the password change was successful.
      */
-    @PostMapping(value = "/{username}/change_password", consumes = "application/json", produces = "application/json")
+    @PatchMapping(value = "/{username}/change_password", consumes = "application/json", produces = "application/json")
     @ApiOperation("Change a user's password.")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "User password successfully changed."),

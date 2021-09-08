@@ -47,14 +47,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractApiTest {
+    protected static final String TEST_USERNAME = "testuser";
     protected final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     protected final JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
     protected final ObjectMapper objectMapper = new ObjectMapper();
     protected final TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {
     };
     protected final String BAD_CREDENTIALS_MESSAGE = "Your username or password was incorrect, please try again.";
-
-    protected static final String TEST_USERNAME = "testuser";
     protected final String TEST_PASSWORD = "password";
     protected final String VALID_REGISTER_USERNAME = "test-register";
     protected final String VALID_REGISTER_PASSWORD = "test-password";

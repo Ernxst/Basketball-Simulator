@@ -4,6 +4,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENV: ${ENV}
+        SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+        SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+        SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    environment:
+      ENV: ${ENV}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     command: [ "java" ,"-jar", "app.jar" ]
     entrypoint: /usr/bin/entrypoint.sh
     ports:

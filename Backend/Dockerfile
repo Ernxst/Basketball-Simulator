@@ -1,7 +1,10 @@
 # syntax=docker/dockerfile:1
 
-FROM maven:3.6-jdk-11 AS build
+ARG ENV=development
 
+FROM maven:3.6-jdk-11 AS dependency
+
+ARG ENV
 ARG SPRING_DATASOURCE_URL
 ARG SPRING_DATASOURCE_USERNAME
 ARG SPRING_DATASOURCE_PASSWORD
@@ -9,12 +12,21 @@ ARG SPRING_DATASOURCE_PASSWORD
 ENV SPRING_DATASOURCE_URL ${SPRING_DATASOURCE_URL}
 ENV SPRING_DATASOURCE_USERNAME ${SPRING_DATASOURCE_USERNAME}
 ENV SPRING_DATASOURCE_PASSWORD ${SPRING_DATASOURCE_PASSWORD}
+ENV ENV ${ENV}
 
 COPY ./pom.xml ./pom.xml
 RUN mvn -B dependency:resolve-plugins dependency:resolve
 
+FROM dependency AS development
+ENV MVN="mvn clean package"
+
+FROM dependency AS production
+ENV MVN="mvn clean package -DskipTests"
+
+FROM ${ENV} AS build
 COPY ./src ./src
-RUN mvn clean package
+RUN ${MVN}
+
 
 FROM openjdk:11-jre-slim AS runtime
 

@@ -2,6 +2,7 @@ version: "3.9"
 services:
   db:
     image: library/postgres:13-alpine
+    restart: always
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/etc/timezone:/etc/timezone:ro"
@@ -9,23 +10,14 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: bb_dev
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       ENV: development
   app:
+    env_file:
+      - .env.development
     depends_on:
       - db
-    environment:
-      ENV: development
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bb_dev
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
-    build:
-      args:
-        ENV: development
-        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bb_dev
-        SPRING_DATASOURCE_USERNAME: postgres
-        SPRING_DATASOURCE_PASSWORD: password
 volumes:
   app_postgres:

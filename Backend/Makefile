@@ -1,4 +1,5 @@
 env = development
+env_file = .env.$(env)
 build =
 silent =
 build_flag=
@@ -12,10 +13,11 @@ ifdef silent
 	silent_flag = --detach
 endif
 
-compose = docker-compose
+compose_file = docker-compose.override.yml
 ifeq ($(env), production)
-	compose = docker-compose -f docker-compose.yml -f docker-compose.production.yml --env-file .env
+	compose_file = docker-compose.production.yml
 endif
+compose = docker-compose -f docker-compose.yml -f $(compose_file) --env-file $(env_file)
 exec = $(compose) exec app
 
 all:
@@ -26,6 +28,10 @@ up:
 	${compose} up --abort-on-container-exit --renew-anon-volumes --remove-orphans $(build_flag) $(silent_flag)
 down:
 	${compose} down
+config:
+	${compose} config
+db:
+	${compose} up --abort-on-container-exit --renew-anon-volumes --remove-orphans $(build_flag) $(silent_flag) db
 env:
 	export $(cat .env.development | xargs)
 junit:

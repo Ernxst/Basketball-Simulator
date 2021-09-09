@@ -173,3 +173,4 @@ target
 Dockerfile
 Makefile
 docker-compose*
+.env.production

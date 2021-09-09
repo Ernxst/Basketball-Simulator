@@ -1,10 +1,12 @@
-version: "3.9"
+version: "3.8"
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENV: ${ENV}
     command: [ "java" ,"-jar", "app.jar" ]
     entrypoint: /usr/bin/entrypoint.sh
     ports:
-      - "8100:8100"
+      - "${PORT}:8100"

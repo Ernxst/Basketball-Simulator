@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Simple class to output logging info.
@@ -20,7 +23,9 @@ public class AppLogger {
      */
     public static void log(String message) {
         if (LOG_API_CALLS) {
-            String formattedDate = new SimpleDateFormat("dd/MM/yyyy @ HH:mm:ss").format(System.currentTimeMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy @ HH:mm:ss", Locale.ENGLISH);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+            String formattedDate = dateFormat.format(new Date());
             System.out.println("[INFO] (" + formattedDate + ") " + message);
         }
     }

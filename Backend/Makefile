@@ -26,13 +26,19 @@ up:
 	${compose} up --abort-on-container-exit --renew-anon-volumes --remove-orphans $(build_flag) $(silent_flag)
 down:
 	${compose} down
+env:
+	export $(cat .env.development | xargs)
 junit:
-	${exec} mvn surefire-report:report && ${exec} make server
+	make env
+	mvn surefire-report:report && make server
 unit-test:
-	${exec} mvn test
+	make env
+	mvn test
 coverage:
-	${exec} mvn jacoco:prepare-agent test jacoco:report && ${exec} make server
+	make env
+	mvn jacoco:prepare-agent test jacoco:report && make server
 pmd:
+	make env
 	mvn pmd:pmd && make server
 server:
 	cd target/site/ && python3 -m http.server

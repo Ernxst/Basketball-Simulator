@@ -78,17 +78,6 @@ public class PlayerStats extends LeagueItem<PlayerStats.PlayerStatsKey> {
     @JoinColumn(name = "SEASON", insertable = false, updatable = false)
     private LeagueSeason leagueSeason;
 
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PlayerStatsKey implements Serializable {
-        private int leagueID;
-        private int playerID;
-        private int season;
-    }
-
     @Override
     public PlayerStatsKey getId() {
         return new PlayerStatsKey(leagueID, season, playerID);
@@ -121,5 +110,16 @@ public class PlayerStats extends LeagueItem<PlayerStats.PlayerStatsKey> {
                 "\n    threePointersAttempted: " + threePointersAttempted +
                 "\n    threePointersMade: " + threePointersMade +
                 "\n}";
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PlayerStatsKey implements Serializable {
+        private int leagueID;
+        private int playerID;
+        private int season;
     }
 }

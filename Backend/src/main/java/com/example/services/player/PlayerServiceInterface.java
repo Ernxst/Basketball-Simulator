@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface PlayerServiceInterface {
     /**
-     *
      * @param playerID
      * @return
      * @throws PlayerNotFoundException
@@ -16,27 +15,23 @@ public interface PlayerServiceInterface {
     List<Player> findPlayersByPlayerIDsIn(Iterable<Integer> playerIDs);
 
     /**
-     *
      * @param teamID
      * @return
      */
     List<Player> findAllPlayersInTeam(int teamID);
 
     /**
-     *
      * @param player
      */
     void deletePlayer(Player player);
 
     /**
-     *
      * @param player
      * @return
      */
     int insertPlayer(Player player);
 
     /**
-     *
      * @param players
      * @return
      */

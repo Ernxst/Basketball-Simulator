@@ -3,21 +3,26 @@ package com.example.config;
 import com.example.Application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.List;
 
 @EnableWebMvc
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addResourceHandlers (ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/swagger-ui.html**")
+                .addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+        registry.
+                addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
@@ -26,10 +31,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods("GET", "POST", "DELETE")
+                .allowedMethods("GET", "POST", "DELETE", "PATCH", "OPTIONS", "PUT")
                 .allowedHeaders("*")
                 .allowedOrigins("http://localhost:" + Application.APP_PORT, "https://basketball-simulator-4f6a7.web.app") // Only allow requests from the frontend.
-//                .allowedOrigins("*") // For debugging
                 .allowCredentials(true) // Allow authenticated requests.
                 .maxAge(3600);
     }

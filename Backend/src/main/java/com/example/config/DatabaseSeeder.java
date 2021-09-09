@@ -145,7 +145,7 @@ public class DatabaseSeeder {
 
     private void insertTeamIcons() {
         String[] icons = new String[]{"icon1", "icon2", "icon3", "icon4"};
-        for (String icon: icons) {
+        for (String icon : icons) {
             insertValues("INSERT INTO TEAM_ICON (ICON) VALUES (?) ON CONFLICT (ICON) DO NOTHING;", Collections.singletonList(icon));
         }
     }

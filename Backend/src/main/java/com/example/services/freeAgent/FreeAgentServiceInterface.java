@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface FreeAgentServiceInterface {
     /**
-     *
      * @param playerID
      * @return
      * @throws FreeAgentNotFoundException
@@ -15,14 +14,12 @@ public interface FreeAgentServiceInterface {
     FreeAgent findFreeAgentByPlayerID(int playerID) throws FreeAgentNotFoundException;
 
     /**
-     *
      * @param playerIDs
      * @return
      */
     List<FreeAgent> findFreeAgentsByPlayerIDs(List<Integer> playerIDs);
 
     /**
-     *
      * @param freeAgent
      */
     void deleteFreeAgent(FreeAgent freeAgent);
@@ -30,7 +27,6 @@ public interface FreeAgentServiceInterface {
     int insertFreeAgent(FreeAgent freeAgent);
 
     /**
-     *
      * @param freeAgents
      * @return
      */

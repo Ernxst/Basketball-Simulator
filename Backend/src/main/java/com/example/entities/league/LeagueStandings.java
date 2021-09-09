@@ -46,17 +46,6 @@ public class LeagueStandings extends LeagueItem<LeagueStandings.LeagueStandingsK
     @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
     private Team team;
 
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class LeagueStandingsKey implements Serializable {
-        private int leagueID;
-        private int season;
-        private int teamID;
-    }
-
     @Override
     public LeagueStandingsKey getId() {
         return new LeagueStandingsKey(leagueID, season, teamID);
@@ -79,5 +68,16 @@ public class LeagueStandings extends LeagueItem<LeagueStandings.LeagueStandingsK
                 "\n    losses  : " + losses +
                 "\n    team    : " + team +
                 "\n}";
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LeagueStandingsKey implements Serializable {
+        private int leagueID;
+        private int season;
+        private int teamID;
     }
 }

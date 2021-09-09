@@ -16,7 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService implements UserServiceInterface {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
      * Load a user from the database by their (unique) username.
@@ -86,7 +86,7 @@ public class UserService implements UserServiceInterface {
     /**
      * Test whether an entered password matches the password for a given user.
      *
-     * @param user            the user whose password is being matched to.
+     * @param user        the user whose password is being matched to.
      * @param rawPassword the input password.
      * @return a boolean representing whether the passwords match.
      */

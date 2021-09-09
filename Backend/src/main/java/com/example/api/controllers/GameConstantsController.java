@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/constants")
-@Api(tags="Constants")
+@Api(tags = "Constants")
 public class GameConstantsController {
 
     @GetMapping(value = "/max_leagues", produces = "application/json")

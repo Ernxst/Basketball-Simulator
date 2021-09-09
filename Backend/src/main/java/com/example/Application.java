@@ -15,10 +15,10 @@ import java.util.Properties;
  */
 @SpringBootApplication
 public class Application {
-    // The port this backend runs on.
-    public static String PORT;
     // The port the frontend runs on.
     public static final String APP_PORT = "8080";
+    // The port this backend runs on.
+    public static String PORT;
 
     private static String getPort() throws IOException {
         String envPort = System.getenv("PORT");

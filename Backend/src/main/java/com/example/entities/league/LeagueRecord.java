@@ -51,37 +51,6 @@ public class LeagueRecord extends LeagueItem<LeagueRecord.LeagueRecordKey> {
     @JoinColumn(name = "SEASON", insertable = false, updatable = false)
     private LeagueSeason leagueSeason;
 
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class LeagueRecordKey implements Serializable {
-        private int leagueID;
-        private int season;
-        private String title;
-    }
-
-    public enum Record {
-        MOST_PTS("Most Points"), MOST_REB("Most Rebounds"),
-        MOST_AST("Most Assists"), MOST_STL("Most Steals"),
-        MOST_BLK("Most Blocks"), MOST_TO("Most Turnovers"),
-        MOST_FTA("Most Free Throws Attempted"), MOST_FTM("Most Free Throws Made"),
-        MOST_FGA("Most Field Goals Attempted"), MOST_FGM("Most Field Goals Made"),
-        MOST_3PA("Most Three Pointers Attempted"), MOST_3PM("Most Three Pointers Made");
-
-        public static final Record[] allRecords = values();
-        private final String label;
-
-        Record(String label) {
-            this.label = label;
-        }
-
-        String getLabel() {
-            return label;
-        }
-    }
-
     @Override
     public LeagueRecordKey getId() {
         return new LeagueRecordKey(leagueID, season, title);
@@ -104,5 +73,36 @@ public class LeagueRecord extends LeagueItem<LeagueRecord.LeagueRecordKey> {
                 "\n    Season   : " + season +
                 "\n    Date Set : " + dateSet +
                 "\n}";
+    }
+
+    public enum Record {
+        MOST_PTS("Most Points"), MOST_REB("Most Rebounds"),
+        MOST_AST("Most Assists"), MOST_STL("Most Steals"),
+        MOST_BLK("Most Blocks"), MOST_TO("Most Turnovers"),
+        MOST_FTA("Most Free Throws Attempted"), MOST_FTM("Most Free Throws Made"),
+        MOST_FGA("Most Field Goals Attempted"), MOST_FGM("Most Field Goals Made"),
+        MOST_3PA("Most Three Pointers Attempted"), MOST_3PM("Most Three Pointers Made");
+
+        public static final Record[] allRecords = values();
+        private final String label;
+
+        Record(String label) {
+            this.label = label;
+        }
+
+        String getLabel() {
+            return label;
+        }
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LeagueRecordKey implements Serializable {
+        private int leagueID;
+        private int season;
+        private String title;
     }
 }

@@ -10,8 +10,8 @@ import java.text.SimpleDateFormat;
  * Simple class to output logging info.
  */
 public class AppLogger {
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
     public static final boolean LOG_API_CALLS = true;
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     /**
      * Log a message to the console.

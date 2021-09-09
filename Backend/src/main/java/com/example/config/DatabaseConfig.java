@@ -16,23 +16,21 @@ import java.sql.SQLException;
 @Configuration
 public class DatabaseConfig {
 
-    @Value("${spring.datasource.url}")
     private String dbUrl;
+    private String username;
+    private String password;
+    private DataSource dataSourceObj = null;
+    private String jdbcUrl;
 
     @Value("${spring.datasource.driverClassName}")
     private String driver;
 
-    @Value("${spring.datasource.username}")
-    private String username;
-
-    @Value("${spring.datasource.password}")
-    private String password;
-
-    private DataSource dataSourceObj = null;
-    private String jdbcUrl;
-
     @Bean
     public DataSource dataSource() throws URISyntaxException, SQLException {
+        dbUrl = System.getenv("SPRING_DATASOURCE_URL");
+        username = System.getenv("SPRING_DATASOURCE_USER");
+        password = System.getenv("SPRING_DATASOURCE_PASSWORD");
+
         if (dataSourceObj == null) {
             AppLogger.log("Creating new data source");
             dataSourceObj = createDataSource();
@@ -76,7 +74,7 @@ public class DatabaseConfig {
     /**
      * Create tables and insert default data into the database.
      */
-    private void seed() throws SQLException {
+    private void seed() throws SQLException, URISyntaxException {
         AppLogger.log("=== Seeding Database ===");
         DatabaseSeeder seeder = new DatabaseSeeder(connection());
         seeder.seed();
@@ -84,7 +82,7 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public Connection connection() throws SQLException {
-        return dataSourceObj.getConnection();
+    public Connection connection() throws SQLException, URISyntaxException {
+        return dataSource().getConnection();
     }
 }

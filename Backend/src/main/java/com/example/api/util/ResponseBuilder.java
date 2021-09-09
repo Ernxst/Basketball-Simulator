@@ -6,13 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 public class ResponseBuilder<T extends AbstractResponse> {
+    private final ResponseEntity.BodyBuilder builder;
     private T body;
     private String jwtToken;
-    private final ResponseEntity.BodyBuilder builder;
 
     public ResponseBuilder(HttpStatus status) {
         // TODO: Add all necessary headers
-         builder = ResponseEntity.status(status.value())
+        builder = ResponseEntity.status(status.value())
                 .contentType(MediaType.APPLICATION_JSON);
     }
 

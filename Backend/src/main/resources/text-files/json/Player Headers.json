@@ -1,16 +1,16 @@
 {
-  "Player Headers": [
-    "Position",
-    "Rating",
-    "Potential",
-    "Age",
-    "Birth Date",
-    "College",
-    "Years Pro",
-    "Height (Feet, Inches)",
-    "Weight (Lbs)",
-    "Wingspan (Feet, Inches)",
-    "Standing Vertical Leap (Inches)",
-    "Maximum Vertical Leap (Inches)"
-  ]
+    "Player Headers": [
+        "Position",
+        "Rating",
+        "Potential",
+        "Age",
+        "Birth Date",
+        "College",
+        "Years Pro",
+        "Height (Feet, Inches)",
+        "Weight (Lbs)",
+        "Wingspan (Feet, Inches)",
+        "Standing Vertical Leap (Inches)",
+        "Maximum Vertical Leap (Inches)"
+    ]
 }

@@ -4,10 +4,10 @@
     --navbar-width: 56px;
     --max-sidebar-width: 360px;
 
-    --button-radius: 10px;
-    --nav-button-radius: 5px;
-    --card-radius: 12px;
-    --input-radius: 6px;
+    --button-radius: 0;
+    --nav-button-radius: 0;
+    --card-radius: 0;
+    --input-radius: 0;
 
     --dark-blue: #291DA0;
     --blue: #2F44AF;

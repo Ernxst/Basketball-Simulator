@@ -93,7 +93,7 @@ export default {
 }
 
 .league-card {
-    border-radius: 8px;
+    border-radius: var(--card-radius);
     cursor: pointer;
     border: 1px solid #FFF;
     transition: .2s ease-in-out transform;
@@ -130,7 +130,7 @@ export default {
 .card-img {
     z-index: 0;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: var(--card-radius);
 }
 
 .card-img img {

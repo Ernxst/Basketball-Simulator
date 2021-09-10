@@ -35,27 +35,25 @@ export const mockApi = new MockAdapter(api, {});
 
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,
     { username: validLoginUsername, password: validLoginPassword })
-    .reply(200, {
-        username: validLoginUsername, access_token: "aaaa"
+    .reply(201, {
+        username: validLoginUsername, token: "aaaa"
     });
 
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,
     { username: validRegisterUsername, password: validRegisterPassword })
-    .reply(200, {
-        username: validRegisterUsername, access_token: "aaaa"
+    .reply(201, {
+        username: validRegisterUsername, token: "aaaa"
     });
 
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,
     { username: validLoginUsername, password: incorrectPassword })
-    .reply(200, {
-        message: "Login failed, either your username or password was incorrect, please try again.",
-        code: "UNAUTHORIZED"
+    .reply(401, {
+        error: "Login failed, either your username or password was incorrect, please try again.",
     });
 
 mockApi.onPost(FULL_USER_LOGIN_ENDPOINT,
     { username: invalidLoginUsername, password: incorrectPassword })
-    .reply(200, {
-        message: `Login failed, the username ${invalidLoginUsername} does not exist; are you trying to sign up?`,
-        code: "UNAUTHORIZED"
+    .reply(401, {
+        error: `Login failed, the username ${invalidLoginUsername} does not exist; are you trying to sign up?`,
     });
 

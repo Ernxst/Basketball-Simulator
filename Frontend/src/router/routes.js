@@ -1,10 +1,13 @@
+import { getTokenFromStorage, getUsernameFromToken } from "../services/jwt.service.ts";
+
+
 export const routes = [
     {
         path: "/",
         redirect: (route) => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            return user && user.access_token
-                ? `/${user.username}/select`
+            const token = getTokenFromStorage();
+            return token
+                ? `/${getUsernameFromToken(token)}/select`
                 : "/welcome";
         },
     },
@@ -37,6 +40,7 @@ export const routes = [
             requiresAuth: true,
         },
     },
+    // TODO: :team should be :league_id
     {
         path: "/:username/:team/play",
         component: () => import(/* webpackChunkName: "play", webpackPrefetch: true */ "../app/views/home/Home.vue"),
@@ -51,6 +55,7 @@ export const routes = [
             requiresAuth: true,
         },
     },
+    // TODO: :team should be :league_id
     {
         path: "/:username/:team/search",
         component: () => import(/* webpackChunkName: "search", webpackPrefetch: true */ "../app/views/search/Search.vue"),
@@ -65,6 +70,7 @@ export const routes = [
             requiresAuth: true,
         },
     },
+    // TODO: :team should be :league_id
     {
         path: "/:username/:team/insights",
         component: () => import(/* webpackChunkName: "insights", webpackPrefetch: true */ "../app/views/insights/Insights.vue"),
@@ -79,6 +85,7 @@ export const routes = [
             requiresAuth: true,
         },
     },
+    // TODO: :team should be :league_id
     {
         path: "/:username/:team/team",
         component: () => import(/* webpackChunkName: "team", webpackPrefetch: true */ "../app/views/team/Team.vue"),
@@ -93,6 +100,7 @@ export const routes = [
             requiresAuth: true,
         },
     },
+    // TODO: :team should be :league_id
     {
         path: "/:username/:team/settings",
         component: () => import(/* webpackChunkName: "settings", webpackPrefetch: true */ "../app/views/settings/Settings.vue"),

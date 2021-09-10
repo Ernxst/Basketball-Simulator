@@ -26,6 +26,7 @@
     "@supabase/supabase-js": "^1.15.0",
     "axios-mock-adapter": "^1.19.0",
     "firebase-storage-lite": "^0.3.0",
+    "jwt-decode": "^3.1.2",
     "madge": "^5.0.1",
     "preload-webpack-plugin": "^3.0.0-beta.4",
     "serve": "^11.3.2",

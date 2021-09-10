@@ -84,27 +84,18 @@ export default {
             if (messageAndField["message"] === "valid") {
                 this.loading = true;
                 this.$store.dispatch("auth/register", this.user).then(
-                    (registerResponse) => {
-                        this.$store.dispatch("auth/login", {
-                            username: registerResponse.username,
-                            password: this.user.password
-                        }).then((loginResponse) => {
-                            this.loading = false;
+                    () => {
+                        this.$nextTick(() => {
                             this.$router.push(
                                 {
                                     name: "team-select",
-                                    params: { "username": registerResponse.username }
+                                    params: { "username": this.user.username }
                                 });
                         });
                     },
                     (error) => {
-                        const message = (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                            error.message ||
-                            error.toString();
                         this.loading = false;
-                        alert(message);
+                        alert(error.error);
                         this.clearSensitiveInputs();
                     }
                 );

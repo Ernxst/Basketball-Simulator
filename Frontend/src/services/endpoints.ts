@@ -1,6 +1,6 @@
 const getBaseUrl = (environment: string): string => {
     const PORT: number = 8100;
-    return (environment == 'production') ? 'https://basketball-simulator-app.herokuapp.com/' :
+    return (environment === 'production') ? 'https://basketball-simulator-app.herokuapp.com/' :
         `http://localhost:${PORT}/`;
 };
 export const BASE_URL: string = getBaseUrl('development');

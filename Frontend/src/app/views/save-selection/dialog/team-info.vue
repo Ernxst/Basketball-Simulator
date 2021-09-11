@@ -1,11 +1,11 @@
 <template>
     <section class="team-info-form centred">
-        <div class="container centred" ref="team-name-container">
+        <div class="param-container centred" ref="team-name-container">
             <autocomplete-input id="team-name-input" :object="leagueParams" :suggestions="teamNames"
                                 icon="groups" key-name="team_name" label="Team Name" placeholder="Lakers"
                                 type="text"></autocomplete-input>
         </div>
-        <div class="container centred" ref="state-container">
+        <div class="param-container centred" ref="state-container">
             <autocomplete-input id="team-state-input" :object="leagueParams" :suggestions="teamStates"
                                 icon="place" key-name="team_state" label="Team State"
                                 placeholder="Los Angeles" type="text"></autocomplete-input>

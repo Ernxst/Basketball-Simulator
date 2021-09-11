@@ -5,8 +5,8 @@
             <span class="min value centred" v-if="show_limits">{{ min }}</span>
             <div class="slider centred">
                 <input type="range" :min="min" :max="max" class="slider" :id="id" ref="slider"
-                       v-model="object[attribute]" :step="step" @input="setPos">
-                <span class="current-value noselect centred" ref="value">{{ value }}</span>
+                       :step="step" :value="modelValue" @input="update">
+                <span class="current-value noselect centred" ref="value">{{ modelValue }}</span>
             </div>
             <span class="max value centred" v-if="show_limits">{{ max }}</span>
         </div>
@@ -19,38 +19,37 @@ export default {
     props: {
         min: { default: 0, type: Number },
         max: { default: 100, type: Number },
-        start: { default: 50, type: Number },
+        modelValue: { default: 50, type: Number },
         step: { default: 1, type: Number },
         show_limits: { default: false, type: Boolean },
         id: String,
         label: String,
-        object: Object,
-        attribute: String
     },
     computed: {
         range() {
             return this.max - this.min;
         },
-        value() {
-            return this.object[this.attribute];
-        }
+    },
+    beforeUpdate() {
+        this.setPos(this.modelValue);
     },
     methods: {
-        setPos() {
-            const percentage = (this.value - this.min) / this.range;
+        update(e) {
+            const value = e.target.value;
+            this.$emit('update:modelValue', value);
+            this.setPos(value);
+        },
+        setPos(value) {
+            const percentage = (value - this.min) / this.range;
             const width = this.$refs.slider.clientWidth;
             const labelWidth = this.$refs.value.clientWidth;
             this.$refs.value.style.left = `${(percentage * (width - labelWidth))}px`;
         },
     },
     mounted() {
-        this.$nextTick(() => {
-            this.setPos();
+        window.addEventListener('resize', () => {
+            this.setPos(this.modelValue);
         });
-        window.addEventListener('resize', this.setPos);
-    },
-    beforeUnmount() {
-        window.removeEventListener('resize', this.setPos);
     }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="empty-card centred">
         <p class="bg-text">EMPTY SLOT</p>
-        <span class="add-icon material-icons">add</span>
+        <span class="add-icon material-icons" v-on:click="$emit('newLeague')">add</span>
     </div>
 </template>
 

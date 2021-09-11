@@ -5,22 +5,26 @@ const TOKEN_KEY_NAME = "token";
 
 const decodeToken = (token: string) => {
     return jwtDecode<JwtPayload>(token);
-}
+};
 
-export const getTokenFromStorage = () : string => {
+export const getTokenFromStorage = (): string => {
     return localStorage.getItem(TOKEN_KEY_NAME);
-}
+};
 
-export const setJwtToken = (token: string) : void => {
+export const setJwtToken = (token: string): void => {
     localStorage.setItem(TOKEN_KEY_NAME, token);
-}
+};
 
-export const removeJwtToken = () : void => {
-    localStorage.removeItem(TOKEN_KEY_NAME)
-}
+export const removeJwtToken = (): void => {
+    localStorage.removeItem(TOKEN_KEY_NAME);
+};
 
-export const getUsernameFromToken = (token : string) : string => {
+export const getUsernameFromToken = (token: string): string => {
     const decoded = decodeToken(token);
-    console.log(decoded)
     return decoded.sub;
-}
+};
+
+export const isExpired = (token: string): boolean => {
+    const decoded = decodeToken(token);
+    return decoded.exp < Date.now();
+};

@@ -11,6 +11,7 @@
     "build": "webpack --mode production  --config webpack.prod.js",
     "start:dev": "set -e; webpack --mode development --config webpack.dev.js; open http://localhost:8080 & serve -s dist -p 8080 --no-clipboard",
     "start": "set -e; webpack --mode production  --config webpack.prod.js; open http://localhost:8080 & serve -s dist -p 8080 --no-clipboard",
+    "serve": "webpack serve --port 8080 --output-path dist --config webpack.dev.js --hot --open",
     "unused-modules": "npx depcheck",
     "profile": "webpack --profile --json > stats.json",
     "deploy": "set -e; build; firebase deploy",
@@ -29,9 +30,11 @@
     "jwt-decode": "^3.1.2",
     "madge": "^5.0.1",
     "preload-webpack-plugin": "^3.0.0-beta.4",
-    "serve": "^11.3.2",
+    "serve": "^12.0.1",
     "ts-jest": "^26.5.6",
+    "v-calendar": "^3.0.0-alpha.5",
     "vue-router": "^4.0.0-rc.1",
+    "webpack-dev-server": "^4.2.0",
     "webpack-merge": "^5.4.0"
   },
   "devDependencies": {
@@ -41,6 +44,7 @@
     "@babel/plugin-transform-runtime": "^7.12.17",
     "@babel/preset-env": "^7.12.17",
     "@fullcalendar/list": "^5.3.1",
+    "@types/node": "^16.9.1",
     "@vue/compiler-sfc": "^3.0.11",
     "@vue/reactivity": "3.0.2",
     "@vue/runtime-core": "3.0.2",

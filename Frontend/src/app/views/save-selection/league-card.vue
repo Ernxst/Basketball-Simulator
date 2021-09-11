@@ -27,7 +27,7 @@
                 </table>
             </div>
         </div>
-        <empty-league-card v-else></empty-league-card>
+        <empty-league-card @newLeague="$emit('newLeague')" v-else></empty-league-card>
     </div>
 </template>
 

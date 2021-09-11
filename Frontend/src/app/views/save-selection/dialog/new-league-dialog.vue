@@ -168,4 +168,13 @@ export default {
         border-color: var(--flat-red);
     }
 }
+
+@media (max-width: 1200px) {
+    .new-league-dialog {
+        max-width: 97%;
+        width: 100%;
+        max-height: 95vh;
+        height: 100%;
+    }
+}
 </style>

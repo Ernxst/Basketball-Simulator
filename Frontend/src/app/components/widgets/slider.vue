@@ -44,7 +44,6 @@ export default {
         },
     },
     mounted() {
-        this.object[this.attribute] = this.start;
         this.$nextTick(() => {
             this.setPos();
         });

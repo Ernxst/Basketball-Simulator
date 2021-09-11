@@ -93,4 +93,15 @@ export default {
 .modal-window .content .close-icon:hover {
     color: var(--flat-red);
 }
+
+@media (max-width: 1200px) {
+    .modal-window .content {
+        padding: 12px;
+    }
+
+    .modal-window .content .close-icon {
+        top: 8px;
+        right: 8px;
+    }
+}
 </style>

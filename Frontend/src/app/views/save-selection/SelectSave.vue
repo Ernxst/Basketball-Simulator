@@ -112,12 +112,18 @@ export default {
 
 .logout-btn {
     padding: 1px 28px;
-    margin-left: auto;
+    width: 100%;
+    margin: 0;
 }
 
 @media (min-width: 1200px) {
     .select-save {
         padding: 48px 96px;
+    }
+
+    .logout-btn {
+        margin-left: auto;
+        width: unset;
     }
 
     .league-container {

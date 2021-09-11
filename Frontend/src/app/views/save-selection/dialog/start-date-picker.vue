@@ -84,7 +84,7 @@ export default {
     margin-top: 0;
     margin-bottom: 8px;
     line-height: 90%;
-    font-size: 14px;
+    font-size: 16px;
     color: #555;
     width: 100%;
 }

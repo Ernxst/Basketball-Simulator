@@ -82,6 +82,7 @@ export default {
     padding: 32px 24px;
     overflow-y: auto;
     max-height: 100vh;
+    align-items: flex-start;
 }
 
 .header-section, .league-container {

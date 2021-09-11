@@ -1,5 +1,5 @@
 <template>
-    <span :class="tooltipClass">
+    <span :class="tooltipClass" v-show="text !== ''">
         {{ text }}
     <slot></slot>
     </span>
@@ -19,7 +19,7 @@ export default {
         },
         delay: {
             type: Number,
-            default: 667,
+            default: 500,
         }
     },
     computed: {
@@ -77,5 +77,6 @@ export default {
     max-width: 25vw;
     padding: 4px 8px;
     cursor: default;
+    z-index: 100;
 }
 </style>

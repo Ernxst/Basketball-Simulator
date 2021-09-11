@@ -140,7 +140,7 @@ h1 {
         background-clip: padding-box;
         background: rgba(255, 255, 255, .2);
         border: 1px solid rgba(255, 255, 255, .3);
-        border-radius: 8px;
+        border-radius: var(--card-radius);
     }
 
     .text-input .input-container {

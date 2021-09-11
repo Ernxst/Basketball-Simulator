@@ -40,12 +40,12 @@ public class UserService implements UserServiceInterface {
      */
     public User register(User user) throws UsernameTakenException {
         String username = user.getUsername();
-        if (!usernameExists(username)) {
-            String encryptedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encryptedPassword);
-            return userRepository.save(user);
+        if (usernameExists(username)) {
+            throw new UsernameTakenException(MessageFormat.format("The username {0} is already in use, please try another. Did you mean to sign in?", username));
         }
-        throw new UsernameTakenException(MessageFormat.format("The username {0} is already in use, please try another. Did you mean to sign in?", username));
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+        return userRepository.save(user);
     }
 
     /**

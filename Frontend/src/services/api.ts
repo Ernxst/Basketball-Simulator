@@ -1,43 +1,34 @@
 import axios, { AxiosResponse, Method } from "axios";
 import { BASE_URL } from "./endpoints";
-import { ApiErrorResponse, ApiResponse } from "../assets/types.js";
+import { ApiErrorResponse, ApiResponse, StringAnyMap, StringStringMap } from "../assets/types.js";
+import authHeader from "./auth-header";
 
 
 export async function makeRequest(endpoint: string, method: Method,
-                                  params: any = {}, body: any = {}): Promise<ApiResponse> {
-    return api.request({
-        method: method,
-        url: endpoint,
-        params,
-        data: body,
-    }).then(
+                                  params: StringAnyMap = {}, body: any = {},
+                                  auth: boolean = false): Promise<ApiResponse> {
+    const config: StringAnyMap = {
+        method: method, url: endpoint,
+        params: params, data: body,
+    };
+    if (auth === true)
+        config["headers"] = authHeader();
+    return api.request(config).then(
         (response: AxiosResponse) => {
-            if (response && response.status === 200) {
-                return response.data;
-            }
-            return {
-                status: response.status,
-                statusText: response.statusText,
-            };
+            return response.data;
         },
         (error: ApiErrorResponse) => {
-            return {
-                status: error.response.status,
-                statusText: error.message
-            }
+            return error.response.data;
         }
     );
 }
 
+const defaultHeaders: StringStringMap = {
+    "Accept": "application/json",
+    "Content-Type": "application/json;charset=UTF-8",
+};
 export const api = axios.create({
     baseURL: BASE_URL,
     timeout: 20000,
-    headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT",
-        "Access-Control-Max-Age": "1000",
-        "Access-Control-Allow-Headers": "x-requested-with, Content-Type, origin, authorization, accept, client-security-token",
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-    },
+    headers: defaultHeaders
 });

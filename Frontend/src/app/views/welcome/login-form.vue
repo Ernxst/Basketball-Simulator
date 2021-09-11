@@ -61,13 +61,7 @@ export default {
                     // On failure
                     (error) => {
                         this.loading = false;
-                        const message = (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                            error.message ||
-                            error.toString();
-
-                        alert(message);
+                        alert(error.error);
                         this.clearSensitiveInputs();
                     }
                 );

@@ -73,6 +73,9 @@ deploy:
 	heroku container:release web -a basketball-simulator-web
 push:
 	git push production main
+merge:
+	git pull origin main
+	git push
 reset:
 	heroku pg:reset -a --confirm basketball-simulator-web
 .PHONY: list

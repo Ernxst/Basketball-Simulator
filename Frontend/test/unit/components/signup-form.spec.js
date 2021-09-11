@@ -10,18 +10,17 @@ describe("Signup Form", () => {
     beforeAll(() => {
         mockApi.onPost(FULL_USER_REGISTER_ENDPOINT,
             { username: validRegisterUsername, password: validRegisterPassword })
-            .reply(200, {
-                username: validRegisterUsername, message: "Registration success", code: "OK"
+            .reply(201, {
+                username: validRegisterUsername, token: "aaa"
             });
 
         mockApi.onPost(FULL_USER_REGISTER_ENDPOINT,
             { username: takenUsername, password: validRegisterPassword })
-            .reply(200, {
-                message: `The username ${takenUsername} is already in use, please try another. Did you mean to sign in?`,
-                code: "UNAUTHORIZED"
+            .reply(409, {
+                error: `The username ${takenUsername} is already in use, please try another. Did you mean to sign in?`,
             });
     });
-    
+
     const testRegister = async (username, password, repeatPassword, success, message) => {
         const routerSpy = spyOn(mockRouter, "push");
         const alertSpy = spyOn(window, "alert");

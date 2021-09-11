@@ -87,7 +87,7 @@ export default {
     display: inline-block;
     padding: 4px 6px;
     background: var(--blue);
-    border-radius: 4px;
+    border-radius: var(--nav-button-radius);
 }
 
 .team-record, .team-record > * {

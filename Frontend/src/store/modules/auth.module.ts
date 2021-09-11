@@ -2,17 +2,18 @@ import AuthService from './../../services/auth.service';
 import { User } from "../../assets/types";
 // @ts-ignore
 import { Commit } from "vuex";
+import { getTokenFromStorage } from "../../services/jwt.service";
 
 
 interface State {
     status: { loggedIn: boolean },
-    user: User | null
+    token: string | null
 }
 
-const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user
-    ? { status: { loggedIn: true }, user }
-    : { status: { loggedIn: false }, user: null };
+const token = getTokenFromStorage();
+const initialState = token
+    ? { status: { loggedIn: true }, token }
+    : { status: { loggedIn: false }, token: null };
 
 export const auth = {
     namespaced: true,
@@ -25,9 +26,9 @@ export const auth = {
          */
         login({ commit }: { commit: Commit }, user: User): Promise<any> {
             return AuthService.login(user).then(
-                (response: { username: string, access_token: string }) => {
-                    if (response.access_token) {
-                        commit('loginSuccess', response);
+                (response: { username: string, token: string }) => {
+                    if (response.token) {
+                        commit('loginSuccess', response.token);
                         return Promise.resolve(response);
                     }
                     commit('loginFailure');
@@ -50,9 +51,9 @@ export const auth = {
          */
         register({ commit }: { commit: Commit }, user: User): Promise<any> {
             return AuthService.register(user).then(
-                (response: { username : string, message: string, code: string }) => {
-                    if (response.username) {
-                        commit('registerSuccess');
+                (response: { username: string, token: string }) => {
+                    if (response.token) {
+                        commit('registerSuccess', response.token);
                         return Promise.resolve(response);
                     }
                     commit('registerFailure');
@@ -66,20 +67,21 @@ export const auth = {
         }
     },
     mutations: {
-        loginSuccess(state: State, user: User) {
+        loginSuccess(state: State, token: string) {
             state.status.loggedIn = true;
-            state.user = user;
+            state.token = token;
         },
         loginFailure(state: State) {
             state.status.loggedIn = false;
-            state.user = null;
+            state.token = null;
         },
         logout(state: State) {
             state.status.loggedIn = false;
-            state.user = null;
+            state.token = null;
         },
-        registerSuccess(state: State) {
-            state.status.loggedIn = false;
+        registerSuccess(state: State, token : string) {
+            state.status.loggedIn = true;
+            state.token = token;
         },
         registerFailure(state: State) {
             state.status.loggedIn = false;

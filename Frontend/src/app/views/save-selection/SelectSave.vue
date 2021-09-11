@@ -2,39 +2,33 @@
     <main class="select-save full-page noselect">
         <section class="header-section">
             <h1 class="title">Select League</h1>
-            <p class="subtitle">Welcome back <b>{{ $route.params.username }}</b>. {{ labelText }}</p>
+            <p class="subtitle">Welcome back <b>{{ $route.params.username }}</b>. {{ labelText() }}</p>
         </section>
         <section class="league-container">
             <league-card v-for="league in leagues" :current-date="league['current-date']"
                          :current-season="league['current-season']" :last-played="league['last-played']"
                          :league-name="league['league-name']" :losses="league['losses']"
-                         :team-city="league['team-city']"
-                         :team-icon="league['team-icon']" :team-name="league['team-name']"
-                         :wins="league['wins']">
+                         :team-city="league['team-city']" :team-icon="league['team-icon']"
+                         :team-name="league['team-name']" :wins="league['wins']"
+                         @newLeague="newLeague">
             </league-card>
         </section>
         <flat-button class="logout-btn" text="Log out" v-on:click="logout"></flat-button>
     </main>
+    <new-league-dialog ref="dialog"></new-league-dialog>
 </template>
 
 <script>
 import ConstantsService from "../../../services/constants.service.ts";
 import FlatButton from "../../components/widgets/buttons/flat-button.vue";
+import NewLeagueDialog from "./dialog/new-league-dialog.vue";
 import LeagueCard from "./league-card.vue";
 
 
 export default {
     name: "SelectSave",
-    components: { LeagueCard, FlatButton },
+    components: { NewLeagueDialog, LeagueCard, FlatButton },
     computed: {
-        labelText() {
-            if (this.storedLeagues.length === 0)
-                return "You have no existing leagues, click a save slot below to create a new league.";
-            const base = "Select a league to continue with below. ";
-            if (this.storedLeagues.length === ConstantsService.maxTeamsInLeague())
-                return base + "You have reached the maximum number of leagues, you will have to delete an existing save to create a new league.";
-            return base + " Click an empty save slot to create a new league.";
-        },
         storedLeagues() {
             return [{
                 "league-name": "MyLeague",
@@ -52,7 +46,28 @@ export default {
             return this.storedLeagues.concat([{}, {}]);
         }
     },
+    beforeCreate() {
+        ConstantsService.maxTeamsInLeague().then((maxLeagues) => {
+            this.maxLeagues = maxLeagues;
+        });
+    },
+    data() {
+        return {
+            maxLeagues: 0,
+        };
+    },
     methods: {
+        newLeague() {
+            this.$refs.dialog.show();
+        },
+        labelText() {
+            if (this.storedLeagues.length === 0)
+                return "You have no existing leagues, click a save slot below to create a new league.";
+            const base = "Select a league to continue with below. ";
+            if (this.storedLeagues.length === this.maxLeagues)
+                return base + `You have reached the maximum number of leagues (${this.maxLeagues}), you will have to delete an existing save to create a new league.`;
+            return base + " Click an empty save slot to create a new league.";
+        },
         logout() {
             this.$store.dispatch("auth/logout").then(_ => {
                 this.$router.go();
@@ -97,12 +112,18 @@ export default {
 
 .logout-btn {
     padding: 1px 28px;
-    margin-left: auto;
+    width: 100%;
+    margin: 0;
 }
 
 @media (min-width: 1200px) {
     .select-save {
         padding: 48px 96px;
+    }
+
+    .logout-btn {
+        margin-left: auto;
+        width: unset;
     }
 
     .league-container {

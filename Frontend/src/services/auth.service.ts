@@ -3,6 +3,7 @@ import axios from 'axios';
 import { User } from "../assets/types";
 import { RELATIVE_USER_LOGIN_ENDPOINT, RELATIVE_USER_REGISTER_ENDPOINT } from "./endpoints";
 import { makeRequest } from "./api";
+import { removeJwtToken, setJwtToken } from "./jwt.service";
 
 
 class AuthService {
@@ -15,19 +16,18 @@ class AuthService {
         return makeRequest(RELATIVE_USER_LOGIN_ENDPOINT, "POST", {}, {
             username: user.username,
             password: user.password
-        })
-            .then(
-                (response: { access_token: string }) => {
-                    if (response.access_token) {
-                        localStorage.setItem('user', JSON.stringify(response));
-                    }
-                    return response;
+        }).then(
+            (response: { username: string, token: string }) => {
+                if (response.token) {
+                    setJwtToken(response.token);
                 }
-            );
+                return response;
+            }
+        );
     }
 
     logout(): void {
-        localStorage.removeItem('user');
+        removeJwtToken();
     }
 
     /**

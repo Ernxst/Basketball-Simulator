@@ -4,10 +4,10 @@
     --navbar-width: 56px;
     --max-sidebar-width: 360px;
 
-    --button-radius: 10px;
-    --nav-button-radius: 5px;
-    --card-radius: 12px;
-    --input-radius: 6px;
+    --button-radius: 0;
+    --nav-button-radius: 0;
+    --card-radius: 0;
+    --input-radius: 0;
 
     --dark-blue: #291DA0;
     --blue: #2F44AF;
@@ -178,4 +178,13 @@ input, button, textarea, select {
 
 .sidebar-card > * {
     max-width: 100%;
+}
+
+.tagline {
+    color: #676B75;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: 2px;
 }

@@ -42,33 +42,19 @@ export default {
     text-transform: uppercase;
 }
 
-.flat-button, .flat-button:after {
-    transition: .2s ease-in-out all;
+.flat-button {
+    transition: .1s ease-in-out all;
     border-radius: var(--button-radius);
     cursor: pointer;
 }
 
-.flat-button:after {
-    background: var(--turqoise);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 100%;
-    content: "";
-    z-index: 1;
-}
-
 .flat-button:hover {
     box-shadow: 0 6px 12px -1px rgba(0, 0, 0, .33);
-}
-
-.flat-button:hover:after {
-    top: 0;
+    filter: brightness(66%);
 }
 
 .disabled {
     pointer-events: none;
-    filter: brightness(40%);
+    filter: brightness(33%);
 }
 </style>

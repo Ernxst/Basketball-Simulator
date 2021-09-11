@@ -15,7 +15,7 @@
             <flat-button text="Create" :class="buttonClass" style="--button-bg: var(--flat-green)"
                          v-on:click.prevent="$emit('createLeague')">
             </flat-button>
-            <tooltip ref="tooltip" :text="errorMessage" delay="300"></tooltip>
+            <tooltip ref="tooltip" :text="errorMessage" :delay="300"></tooltip>
         </div>
         <slot></slot>
     </section>

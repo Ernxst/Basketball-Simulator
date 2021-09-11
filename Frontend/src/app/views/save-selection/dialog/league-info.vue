@@ -7,7 +7,7 @@
                         placeholder="My League" type="text"></text-input>
         </div>
         <div class="container centred" ref="date-container">
-            <start-date-picker :league-params="leagueParams"></start-date-picker>
+            <start-date-picker :league-params="leagueParams" ref="date-picker"></start-date-picker>
         </div>
         <slider ref="slider" :min="minNumOfTeams" :max="maxNumOfTeams" label="Number of Teams"
                 id="teams-slider" :start="minNumOfTeams" :object="leagueParams" attribute="num_of_teams"></slider>
@@ -16,7 +16,7 @@
             <flat-button text="Next" :class="buttonClass" style="--button-bg: var(--flat-green)"
                          v-on:click.prevent="$emit('next')">
             </flat-button>
-            <tooltip ref="tooltip" :text="errorMessage" delay="300"></tooltip>
+            <tooltip ref="tooltip" :text="errorMessage" :delay="300"></tooltip>
         </div>
     </section>
 </template>
@@ -94,6 +94,9 @@ export default {
             this.resetHighlights();
             if (this.$refs.tooltip !== null)
                 this.$refs.tooltip.disable();
+        },
+        reset() {
+            this.$refs['date-picker'].reset();
         }
     }
 };

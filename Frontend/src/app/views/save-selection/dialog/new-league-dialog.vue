@@ -7,7 +7,8 @@
                 <p>{{ text }}</p>
             </div>
             <div class="form centred">
-                <league-info :league-params="leagueParams" :class="leagueClass" @next="next"></league-info>
+                <league-info :league-params="leagueParams" :class="leagueClass" @next="next"
+                             ref="league-info"></league-info>
                 <team-info :league-params="leagueParams" :class="teamClass" @createLeague="submit">
                     <flat-button text="Back" class="back" v-on:click.prevent="back"></flat-button>
                 </team-info>
@@ -83,6 +84,7 @@ export default {
                 team_state: "",
                 team_name: "",
             };
+            this.$refs['league-info'].reset();
         }
     },
 };

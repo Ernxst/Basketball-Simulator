@@ -48,6 +48,10 @@ export default {
         this.$nextTick(() => {
             this.setPos();
         });
+        window.addEventListener('resize', this.setPos);
+    },
+    beforeUnmount() {
+        window.removeEventListener('resize', this.setPos);
     }
 };
 </script>

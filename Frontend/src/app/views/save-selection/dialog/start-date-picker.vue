@@ -6,7 +6,8 @@
         <flat-button class="button" :text="buttonText" @click="toggle"></flat-button>
         <div class="picker-container centred" v-show="visible">
             <DatePicker v-model="leagueParams['start_date']" :attributes="attributes"
-                        color="green" @input="hide" :max-date="Date.now()"></DatePicker>
+                        ref="datepicker" color="green" @input="hide"
+                        :max-date="Date.now()"></DatePicker>
             <span class="close-icon material-icons" v-on:click="hide">close</span>
         </div>
     </div>
@@ -62,6 +63,10 @@ export default {
         },
         hide() {
             this.visible = false;
+        },
+        reset() {
+            const datepicker = this.$refs.datepicker;
+            datepicker.move(new Date());
         }
     }
 };

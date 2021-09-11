@@ -8,7 +8,7 @@
             </div>
             <div class="form centred">
                 <league-info :league-params="leagueParams" :class="leagueClass" @next="next"
-                             ref="league-info"></league-info>
+                             ref="league-info" :min-teams="minNumOfTeams" :max-teams="maxNumOfTeams"></league-info>
                 <team-info :league-params="leagueParams" :class="teamClass" @createLeague="submit">
                     <flat-button text="Back" class="back" v-on:click.prevent="back"></flat-button>
                 </team-info>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import ConstantsService from "../../../../services/constants.service.ts";
 import ModalWindow from "../../../components/dialogs/modal-window.vue";
 import FlatButton from "../../../components/widgets/buttons/flat-button.vue";
 import LeagueInfo from "./league-info.vue";
@@ -47,6 +48,8 @@ export default {
     data() {
         return {
             stage: 0,
+            minNumOfTeams: 0,
+            maxNumOfTeams: 0,
             leagueParams: {
                 league_name: "",
                 start_date: null,
@@ -55,6 +58,15 @@ export default {
                 team_name: "",
             },
         };
+    },
+    beforeCreate() {
+        ConstantsService.minTeamsInLeague().then((minTeams) => {
+            this.minNumOfTeams = minTeams;
+            this.leagueParams["num_of_teams"] = minTeams;
+        });
+        ConstantsService.maxTeamsInLeague().then((maxTeams) => {
+            this.maxNumOfTeams = maxTeams;
+        });
     },
     methods: {
         back() {
@@ -65,6 +77,7 @@ export default {
         },
         submit() {
             console.log(this.leagueParams);
+            this.reset();
             this.$refs.modal.confirm();
         },
         show() {
@@ -80,7 +93,7 @@ export default {
             this.leagueParams = {
                 league_name: "",
                 start_date: null,
-                num_of_teams: 0,
+                num_of_teams: this.minNumOfTeams,
                 team_state: "",
                 team_name: "",
             };
@@ -100,7 +113,7 @@ export default {
 
 .new-league-dialog > *, .new-league-dialog .form > *,
 .new-league-dialog .button-outer, .new-league-dialog .flat-button,
-.new-league-dialog .container {
+.new-league-dialog .param-container {
     width: 100%;
     flex-direction: column;
 }
@@ -152,13 +165,13 @@ export default {
     margin-bottom: 8px;
 }
 
-.new-league-dialog .container {
+.new-league-dialog .param-container {
     border: 2px solid transparent;
     border-radius: var(--card-radius);
     padding: 6px;
 }
 
-.new-league-dialog .container.highlighted {
+.new-league-dialog .param-container.highlighted {
     animation: blink .67s;
     animation-iteration-count: infinite;
 }
@@ -175,6 +188,8 @@ export default {
         width: 100%;
         max-height: 95vh;
         height: 100%;
+        overflow-y: scroll;
+        justify-content: flex-start;
     }
 }
 </style>

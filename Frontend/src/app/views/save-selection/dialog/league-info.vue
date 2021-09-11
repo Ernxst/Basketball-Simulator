@@ -1,16 +1,17 @@
 <template>
     <section class="league-info-form centred">
-        <div class="container centred" ref="name-container">
+        <div class="param-container centred" ref="name-container">
             <text-input id="league_name" ref="league_name" :no-spaces="false"
                         :object="leagueParams" autocomplete="off"
                         icon="sports_basketball" key-name="league_name" label="League Name"
                         placeholder="My League" type="text"></text-input>
         </div>
-        <div class="container centred" ref="date-container">
+        <div class="param-container centred" ref="date-container">
             <start-date-picker :league-params="leagueParams" ref="date-picker"></start-date-picker>
         </div>
-        <slider ref="slider" :min="minNumOfTeams" :max="maxNumOfTeams" label="Number of Teams"
-                id="teams-slider" :start="minNumOfTeams" :object="leagueParams" attribute="num_of_teams"></slider>
+        <slider ref="slider" :min="minTeams" :max="maxTeams"
+                label="Number of Teams" id="teams-slider"
+                v-model.number="leagueParams.num_of_teams"></slider>
         <div class="button-outer centred" v-on:mouseenter="trigger"
              v-on:mouseleave="resetHover">
             <flat-button text="Next" :class="buttonClass" style="--button-bg: var(--flat-green)"
@@ -22,7 +23,6 @@
 </template>
 
 <script>
-import ConstantsService from "../../../../services/constants.service.ts";
 import FlatButton from "../../../components/widgets/buttons/flat-button.vue";
 import Slider from "../../../components/widgets/slider.vue";
 import TextInput from "../../../components/widgets/text-input/text-input.vue";
@@ -34,13 +34,9 @@ export default {
     name: "league-info",
     components: { Tooltip, StartDatePicker, Slider, FlatButton, TextInput },
     props: {
+        minTeams: { type: Number, default: 0 },
+        maxTeams: { type: Number, default: 0 },
         leagueParams: {}
-    },
-    data() {
-        return {
-            minNumOfTeams: 0,
-            maxNumOfTeams: 0,
-        };
     },
     computed: {
         buttonClass() {
@@ -60,15 +56,6 @@ export default {
             this.resetHighlights();
             return "";
         }
-    },
-    beforeCreate() {
-        ConstantsService.minTeamsInLeague().then((minTeams) => {
-            this.minNumOfTeams = minTeams;
-            this.leagueParams["num_of_teams"] = minTeams;
-        });
-        ConstantsService.maxTeamsInLeague().then((maxTeams) => {
-            this.maxNumOfTeams = maxTeams;
-        });
     },
     methods: {
         highlight(elem) {

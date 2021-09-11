@@ -117,8 +117,12 @@ h1 {
     text-align: center;
 }
 
-.text-input label, .text-input input {
+.text-input label {
     color: #FFF;
+}
+
+.text-input input {
+    color: var(--black);
 }
 
 @media (min-width: 768px) {
@@ -146,6 +150,10 @@ h1 {
     .text-input .input-container {
         background: rgba(254, 254, 254, 0.075);
         border: 2px solid rgba(254, 254, 254, 0.3);
+    }
+
+    .text-input input {
+        color: #FFF;
     }
 }
 

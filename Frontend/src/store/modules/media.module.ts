@@ -1,11 +1,12 @@
 import MediaService from '../../services/media.service';
 import { routes } from "../../router/routes";
+import { StringStringMap } from '../../assets/types';
 
 
 interface State {
-    backgrounds: Record<string, string>,
-    "team-icons": Record<string, string>,
-    "icons": Record<string, string>,
+    backgrounds: StringStringMap,
+    "team-icons": StringStringMap,
+    "icons": StringStringMap,
 }
 
 const state = () => ({
@@ -41,7 +42,7 @@ export const media = {
         }
     },
     mutations: {
-        setBackgrounds(state: State, backgrounds: Record<string, string>,) {
+        setBackgrounds(state: State, backgrounds: StringStringMap) {
             state.backgrounds = backgrounds;
         }
     }

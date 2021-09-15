@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Getter
 @Setter
-@Data
 public class DeleteUserRequest {
     @NotNull
     private String password;

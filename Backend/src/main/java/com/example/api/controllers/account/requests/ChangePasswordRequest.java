@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Getter
 @Setter
-@Data
 public class ChangePasswordRequest {
     @NotNull
     private String currentPassword;

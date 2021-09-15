@@ -27,11 +27,10 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource dataSource() throws URISyntaxException, SQLException {
-        dbUrl = System.getenv("SPRING_DATASOURCE_URL");
-        username = System.getenv("POSTGRES_USER");
-        password = System.getenv("POSTGRES_PASSWORD");
-
         if (dataSourceObj == null) {
+            dbUrl = System.getenv("SPRING_DATASOURCE_URL");
+            username = System.getenv("POSTGRES_USER");
+            password = System.getenv("POSTGRES_PASSWORD");
             AppLogger.log("Creating new data source");
             dataSourceObj = createDataSource();
             seed();

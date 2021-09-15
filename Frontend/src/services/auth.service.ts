@@ -1,5 +1,4 @@
 // @ts-ignore
-import axios from 'axios';
 import { User } from "../assets/types";
 import { RELATIVE_USER_LOGIN_ENDPOINT, RELATIVE_USER_REGISTER_ENDPOINT } from "./endpoints";
 import { makeRequest } from "./api";

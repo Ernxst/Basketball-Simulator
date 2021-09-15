@@ -22,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -52,10 +53,7 @@ public class AccountController {
     public ResponseEntity<AuthSuccessResponse> register(@RequestBody AuthRequest authRequest)
             throws UsernameTakenException {
         User registeredUser = userService.register(new User(authRequest.getUsername(), authRequest.getPassword()));
-        String token = jwtTokenUtil.generateToken(registeredUser);
-        String username = registeredUser.getUsername();
-        AuthSuccessResponse body = new AuthSuccessResponse(username, token);
-        return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
+        return authenticate(registeredUser);
     }
 
     /**
@@ -72,15 +70,18 @@ public class AccountController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<AuthSuccessResponse> login(@RequestBody AuthRequest authRequest)
-            throws BadCredentialsException, UsernameTakenException {
-        String username = authRequest.getUsername();
+            throws BadCredentialsException, UsernameNotFoundException {
         Authentication authenticate = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         User user = (User) authenticate.getPrincipal();
-        String token = jwtTokenUtil.generateToken(user);
-        AuthSuccessResponse body = new AuthSuccessResponse(username, token);
-        return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
+        return authenticate(user);
     }
+
+    private ResponseEntity<AuthSuccessResponse> authenticate(User user) {
+            String token = jwtTokenUtil.generateToken(user);
+            AuthSuccessResponse body = new AuthSuccessResponse(user.getUsername(), token);
+            return new ResponseBuilder<>(HttpStatus.CREATED, body, token).build();
+    } 
 
     /**
      * Delete a user from the database.
@@ -98,7 +99,7 @@ public class AccountController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<AbstractResponse> deleteUser(@PathVariable String username,
                                                        @RequestBody DeleteUserRequest request)
-            throws BadCredentialsException {
+            throws BadCredentialsException, UsernameNotFoundException {
         User user = new User(username, request.getPassword());
         userService.deleteUser(user);
         return new ResponseBuilder<>(HttpStatus.NO_CONTENT).build();
@@ -120,7 +121,7 @@ public class AccountController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<AbstractResponse> changePassword(@PathVariable String username,
                                                            @RequestBody ChangePasswordRequest request)
-            throws BadCredentialsException {
+            throws BadCredentialsException, UsernameNotFoundException {
         User user = new User(username, request.getCurrentPassword());
         userService.changePassword(user, request.getNewPassword());
         return new ResponseBuilder<>(HttpStatus.NO_CONTENT).build();

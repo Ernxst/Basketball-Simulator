@@ -56,6 +56,7 @@ public class Team {
     private League league;
 
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @MapKeyColumn(name = "SEASON", insertable = false, updatable = false)
     // { seasonNo: Standings }
     private Map<Integer, LeagueStandings> allStandings;
 

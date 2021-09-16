@@ -27,8 +27,9 @@ public class User implements UserDetails {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @OneToMany
-    @JoinColumn(name = "USERNAME", insertable = false, updatable = false)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @MapKeyColumn(name = "LEAGUE_ID", insertable = false, updatable = false)
+    // { leagueID: League }
     private Map<Integer, League> leagues;
 
     public User(String username, String password) {

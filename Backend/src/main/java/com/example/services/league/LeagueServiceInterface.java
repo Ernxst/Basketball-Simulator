@@ -2,7 +2,10 @@ package com.example.services.league;
 
 import com.example.entities.league.League;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import java.time.LocalDate;
+import java.util.List;
 
 public interface LeagueServiceInterface {
     /**
@@ -30,6 +33,14 @@ public interface LeagueServiceInterface {
      * @throws LeagueNotFoundException
      */
     League getLeagueByID(int leagueID) throws LeagueNotFoundException;
+
+    /**
+     * 
+     * @param username
+     * @return
+     * @throws LeagueNotFoundException
+     */
+    List<LeagueSave> getLeagueSaves(String username) throws UsernameNotFoundException;
 
     /**
      * @param league

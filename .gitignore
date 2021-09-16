@@ -297,3 +297,13 @@ buildNumber.properties
 hs_err_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java
+Backend/.classpath
+Backend/.factorypath
+Backend/.project
+Backend/.settings/org.eclipse.core.resources.prefs
+Backend/.DS_Store
+Backend/.settings/org.eclipse.jdt.apt.core.prefs
+Backend/.settings/org.eclipse.jdt.core.prefs
+Backend/.settings/org.eclipse.m2e.core.prefs
+Backend/.vscode/launch.json
+Frontend/.vscode/launch.json

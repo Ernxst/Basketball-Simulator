@@ -8,6 +8,18 @@
       "type": "node-terminal"
     },
     {
+      "command": "npm start:dev",
+      "name": "Run npm start:dev",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "npm run-script serve",
+      "name": "Run npm serve",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
       "type": "pwa-node",
       "request": "launch",
       "name": "Launch Program",

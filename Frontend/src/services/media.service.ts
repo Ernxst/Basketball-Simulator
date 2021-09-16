@@ -1,10 +1,11 @@
+import { StringStringMap } from './../assets/types';
 // @ts-ignore
 import Reference from "firebase-storage-lite";
 
 
-const base = "gs://basketball-simulator-4f6a7.appspot.com/";
-const baseBucket = new Reference(base);
-const imgFormat = ".webp";
+const base : string = "gs://basketball-simulator-4f6a7.appspot.com/";
+const baseBucket : Reference = new Reference(base);
+const imgFormat : string = ".webp";
 
 /**
  * Return the download URL of a given file.
@@ -30,8 +31,8 @@ async function getImage(src: string, bucket: any): Promise<string> {
  * @param names the images to fetch.
  * @returns a map of filenames to their Firebase download URLs.
  */
-const fetchImages = async (folder: string, names: Array<string>): Promise<Record<string, string>> => {
-    const map: Record<string, string> = {};
+const fetchImages = async (folder: string, names: Array<string>): Promise<StringStringMap> => {
+    const map: StringStringMap = {};
     const bucket = await baseBucket.child(folder + "/");
     for (const name of names) {
         map[name] = await getImage(name, bucket);
@@ -40,7 +41,7 @@ const fetchImages = async (folder: string, names: Array<string>): Promise<Record
 };
 
 class MediaService {
-    async fetchBackgrounds(names : Array<string>): Promise<Record<string, string>> {
+    async fetchBackgrounds(names : Array<string>): Promise<StringStringMap> {
         return fetchImages("backgrounds", names);
     }
 }

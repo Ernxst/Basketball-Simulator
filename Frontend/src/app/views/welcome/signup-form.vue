@@ -88,7 +88,7 @@ export default {
                         this.$nextTick(() => {
                             this.$router.push(
                                 {
-                                    name: "team-select",
+                                    name: "league-select",
                                     params: { "username": this.user.username }
                                 });
                         });

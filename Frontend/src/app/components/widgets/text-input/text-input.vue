@@ -98,7 +98,7 @@ label {
     margin-left: 4px;
     margin-bottom: 8px;
     line-height: 90%;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 b {
@@ -150,7 +150,7 @@ input {
     border: none;
     background: transparent;
     flex: 1;
-    font-size: 13px;
+    font-size: 16px;
     outline: none;
 }
 
@@ -193,7 +193,7 @@ input {
     }
 
     input {
-        font-size: 13px;
+        font-size: 16px;
     }
 }
 </style>

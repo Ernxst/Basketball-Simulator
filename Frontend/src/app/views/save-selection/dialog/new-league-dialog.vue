@@ -76,9 +76,15 @@ export default {
             this.stage = 1;
         },
         submit() {
-            console.log(this.leagueParams);
-            this.reset();
-            this.$refs.modal.confirm();
+            this.$store.dispatch("league/newLeague", this.leagueParams).then(() => {
+                this.reset();
+                this.$refs.modal.confirm();
+                const leagueID = this.$store.getters["league/currentLeagueID"];
+                this.$router.push( { name: "play", params: {
+                    "league_id": leagueID
+                }})
+            })
+           
         },
         show() {
             this.reset();
@@ -141,10 +147,6 @@ export default {
     display: flex;
 }
 
-.new-league-dialog .form .stage .text-input {
-    margin-bottom: 12px;
-}
-
 .new-league-dialog .flat-button,
 .new-league-dialog .text-input,
 .new-league-dialog .autocomplete-text-input {
@@ -166,6 +168,7 @@ export default {
 }
 
 .new-league-dialog .param-container {
+    margin-bottom: 12px;
     border: 2px solid transparent;
     border-radius: var(--card-radius);
     padding: 6px;

@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Getter
 @Setter
-@Data
 public class AuthRequest {
     @NotNull
     private String username;

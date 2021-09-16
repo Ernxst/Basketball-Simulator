@@ -92,6 +92,10 @@ public class League {
         return seasons.get(season);
     }
 
+    public Team getUserTeam() {
+        return teams.values().stream().filter(team -> team.isUserTeam()).findFirst().orElse(null);
+    }
+
     /**
      * @return
      */

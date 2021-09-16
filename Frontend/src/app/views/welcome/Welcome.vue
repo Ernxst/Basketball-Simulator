@@ -48,7 +48,7 @@ export default {
     },
     created() {
         if (this.loggedIn) {
-            this.$router.push({ name: "team-select" });
+            this.$router.push({ name: "league-select" });
         }
     },
     methods: {

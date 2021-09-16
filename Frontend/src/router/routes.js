@@ -13,7 +13,10 @@ export const routes = [
     },
     {
         path: "/welcome",
-        component: () => import(/* webpackChunkName: "welcome", webpackPrefetch: true */ "../app/views/welcome/Welcome.vue"),
+        component: () =>
+            import(
+                /* webpackChunkName: "welcome", webpackPrefetch: true */ "../app/views/welcome/Welcome.vue"
+            ),
         name: "welcome",
         meta: {
             title: (route) => {
@@ -21,15 +24,17 @@ export const routes = [
             },
             description: (route) => {
                 return "";
-            }
-            ,
+            },
             requiresAuth: false,
         },
     },
     {
         path: "/:username/select",
-        component: () => import(/* webpackChunkName: "team-select", webpackPrefetch: true */ "../app/views/save-selection/SelectSave.vue"),
-        name: "team-select",
+        component: () =>
+            import(
+                /* webpackChunkName: "league-select", webpackPrefetch: true */ "../app/views/save-selection/SelectSave.vue"
+            ),
+        name: "league-select",
         meta: {
             title: (route) => {
                 return "Select Save";
@@ -40,10 +45,12 @@ export const routes = [
             requiresAuth: true,
         },
     },
-    // TODO: :team should be :league_id
     {
-        path: "/:username/:team/play",
-        component: () => import(/* webpackChunkName: "play", webpackPrefetch: true */ "../app/views/home/Home.vue"),
+        path: "/:username/:league_id/play",
+        component: () =>
+            import(
+                /* webpackChunkName: "play", webpackPrefetch: true */ "../app/views/home/Home.vue"
+            ),
         name: "play",
         meta: {
             title: (route) => {
@@ -55,10 +62,12 @@ export const routes = [
             requiresAuth: true,
         },
     },
-    // TODO: :team should be :league_id
     {
-        path: "/:username/:team/search",
-        component: () => import(/* webpackChunkName: "search", webpackPrefetch: true */ "../app/views/search/Search.vue"),
+        path: "/:username/:league_id/search",
+        component: () =>
+            import(
+                /* webpackChunkName: "search", webpackPrefetch: true */ "../app/views/search/Search.vue"
+            ),
         name: "search",
         meta: {
             title: (route) => {
@@ -70,10 +79,12 @@ export const routes = [
             requiresAuth: true,
         },
     },
-    // TODO: :team should be :league_id
     {
-        path: "/:username/:team/insights",
-        component: () => import(/* webpackChunkName: "insights", webpackPrefetch: true */ "../app/views/insights/Insights.vue"),
+        path: "/:username/:league_id/insights",
+        component: () =>
+            import(
+                /* webpackChunkName: "insights", webpackPrefetch: true */ "../app/views/insights/Insights.vue"
+            ),
         name: "insights",
         meta: {
             title: (route) => {
@@ -85,10 +96,12 @@ export const routes = [
             requiresAuth: true,
         },
     },
-    // TODO: :team should be :league_id
     {
-        path: "/:username/:team/team",
-        component: () => import(/* webpackChunkName: "team", webpackPrefetch: true */ "../app/views/team/Team.vue"),
+        path: "/:username/:league_id/team",
+        component: () =>
+            import(
+                /* webpackChunkName: "team", webpackPrefetch: true */ "../app/views/team/Team.vue"
+            ),
         name: "team",
         meta: {
             title: (route) => {
@@ -100,10 +113,12 @@ export const routes = [
             requiresAuth: true,
         },
     },
-    // TODO: :team should be :league_id
     {
-        path: "/:username/:team/settings",
-        component: () => import(/* webpackChunkName: "settings", webpackPrefetch: true */ "../app/views/settings/Settings.vue"),
+        path: "/:username/:league_id/settings",
+        component: () =>
+            import(
+                /* webpackChunkName: "settings", webpackPrefetch: true */ "../app/views/settings/Settings.vue"
+            ),
         name: "settings",
         meta: {
             title: (route) => {
@@ -117,7 +132,10 @@ export const routes = [
     },
     {
         path: "/:catchAll(.*)",
-        component: () => import(/* webpackChunkName: "not-found", webpackPrefetch: true */ "../app/views/NotFound.vue"),
+        component: () =>
+            import(
+                /* webpackChunkName: "not-found", webpackPrefetch: true */ "../app/views/NotFound.vue"
+            ),
         meta: {
             title: (route) => {
                 return "Not Found";

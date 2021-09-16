@@ -1,10 +1,12 @@
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
-
 const TOKEN_KEY_NAME = "token";
 
 const decodeToken = (token: string) => {
-    return jwtDecode<JwtPayload>(token);
+    if (token) {
+        return jwtDecode<JwtPayload>(token);
+    }
+    return {};
 };
 
 export const getTokenFromStorage = (): string => {
@@ -22,6 +24,11 @@ export const removeJwtToken = (): void => {
 export const getUsernameFromToken = (token: string): string => {
     const decoded = decodeToken(token);
     return decoded.sub;
+};
+
+export const getUsernameFromStorage = (): string => {
+    const token = getTokenFromStorage();
+    return getUsernameFromToken(token);
 };
 
 export const isExpired = (token: string): boolean => {

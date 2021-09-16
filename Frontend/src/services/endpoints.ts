@@ -1,3 +1,4 @@
+import { getUsernameFromStorage } from './jwt.service';
 const getBaseUrl = (environment: string): string => {
     const PORT: number = 8100;
     return (environment === 'production') ? 'https://basketball-simulator-web.herokuapp.com/' :
@@ -19,3 +20,7 @@ export const RELATIVE_TEAM_STATES_ENDPOINT: string = RELATIVE_CONSTANTS_ENDPOINT
 export const RELATIVE_MIN_TEAMS_ENDPOINT: string = RELATIVE_CONSTANTS_ENDPOINT + "min_teams";
 export const RELATIVE_MAX_TEAMS_ENDPOINT: string = RELATIVE_CONSTANTS_ENDPOINT + "max_teams";
 export const RELATIVE_MAX_LEAGUES_ENDPOINT: string = RELATIVE_CONSTANTS_ENDPOINT + "max_leagues";
+
+export const RELATIVE_LEAGUES_ENDPOINT =  `${getUsernameFromStorage()}/leagues`;
+export const RELATIVE_NEW_LEAGUE_ENDPOINT = `${RELATIVE_LEAGUES_ENDPOINT}/new`;
+export const RELATIVE_GET_LEAGUE_SAVES_ENDPOINT = `${RELATIVE_LEAGUES_ENDPOINT}`;

@@ -4,7 +4,7 @@
             <img :alt="`The ${city} ${name}' logo`" :src="image">
         </div>
         <div class="team-content">
-            <div class="team-city">{{ city }}</div>
+            <div class="team-state">{{ city }}</div>
             <div class="team-name">{{ name }}</div>
             <div class="team-record">
                 <span class="wins">{{ wins }}</span><span class="record-separator">-</span><span
@@ -66,7 +66,7 @@ export default {
     text-transform: capitalize;
 }
 
-.team-city, .team-name {
+.team-state, .team-name {
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -78,7 +78,7 @@ export default {
     margin-bottom: 4px;
 }
 
-.team-city {
+.team-state {
     color: #D9D9D9;
     font-size: 14px;
 }

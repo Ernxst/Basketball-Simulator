@@ -1,0 +1,17 @@
+{
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 2
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 2
+    },
+    "path-intellisense.mappings": {
+        "@": "${workspaceRoot}/src"
+    },
+    "volar.icon.preview": true,
+    "volar.icon.finder": true,
+    "volar.codeLens.scriptSetupTools": false,
+    "volar.preferredTagNameCase": "kebab"
+}

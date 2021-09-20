@@ -1,10 +1,22 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6"
-  },
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*",
+        "**/dump/*",
+        "dist",
+        "docs",
+        ".vscode"
+    ],
+    "include": [
+        "src/**/*",
+        "test/**/*"
+    ]
 }

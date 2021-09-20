@@ -1,44 +1,42 @@
-// @ts-ignore
-import { User } from "../assets/types";
-import { RELATIVE_USER_LOGIN_ENDPOINT, RELATIVE_USER_REGISTER_ENDPOINT } from "./endpoints";
+import { User } from "@/@types/user";
 import { makeRequest } from "./api";
-import { removeJwtToken, setJwtToken } from "./jwt.service";
+import {
+  RELATIVE_USER_LOGIN_ENDPOINT,
+  RELATIVE_USER_REGISTER_ENDPOINT
+} from "./endpoints";
 
+type AuthResponse = {
+  username?: string;
+  token?: string;
+  error?: string;
+};
 
+const authenticate = async (endpoint: string, user: User): Promise<string> => {
+  const authResponse: AuthResponse = await makeRequest<{
+    username: string;
+    token: string;
+  }>({
+    endpoint: endpoint,
+    method: "POST",
+    body: {
+      username: user.username,
+      password: user.password,
+    },
+    auth: false,
+  });
+  if (authResponse.token) return authResponse.token;
+  return Promise.reject(authResponse.error);
+};
 class AuthService {
-    /**
-     * Log the given user into the backend and store the user in local storage.
-     * @param {User} user
-     * @returns
-     */
-    login(user: User) {
-        return makeRequest(RELATIVE_USER_LOGIN_ENDPOINT, "POST", {}, {
-            username: user.username,
-            password: user.password
-        }).then(
-            (response: { username: string, token: string }) => {
-                if (response.token) {
-                    setJwtToken(response.token);
-                }
-                return response;
-            }
-        );
-    }
+  async login(user: User): Promise<string> {
+    return authenticate(RELATIVE_USER_LOGIN_ENDPOINT, user);
+  }
 
-    logout(): void {
-        removeJwtToken();
-    }
+  logout(): void {}
 
-    /**
-     *
-     * @param {User} user
-     */
-    register(user: User) {
-        return makeRequest(RELATIVE_USER_REGISTER_ENDPOINT, "POST", {}, {
-            username: user.username,
-            password: user.password
-        });
-    }
+  async register(user: User): Promise<string> {
+    return authenticate(RELATIVE_USER_REGISTER_ENDPOINT, user);
+  }
 }
 
 export default new AuthService();

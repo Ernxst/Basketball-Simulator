@@ -1,59 +1,49 @@
-import { StringAnyMap } from "./../../assets/types";
-import leagueService from "../../services/league.service";
+import { StringAnyMap } from "@/@types/maps";
+import leagueService from "@/services/league.service";
+import { ActionTree, GetterTree, MutationTree } from "vuex";
 
-interface State {
-    leagueSaves: StringAnyMap[];
-    currentLeagueID: Number;
+export interface LeagueState {
+  leagueSaves: StringAnyMap[];
+  currentLeagueID: Number;
 }
 
-const state = () => ({
-    leagueSaves: [] as StringAnyMap[],
-    currentLeague: null as Number,
-});
+const state: LeagueState = {
+  leagueSaves: [],
+  currentLeagueID: 0,
+};
 
-const getters = {
-    leagueSaves: (state: State) => {
-        return state.leagueSaves;
-    },
+const getters = <GetterTree<LeagueState, any>>{
+  leagueSaves: (state: LeagueState) => {
+    return state.leagueSaves;
+  },
+};
+
+const actions = <ActionTree<LeagueState, any>>{
+  fetchLeagueSaves({ commit }: { commit: Function }) {
+    leagueService.fetchLeagueSaves().then((saves: StringAnyMap[]) => {
+      commit("setLeagueSaves", saves);
+    });
+  },
+  newLeague({ commit }: { commit: Function }, params: StringAnyMap) {
+    leagueService.generateLeague(params).then((leagueID: number) => {
+      commit("setCurrentLeagueID", leagueID);
+    });
+  },
+};
+
+const mutations = <MutationTree<LeagueState>>{
+  setLeagueSaves(state: LeagueState, leagueSaves: StringAnyMap[]) {
+    state.leagueSaves = leagueSaves;
+  },
+  setCurrentLeagueID(state: LeagueState, leagueID: number) {
+    state.currentLeagueID = leagueID;
+  },
 };
 
 export const league = {
-    namespaced: true,
-    state,
-    getters,
-    actions: {
-        fetchLeagueSaves({
-            commit,
-            getters,
-        }: {
-            commit: Function;
-            getters: any;
-        }) {
-            leagueService.fetchLeagueSaves().then((saves) => {
-                commit("setLeagueSaves", saves);
-            });
-        },
-        newLeague(
-            {
-                commit,
-                getters,
-            }: {
-                commit: Function;
-                getters: any;
-            },
-            params: StringAnyMap
-        ) {
-            leagueService.generateLeague(params).then((leagueID) => {
-                commit("setCurrentLeagueID", leagueID);
-            });
-        },
-    },
-    mutations: {
-        setLeagueSaves(state: State, leagueSaves: Array<StringAnyMap>) {
-            state.leagueSaves = leagueSaves;
-        },
-        setCurrentLeagueID(state: State, leagueID: Number) {
-            state.currentLeagueID = leagueID;
-        },
-    },
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
 };

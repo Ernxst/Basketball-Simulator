@@ -1,47 +1,50 @@
 {
-  "hosting": {
-    "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
   "headers": [
     {
-      "source": "**/*.@(eot|otf|ttf|ttc|woff|woff2|font.css)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
         }
-      ]
+      ],
+      "source": "**/*.@(eot|otf|ttf|ttc|woff|woff2|font.css)"
     },
     {
-      "source": "**/*.@(js|css)",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "max-age=604800"
         }
-      ]
+      ],
+      "source": "**/*.@(js|css)"
     },
     {
-      "source": "**/*.@(jpg|jpeg|gif|png|webp)",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "max-age=604800"
         }
-      ]
+      ],
+      "source": "**/*.@(jpg|jpeg|gif|png|webp)"
     }
   ],
+  "hosting": {
+    "ignore": [
+      "firebase.json",
+      "jest.config.ts",
+      "**/.*",
+      "**/test/**",
+      "**/.vscode/**",
+      "**/node_modules/**"
+    ],
+    "public": "dist",
+    "rewrites": [
+      {
+        "destination": "/index.html",
+        "source": "**"
+      }
+    ]
+  },
   "storage": {
     "rules": "storage.rules"
   }

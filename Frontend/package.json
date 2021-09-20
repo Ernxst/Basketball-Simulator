@@ -18,6 +18,7 @@
   "dependencies": {
     "@babel/preset-typescript": "^7.14.5",
     "@babel/runtime": "^7.12.18",
+    "@popperjs/core": "^2.10.1",
     "autoprefixer": "^10.3.4",
     "axios-mock-adapter": "^1.20.0",
     "firebase-storage-lite": "^0.3.0",

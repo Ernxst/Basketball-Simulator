@@ -60,6 +60,7 @@
         this.$refs.username.focus();
       },
       login() {
+        const username = this.user.username;
         if (this.user.username !== "" && this.user.password !== "") {
           this.loading = true;
           this.$store
@@ -68,7 +69,7 @@
               this.$nextTick(() => {
                 this.$router.push({
                   name: "league-select",
-                  params: { username: this.user.username },
+                  params: { username: username },
                 });
               });
             })

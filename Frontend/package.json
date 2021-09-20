@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "jest; open coverage/lcov-report/index.html",
+    "test": "jest",
     "unused-modules": "npx depcheck",
     "watch": "tsc -b tsconfig.json -w",
     "deploy": "set -e; npm run build; firebase deploy"

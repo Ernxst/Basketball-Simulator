@@ -1,6 +1,6 @@
 import { store } from "@/store/store";
 import Welcome from "@/views/welcome/Welcome.vue";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { mockRouter } from "../mocks";
 
 const loginTitle = "Sign In";
@@ -35,6 +35,7 @@ const testRedirect = async (
   const title = wrapper.find(".form-card > h1");
   const subtitle = wrapper.find(".form-card > p");
 
+  await flushPromises();
   expect(wrapper.vm.title).toBe(expectedTitle);
   expect(wrapper.vm.title).toEqual(title.element.innerHTML);
   expect(wrapper.vm.subtitle).toBe(expectedSubtitle);

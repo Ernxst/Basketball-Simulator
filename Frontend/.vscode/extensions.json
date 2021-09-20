@@ -50,7 +50,8 @@
     "techer.open-in-browser",
     "christian-kohler.npm-intellisense",
     "eg2.vscode-npm-script",
-    "wenfangdu.faster-new"
+    "wenfangdu.faster-new",
+    "firsttris.vscode-jest-runner"
   ],
   "unwantedRecommendations": [
     "octref.vetur"
